@@ -1,0 +1,134 @@
+/* ================= PAGE ================= */
+.eq-page-wrapper {
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+/* ================= HEADER ================= */
+.eq-header {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  padding: 18px 24px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.eq-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* BACK BUTTON */
+.eq-back-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 10%;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.eq-back-btn:hover {
+  background: #1d4ed8;
+}
+
+.eq-header-spacer {
+  width: 40px;
+  height: 40px;
+}
+
+/* ================= CONTENT ================= */
+.eq-content {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ================= CARD ================= */
+.eq-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+/* ================= FORM ================= */
+.eq-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.eq-form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.eq-form-group input,
+.eq-form-group select {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.eq-form-group input:focus,
+.eq-form-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* OPTIONS GRID */
+.eq-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* ================= UPDATE BUTTON ================= */
+.eq-update-btn {
+  width: 100%;
+  margin-top: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.eq-update-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ================= STATUS ================= */
+.eq-status {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 640px) {
+  .eq-title {
+    font-size: 22px;
+  }
+
+  .eq-options {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,133 @@
+.um-wrapper {
+  padding: 30px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.um-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.um-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.um-subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.um-count {
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.um-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.um-table thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.um-table td {
+  padding: 18px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.um-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.um-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* Role-specific Avatar Colors */
+.role-admin { background: #0f172a; }
+.role-trainer { background: #2563eb; }
+.role-student { background: #10b981; }
+
+.um-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.um-email {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.um-role {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.um-role.admin { background: #f1f5f9; color: #475569; }
+.um-role.trainer { background: #dbeafe; color: #1e40af; }
+.um-role.student { background: #dcfce7; color: #166534; }
+
+.um-status {
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.um-status.active { background: #ecfdf5; color: #059669; }
+.um-status.inactive { background: #fff1f2; color: #e11d48; }
+
+.um-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.um-btn.deactivate { color: #e11d48; }
+.um-btn.deactivate:hover { background: #fff1f2; border-color: #fda4af; }
+
+.um-btn.activate { color: #059669; }
+.um-btn.activate:hover { background: #ecfdf5; border-color: #6ee7b7; }
+
+.um-empty, .um-loader {
+  padding: 40px;
+  text-align: center;
+  color: #94a3b8;
+  font-style: italic;
+}

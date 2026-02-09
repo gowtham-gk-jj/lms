@@ -1,0 +1,187 @@
+/* Container Layout */
+.learner-db-wrapper {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ✅ Dashboard Top Navigation Area */
+.dashboard-top-nav {
+    display: flex;
+    align-items: center;
+    padding: 15px 40px;
+    gap: 15px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ✅ Professional Round Blue Back Button */
+.back-arrow-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background-color: #0284c7; /* Modern Blue */
+    color: white;
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+}
+
+.back-arrow-btn:hover {
+    background-color: #0369a1;
+    transform: scale(1.08);
+}
+
+.nav-label {
+    font-weight: 700;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Dashboard Content Area */
+.dashboard-content {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-content h1 {
+    color: #0f172a;
+    margin-bottom: 1rem;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.info-box {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 1.2rem;
+    color: #1e40af;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+}
+
+/* Grid System */
+.enrollment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* Course Cards */
+.course-progress-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.course-progress-card:hover {
+    transform: translateY(-5px);
+}
+
+.course-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 20px;
+}
+
+/* Progress Bar Components */
+.progress-section {
+    margin-bottom: 25px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.progress-bar-bg {
+    background: #f1f5f9;
+    height: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: #22c55e;
+    height: 100%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Buttons */
+.continue-btn {
+    width: 100%;
+    padding: 12px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+.continue-btn:hover {
+    background: #2563eb;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    border: 2px dashed #cbd5e1;
+}
+
+.browse-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+/* Mobile Responsiveness for Dashboard */
+@media (max-width: 600px) {
+  .dashboard-content {
+    padding: 15px;
+  }
+
+  .enrollment-grid {
+    grid-template-columns: 1fr; /* One card per row */
+  }
+
+  .dashboard-top-nav {
+    padding: 10px 20px;
+  }
+
+  .dashboard-content h1 {
+    font-size: 22px;
+  }
+}

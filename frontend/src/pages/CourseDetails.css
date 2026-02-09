@@ -1,0 +1,178 @@
+/* ===============================
+   PAGE LAYOUT
+================================ */
+.course-details-page {
+  padding: 40px 60px;
+  background: #f1f5f9;
+  min-height: 100vh;
+}
+
+/* ===============================
+   BACK BUTTON
+================================ */
+.back-nav-container {
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #f8fafc;
+  color: #2563eb;
+  transform: translateX(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ===============================
+   HEADER
+================================ */
+.course-header {
+  margin-bottom: 40px;
+}
+
+.course-details-page h1 {
+  font-size: 2.5rem;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.course-desc {
+  color: #64748b;
+  font-size: 1.1rem;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+/* ===============================
+   LEVEL GRID
+================================ */
+.level-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.level-card {
+  width: 280px;
+  height: 280px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e2e8f0;
+  transition: 0.3s;
+}
+
+.level-card:hover {
+  transform: translateY(-8px);
+  border-color: #22c55e;
+}
+
+.level-badge {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+.level-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.video-btn,
+.enroll-btn,
+.quiz-btn,
+.coming-btn,
+.quiz-start-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+/* WATCH LESSON (BLUE) */
+.video-btn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.video-btn:hover {
+  background: #1e4ed8;
+}
+
+/* ENROLL (GREEN) */
+.enroll-btn {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.enroll-btn:hover {
+  background: #16a34a;
+}
+
+/* START QUIZ (BLUE – SAME AS VIDEO) */
+.quiz-start-btn {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.quiz-start-btn:hover {
+  background: #1e4ed8;
+}
+
+/* QUIZ DEFAULT (LOCKED / INACTIVE) */
+.quiz-btn {
+  background: #f8fafc;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  cursor: not-allowed;
+}
+
+/* QUIZ COMPLETED */
+.quiz-btn.completed {
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* COMING SOON */
+.coming-btn {
+  background: #f1f5f9;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   LOADING / STATES
+================================ */
+.loading-screen {
+  padding: 100px;
+  text-align: center;
+  color: #64748b;
+}

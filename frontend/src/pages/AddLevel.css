@@ -1,0 +1,112 @@
+.add-level-page {
+  padding: 40px 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-btn {
+  align-self: flex-start;
+  max-width: 500px;
+  margin: 0 auto 20px auto;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: #7c3aed; /* Purple trainer accent */
+}
+
+.add-level-card {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h2 {
+  color: #1e293b;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.form-header p {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.add-level-card input,
+.add-level-card select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.add-level-card input:focus,
+.add-level-card select:focus {
+  outline: none;
+  border-color: #7c3aed;
+}
+
+.helper-text {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.submit-level-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  background: #7c3aed; /* Trainer Purple */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.submit-level-btn:hover {
+  background: #6d28d9;
+}
+
+.submit-level-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-level-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

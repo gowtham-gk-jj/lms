@@ -1,0 +1,172 @@
+/* ================= CONTAINER ================= */
+.db-wrapper {
+  animation: fadeIn 0.5s ease-out;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* ================= WELCOME HEADER ================= */
+.db-welcome h1 {
+  font-size: 2.2rem;
+  color: #1e293b;
+  font-weight: 800;
+  margin: 0;
+}
+
+.db-welcome p {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 2rem 0;
+}
+
+/* ================= GRID ================= */
+.db-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* ================= CARD ================= */
+.db-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 2.5rem;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+  /* 🔥 IMPORTANT FIX */
+  display: block;   /* ❌ NOT flex */
+}
+
+.db-card:hover {
+  border-color: #6366f1;
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= CARD TEXT ================= */
+.db-card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 10px; /* 🔥 space below title */
+}
+
+.db-card-desc {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  max-width: 90%;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ================= ROLE DASHBOARD ================= */
+.role-dashboard-wrapper {
+  margin-bottom: 3rem;           /* space below analytics */
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Ensure charts never collapse */
+.role-dashboard-wrapper .recharts-responsive-container {
+  min-height: 260px;
+}
+
+/* KPI cards inside RoleDashboard */
+.role-dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Smooth separation from welcome section */
+.db-welcome {
+  margin-top: 2rem;
+}
+/* ================= OVERVIEW CARD ================= */
+.overview-card {
+  border: 1px solid #6366f1;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.overview-label {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.overview-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+/* ================= OVERVIEW CARD ================= */
+.overview-card {
+  border: 1px solid #6366f1;
+}
+
+/* KPI GRID */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.overview-item {
+  background: #f8fafc;
+  padding: 1.2rem;
+  border-radius: 12px;
+}
+
+.overview-label {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.overview-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* KPI CHART */
+.overview-chart {
+  margin-top: 1.5rem;
+}
+
+.overview-chart-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.chart-container {
+  height: 260px;
+}

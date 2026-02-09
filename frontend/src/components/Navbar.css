@@ -1,0 +1,130 @@
+/* ===== NAVBAR WRAPPER ===== */
+.navbar-wrapper {
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== NAVBAR CONTAINER ===== */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== LOGO ===== */
+.navbar-logo a {
+  font-size: 22px;
+  font-weight: 800;
+  color: #2563eb; /* Changed to Blue for professional LMS look */
+  text-decoration: none;
+}
+
+/* ===== CENTER LINKS ===== */
+.navbar-links {
+  display: flex;
+  gap: 32px;
+}
+
+.navbar-links a {
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: #22c55e;
+}
+
+.active-dash {
+  color: #22c55e !important;
+  font-weight: 700 !important;
+}
+
+/* ===== RIGHT ACTION ===== */
+.navbar-action {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.welcome-text {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+/* ===== LOGIN BUTTON ===== */
+.login-btn {
+  background-color: #22c55e;
+  color: #ffffff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+/* ===== LOGOUT BUTTON (FIXED COLOR) ===== */
+.logout-btn {
+  background-color: #fee2e2; /* Soft red background */
+  color: #ef4444; /* Darker red text for readability */
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #fecaca;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+.notification-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.notification-btn:hover {
+  color: #007bff;
+}
+.notification-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: red;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  min-width: 18px;
+  text-align: center;
+}

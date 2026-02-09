@@ -1,0 +1,51 @@
+/* Sidebar Container */
+.trainer-sidebar {
+  width: 240px;
+  background: #0f172a; /* Professional dark slate */
+  color: white;
+  padding: 24px 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.trainer-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  padding-left: 8px;
+  color: #f8fafc;
+  border-left: 4px solid #7c3aed; /* Purple trainer accent */
+}
+
+/* Navigation List */
+.trainer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Navigation Items */
+.nav-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #94a3b8; /* Muted gray for inactive links */
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* ✅ ACTIVE STATE FIX */
+.nav-item.active {
+  background: #7c3aed; /* Changed to Purple to match TrainerLayout theme */
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}

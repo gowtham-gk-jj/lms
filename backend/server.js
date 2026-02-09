@@ -1,0 +1,53 @@
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const path = require("path");
+const http = require("http"); // ✅ ADD
+const connectDB = require("./config/db");
+const { initSocket } = require("./socket"); // ✅ ADD
+
+// ================= INIT =================
+dotenv.config();
+connectDB();
+
+const app = express();
+
+// ================= MIDDLEWARE =================
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ================= STATIC FILES =================
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ================= ROUTES =================
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/courses", require("./routes/courseRoutes"));
+app.use("/api/organization", require("./routes/organizationRoutes"));
+app.use("/api/articles", require("./routes/articleRoutes"));
+app.use("/api/enrollment", require("./routes/enrollmentRoutes"));
+app.use("/api/quiz", require("./routes/quizRoutes"));
+app.use("/api/progress", require("./routes/progressRoutes"));
+app.use("/api/certificates", require("./routes/certificateRoutes"));
+app.use("/api/dashboard", require("./routes/dashboardRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoutes"));
+
+// ================= HEALTH CHECK =================
+app.get("/", (req, res) => {
+  res.send("LMS API is Running ✅");
+});
+
+// ================= SOCKET SERVER =================
+const server = http.createServer(app); // ✅ IMPORTANT
+initSocket(server); // ✅ INIT SOCKET.IO
+
+// ================= START SERVER =================
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server + Socket.IO running on port ${PORT}`);
+});

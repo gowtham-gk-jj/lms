@@ -1,0 +1,104 @@
+/* Container and Layout */
+.cert-manager-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cert-manager-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+.cert-manager-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.cert-manager-header p {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+/* Table Styling */
+.cert-table-wrapper {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Rounds the table corners */
+}
+
+.cert-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.cert-table thead tr {
+    background-color: #16a085;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.cert-table th, 
+.cert-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.cert-table tbody tr:hover {
+    background-color: #f8fafc;
+    transition: background 0.2s ease;
+}
+
+/* Specific Column Styles */
+.cert-id-cell {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #34495e;
+    background: #f1f1f1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.cert-name-cell {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.cert-date-cell {
+    color: #95a5a6;
+    font-size: 0.9rem;
+}
+
+/* Empty State Styling */
+.no-certs-row {
+    text-align: center;
+    padding: 40px !important;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
+/* Loading Spinner placeholder (if you add one) */
+.loading-text {
+    text-align: center;
+    color: #16a085;
+    font-weight: 500;
+    margin-top: 50px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cert-table th:nth-child(3), 
+    .cert-table td:nth-child(3) {
+        display: none; /* Hide ID on small screens */
+    }
+    
+    .cert-manager-container {
+        padding: 1rem;
+    }
+}

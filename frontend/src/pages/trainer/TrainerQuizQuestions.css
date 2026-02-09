@@ -1,0 +1,182 @@
+/* ================= PAGE ================= */
+.tqq-page-wrapper {
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+/* ================= HEADER ================= */
+.tqq-header {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  padding: 18px 24px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  gap: 16px;
+}
+
+.tqq-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* BACK BUTTON */
+.tqq-back-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 10%;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.tqq-back-btn:hover {
+  background: #1d4ed8;
+}
+
+/* HEADER ACTIONS */
+.tqq-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* EDIT ALL */
+.tqq-edit-all-btn {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tqq-edit-all-btn:hover {
+  background: #1d4ed8;
+}
+
+/* DELETE ALL */
+.tqq-delete-all-btn {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tqq-delete-all-btn:hover {
+  background: #b91c1c;
+}
+
+/* ================= CONTENT ================= */
+.tqq-content {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.tqq-status {
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* ================= QUESTION CARD ================= */
+.tqq-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+/* CARD TOP */
+.tqq-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ACTION BUTTONS */
+.tqq-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tqq-edit-btn {
+  background: #16a34a;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tqq-edit-btn:hover {
+  background: #15803d;
+}
+
+.tqq-delete-btn {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tqq-delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* ================= OPTIONS ================= */
+.tqq-options {
+  margin-top: 14px;
+  padding-left: 18px;
+}
+
+.tqq-option {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  font-size: 14px;
+}
+
+/* CORRECT ANSWER */
+.tqq-option.correct {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 640px) {
+  .tqq-title {
+    font-size: 20px;
+  }
+
+  .tqq-header {
+    grid-template-columns: 48px 1fr;
+    row-gap: 10px;
+  }
+
+  .tqq-header-actions {
+    grid-column: span 2;
+    justify-content: center;
+  }
+
+  .tqq-card-top {
+    flex-direction: column;
+  }
+}

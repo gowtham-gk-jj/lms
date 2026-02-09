@@ -1,0 +1,50 @@
+/* Hero Container */
+.hero {
+  width: 100%;
+  height: 300px; /* Fixed height for a clean banner look */
+  background: linear-gradient(90deg, #fff7cc, #fde68a);
+  display: flex;
+  align-items: center; /* Vertical center */
+  justify-content: flex-start; /* Aligns content to the left */
+  overflow: hidden;
+}
+
+/* Content Wrapper */
+.hero-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto; /* Centers the container in the middle of the screen */
+  padding: 0 60px; /* Horizontal padding */
+}
+
+/* Typography */
+.hero-content h1 {
+  font-size: 48px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Highlighted Text */
+.hero-content h1 span {
+  color: #22c55e;
+}
+
+.hero-content p {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #334155;
+  font-weight: 500;
+}
+
+/* Responsive fix for smaller screens */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 0 30px;
+    text-align: center;
+  }
+  .hero-content h1 {
+    font-size: 36px;
+  }
+}

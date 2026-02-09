@@ -1,0 +1,99 @@
+/* Trainer Module Wrapper */
+.trainer-container {
+  min-height: 100vh;
+  background-color: #f3f0ff; /* Soft purple theme for instructors */
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* TOP NAVIGATION */
+.trainer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: 65px;
+  background-color: #ffffff;
+  border-bottom: 3px solid #7c3aed; /* Bold purple instructor accent */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.trainer-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #7c3aed;
+  cursor: pointer;
+}
+
+.logo-text {
+  color: #1f2937;
+  margin-left: 5px;
+}
+
+.trainer-profile-area {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.trainer-user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.trainer-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.trainer-tag {
+  font-size: 0.7rem;
+  color: #7c3aed;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* LOGOUT BUTTON */
+.trainer-logout-btn {
+  background-color: #1f2937;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trainer-logout-btn:hover {
+  background-color: #dc2626; /* Switches to red on hover for danger awareness */
+  transform: translateY(-1px);
+}
+
+/* CONTENT LAYOUT */
+.trainer-main-content {
+  padding: 2.5rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.trainer-content-wrapper {
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Shared Trainer Card Class */
+.trainer-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.1);
+  border: 1px solid #e5e7eb;
+}

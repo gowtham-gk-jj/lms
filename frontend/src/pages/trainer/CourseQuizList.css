@@ -1,0 +1,124 @@
+/* ================= PAGE WRAPPER ================= */
+.cql-page-wrapper {
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+/* ================= HEADER ================= */
+.cql-header {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  padding: 18px 24px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cql-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* BACK BUTTON */
+.cql-back-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 10%;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cql-back-btn:hover {
+  background: #1d4ed8;
+}
+
+.cql-header-spacer {
+  width: 40px;
+  height: 40px;
+}
+
+/* ================= CONTENT ================= */
+.cql-content {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.cql-status {
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* ================= GRID ================= */
+.cql-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* ================= CARD ================= */
+.cql-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s ease;
+}
+
+.cql-card:hover {
+  transform: translateY(-4px);
+}
+
+/* LEVEL TITLE */
+.cql-level {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* QUESTIONS BADGE */
+.cql-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: #e0ecff;
+  color: #2563eb;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* BUTTON */
+.cql-btn {
+  all: unset;
+  margin-top: auto;
+  background: #2563eb;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.cql-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.cql-btn:active {
+  transform: translateY(0);
+}
+
+/* ================= RESPONSIVE ==========*
