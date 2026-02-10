@@ -1,6 +1,5 @@
 const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
 
-
 /**
  * Common response handler
  */
@@ -32,14 +31,24 @@ export const authApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    
+
     const result = await handleResponse(response);
-    
-    // ✅ Store userId immediately upon login success
+
+    // ✅ FIX 1: STORE TOKEN (THIS WAS MISSING)
+    if (result.token) {
+      localStorage.setItem('token', result.token);
+    }
+
+    // ✅ FIX 2: STORE ROLE (USED FOR ROUTING)
+    if (result.user?.role) {
+      localStorage.setItem('role', result.user.role);
+    }
+
+    // ✅ EXISTING LOGIC (UNCHANGED)
     if (result.user && (result.user._id || result.user.id)) {
       localStorage.setItem('userId', result.user._id || result.user.id);
     }
-    
+
     return result;
   },
 
