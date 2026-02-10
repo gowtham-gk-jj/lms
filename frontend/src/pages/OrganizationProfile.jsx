@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import api from "../api/axios";
+
 
 export default function OrganizationProfile() {
   const [org, setOrg] = useState({
@@ -16,12 +18,12 @@ export default function OrganizationProfile() {
 
   /* LOAD ORGANIZATION */
   useEffect(() => {
-    fetch("http://localhost:5000/api/organization")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) setOrg(data);
-      })
-      .catch(console.error);
+    api.get("/organization")
+  .then((res) => {
+    if (res.data) setOrg(res.data);
+  })
+  .catch(console.error);
+
   }, []);
 
   const handleChange = (e) => {
@@ -37,11 +39,7 @@ export default function OrganizationProfile() {
     try {
       setLoading(true);
 
-      await fetch("http://localhost:5000/api/organization", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(org),
-      });
+      await api.put("/organization", org);
 
       alert("Organization updated successfully!");
     } catch {

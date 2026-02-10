@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../../api/axios";
 import "./EditAllQuizQuestions.css";
 
 const EditAllQuizQuestions = () => {
   const { courseId, level: encodedLevel } = useParams();
   const level = Number(decodeURIComponent(encodedLevel));
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,14 +15,9 @@ const EditAllQuizQuestions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/quiz/course/${courseId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await api.get(`/quiz/course/${courseId}`);
 
-        const data = await res.json();
-
-        const filtered = (data.quiz || []).filter(
+        const filtered = (res.data.quiz || []).filter(
           (q) => q.level === level
         );
 
@@ -40,14 +35,14 @@ const EditAllQuizQuestions = () => {
 
         setQuestions(formatted);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load quiz questions", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuestions();
-  }, [courseId, level, token]);
+  }, [courseId, level]);
 
   /* ===== UPDATE LOCAL STATE ===== */
   const updateQuestion = (index, field, value) => {
@@ -58,30 +53,25 @@ const EditAllQuizQuestions = () => {
 
   /* ===== SAVE ALL ===== */
   const saveAll = async () => {
-    for (const q of questions) {
-      const formattedOptions = q.options.map((opt) => ({
-        text: opt,
-        isCorrect: opt === q.correctAnswer,
-      }));
+    try {
+      for (const q of questions) {
+        const formattedOptions = q.options.map((opt) => ({
+          text: opt,
+          isCorrect: opt === q.correctAnswer,
+        }));
 
-      await fetch(
-        `http://localhost:5000/api/quiz/question/${q._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            question: q.question,
-            options: formattedOptions,
-          }),
-        }
-      );
+        await api.put(`/quiz/question/${q._id}`, {
+          question: q.question,
+          options: formattedOptions,
+        });
+      }
+
+      alert("All questions updated successfully ✅");
+      navigate(-1);
+    } catch (err) {
+      console.error("Failed to save questions", err);
+      alert("Failed to update questions ❌");
     }
-
-    alert("All questions updated successfully");
-    navigate(-1);
   };
 
   if (loading) return <p className="eaq-status">Loading...</p>;

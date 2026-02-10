@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./LogoBranding.css";
+import api from "../api/axios";
+
 
 export default function LogoBranding() {
   const fileRef = useRef(null);
@@ -12,11 +14,13 @@ export default function LogoBranding() {
   useEffect(() => {
     const loadBranding = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/organization");
-        const data = await res.json();
+        const res = await api.get("/organization");
+        const data = res.data;
+
         if (data?.themeColor) setThemeColor(data.themeColor);
         if (data?.logo)
-          setLogoPreview(`http://localhost:5000${data.logo}`);
+          setLogoPreview(`${import.meta.env.VITE_API_BASE_URL}${data.logo}`);
+
       } catch {
         console.log("No branding found");
       }
@@ -32,8 +36,7 @@ export default function LogoBranding() {
   };
 
   const handleSave = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return alert("Session expired");
+   
 
     setLoading(true);
     try {
@@ -41,11 +44,8 @@ export default function LogoBranding() {
       if (logoFile) formData.append("logo", logoFile);
       formData.append("themeColor", themeColor);
 
-      await fetch("http://localhost:5000/api/organization/branding", {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+      await api.put("/organization/branding", formData);
+
 
       alert("✅ Branding updated successfully");
     } catch {

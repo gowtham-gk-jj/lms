@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import api from "../api/axios";
 
 export default function SystemSettings() {
   const [settings, setSettings] = useState({
@@ -10,17 +11,17 @@ export default function SystemSettings() {
 
   const [loading, setLoading] = useState(false);
 
-  /* 🔹 LOAD EXISTING SETTINGS (Module 5 Update) */
+  /* 🔹 LOAD EXISTING SETTINGS */
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/organization/settings");
-        const data = await res.json();
-        if (data) setSettings(data);
+        const res = await api.get("/organization/settings");
+        if (res.data) setSettings(res.data);
       } catch (err) {
         console.warn("No system settings found on server.");
       }
     };
+
     fetchSettings();
   }, []);
 
@@ -33,30 +34,12 @@ export default function SystemSettings() {
     });
   };
 
-  /* 🔹 SAVE SETTINGS (Module 5 Authorized logic) */
+  /* 🔹 SAVE SETTINGS */
   const handleSave = async () => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const token = userInfo?.token;
-
-    if (!token) {
-      alert("Unauthorized: Please login as Admin.");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      // ✅ Backend API Call with Authorization
-      const res = await fetch("http://localhost:5000/api/organization/settings", {
-        method: "PUT",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(settings),
-      });
-
-      if (!res.ok) throw new Error("Failed to update system settings");
+      await api.put("/organization/settings", settings);
 
       alert("System settings updated successfully!");
     } catch (err) {
@@ -107,8 +90,21 @@ export default function SystemSettings() {
         </select>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "20px 0" }}>
-        <span style={{ fontSize: "14px", fontWeight: "500", color: "#334155" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          margin: "20px 0",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "14px",
+            fontWeight: "500",
+            color: "#334155",
+          }}
+        >
           Enable System Notifications
         </span>
         <input

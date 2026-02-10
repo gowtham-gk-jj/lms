@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import api from "../../api/axios";
 import "./CourseQuizList.css";
 
 const CourseQuizList = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const token = user?.token;
 
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,33 +16,17 @@ const CourseQuizList = () => {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/quiz/course/${courseId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch quiz data");
-
-        const data = await res.json();
+        // ✅ NEW API (token auto-attached)
+        const res = await api.get(`/quiz/course/${courseId}`);
 
         /**
          * Backend returns:
          * { success: true, quiz: [ { level, ... } ] }
-         *
-         * We group by level here
          */
         const levelMap = new Map();
 
-        (data.quiz || []).forEach((q) => {
-          if (!levelMap.has(q.level)) {
-            levelMap.set(q.level, 1);
-          } else {
-            levelMap.set(q.level, levelMap.get(q.level) + 1);
-          }
+        (res.data.quiz || []).forEach((q) => {
+          levelMap.set(q.level, (levelMap.get(q.level) || 0) + 1);
         });
 
         const formatted = [...levelMap.entries()].map(
@@ -61,15 +45,14 @@ const CourseQuizList = () => {
       }
     };
 
-    if (token) fetchLevels();
-  }, [courseId, token]);
+    if (user?.token) fetchLevels();
+  }, [courseId, user?.token]);
 
   if (loading) return <p className="cql-status">Loading...</p>;
   if (error) return <p className="cql-status">{error}</p>;
 
   return (
     <div className="cql-page-wrapper">
-
       {/* HEADER */}
       <div className="cql-header">
         <button
@@ -81,7 +64,6 @@ const CourseQuizList = () => {
         </button>
 
         <h1 className="cql-title">Quiz Levels</h1>
-
         <div className="cql-header-spacer"></div>
       </div>
 

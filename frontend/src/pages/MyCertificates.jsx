@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
+
 import { useAuth } from "../context/AuthContext";
 import CertificateCard from "../components/CertificateCard";
 import "./MyCertificates.css";
@@ -18,13 +19,7 @@ const MyCertificates = () => {
     const fetchCerts = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/certificates/my",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+          "/certificates/my");
 
         console.log("🎓 Certificates from backend:", res.data);
         setCertificates(Array.isArray(res.data) ? res.data : []);

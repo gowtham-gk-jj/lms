@@ -10,20 +10,17 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Use a stable token variable
-  const token = user?.token || JSON.parse(localStorage.getItem("userInfo"))?.token;
-
   useEffect(() => {
-    if (token) {
+    if (user?.token) {
       loadUsers();
     }
-  }, [token]);
+  }, [user?.token]);
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const data = await authApi.getAllUsers(token);
-      setUsers(data || []);
+      const data = await authApi.getAllUsers(); // ✅ FIXED
+      setUsers(Array.isArray(data) ? data : []);
     } catch {
       console.error("Failed to load users");
     } finally {
@@ -32,11 +29,13 @@ const UserManagement = () => {
   };
 
   const toggleStatus = async (id, currentStatus) => {
-    // 🚨 Prevent self-deactivation logic
-    const loggedInUserId = user?.user?._id || user?._id; 
-    
+    // 🚨 Prevent self-deactivation
+    const loggedInUserId = user?.user?._id || user?._id;
+
     if (id === loggedInUserId && currentStatus) {
-      alert("Security Alert: You cannot deactivate your own administrative account.");
+      alert(
+        "Security Alert: You cannot deactivate your own administrative account."
+      );
       return;
     }
 
@@ -44,9 +43,11 @@ const UserManagement = () => {
     if (!window.confirm(`Are you sure you want to ${action} this user?`)) return;
 
     try {
-      await authApi.updateUserStatus(id, !currentStatus, token);
+      await authApi.updateUserStatus(id, !currentStatus); // ✅ FIXED
       setUsers((prev) =>
-        prev.map((u) => (u._id === id ? { ...u, isActive: !currentStatus } : u))
+        prev.map((u) =>
+          u._id === id ? { ...u, isActive: !currentStatus } : u
+        )
       );
     } catch {
       alert("System Error: Failed to update user status");
@@ -59,9 +60,13 @@ const UserManagement = () => {
         <div className="um-card-header">
           <div>
             <h2>User Directory</h2>
-            <p className="um-subtitle">Manage system access and permissions</p>
+            <p className="um-subtitle">
+              Manage system access and permissions
+            </p>
           </div>
-          <span className="um-count">{users.length} Active Accounts</span>
+          <span className="um-count">
+            {users.length} Active Accounts
+          </span>
         </div>
 
         {loading ? (
@@ -90,16 +95,31 @@ const UserManagement = () => {
                       </div>
                     </div>
                   </td>
-                  <td><span className={`um-role ${u.role}`}>{u.role}</span></td>
+
                   <td>
-                    <span className={`um-status ${u.isActive ? "active" : "inactive"}`}>
+                    <span className={`um-role ${u.role}`}>
+                      {u.role}
+                    </span>
+                  </td>
+
+                  <td>
+                    <span
+                      className={`um-status ${
+                        u.isActive ? "active" : "inactive"
+                      }`}
+                    >
                       {u.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
+
                   <td>
                     <button
-                      className={`um-btn ${u.isActive ? "deactivate" : "activate"}`}
-                      onClick={() => toggleStatus(u._id, u.isActive)}
+                      className={`um-btn ${
+                        u.isActive ? "deactivate" : "activate"
+                      }`}
+                      onClick={() =>
+                        toggleStatus(u._id, u.isActive)
+                      }
                     >
                       {u.isActive ? "Deactivate" : "Activate"}
                     </button>

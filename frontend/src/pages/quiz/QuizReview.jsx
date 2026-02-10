@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios"; 
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -20,12 +20,8 @@ export default function QuizReview() {
     const fetchReview = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/quiz/review/${attemptId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
+          `/quiz/review/${attemptId}`,
+          
         );
 
         if (!res.data.success) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
+
 import "./LearnerProgress.css";
 
 const LearnerProgress = () => {
@@ -7,14 +8,14 @@ const LearnerProgress = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const API_URL = "http://localhost:5000";
+  
 
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const token = localStorage.getItem("token");
+        
 
-        const res = await axios.get(`${API_URL}/api/progress`, {
+        const res = await axios.get(`/progress`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

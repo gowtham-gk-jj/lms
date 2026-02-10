@@ -1,9 +1,11 @@
 import { downloadReportCSV } from "../services/reportService";
+import api from "../api/axios";
+
 
 const AdminReports = () => {
   const handleDownload = async () => {
     try {
-      const token = localStorage.getItem("token");
+      
 
       if (!token) {
         alert("Please login again");

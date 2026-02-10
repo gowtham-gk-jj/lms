@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AdminProgressTable.css"; // ✅ Updated to look in the same folder
+import api from "../api/axios";
+
 
 const AdminProgressTable = () => {
   const [stats, setStats] = useState([]);
@@ -8,9 +10,8 @@ const AdminProgressTable = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const token = localStorage.getItem("token");
       try {
-        const res = await fetch("http://localhost:5000/api/enrollment/all-stats", {
+        const res = await fetch("enrollment/all-stats", {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

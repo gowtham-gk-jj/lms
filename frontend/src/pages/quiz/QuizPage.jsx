@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -25,7 +25,7 @@ export default function QuizPage() {
     const fetchQuiz = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/quiz/play/${courseId}/${level}`,
+          `/quiz/play/${courseId}/${level}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -83,7 +83,7 @@ export default function QuizPage() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/quiz/submit",
+        "/quiz/submit",
         {
           courseId,
           level,

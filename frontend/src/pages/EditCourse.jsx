@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
+
 import "./EditCourse.css";
 
 export default function EditCourse() {
@@ -16,7 +17,7 @@ export default function EditCourse() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/courses/public/${id}`)
+      .get(`/courses/public/${id}`)
       .then((res) => {
         setTitle(res.data.title);
         setDescription(res.data.description);

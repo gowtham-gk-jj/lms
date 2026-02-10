@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
+
 
 export default function Enroll() {
   const { id, level } = useParams(); // id: Course ID, level: Beginner/Intermediate/Advanced
@@ -23,7 +24,7 @@ export default function Enroll() {
       // ✅ The "Correct Way": API Call to persist enrollment in Database
       // Endpoint usually looks like /api/enroll or /api/courses/:id/enroll
       await axios.post(
-        `http://localhost:5000/api/courses/${id}/enroll`,
+        `courses/${id}/enroll`,
         { level },
         {
           headers: { Authorization: `Bearer ${token}` },

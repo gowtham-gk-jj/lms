@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios"; 
 import { useAuth } from "../../context/AuthContext";
 import "./QuizStart.css";
 
@@ -19,12 +19,8 @@ export default function QuizStart() {
     try {
       // ✅ USE THE REAL QUIZ ENDPOINT
       const res = await axios.get(
-        `http://localhost:5000/api/quiz/play/${courseId}/${level}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
+        `/quiz/play/${courseId}/${level}`,
+        
       );
 
       // ❌ No questions

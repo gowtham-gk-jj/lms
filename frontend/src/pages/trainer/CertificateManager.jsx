@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useAuth } from '../../context/AuthContext';
-import './CertificateManager.css';
+import React, { useState, useEffect } from "react";
+import api from "../api/axios";
+import { useAuth } from "../../context/AuthContext";
+import "./CertificateManager.css";
 
 const CertificateManager = () => {
   const { user } = useAuth();
@@ -11,25 +11,26 @@ const CertificateManager = () => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('http://localhost:5000/api/certificates/all', config);
-        setAllCerts(data);
+        // ✅ NEW API (token auto-attached by axios interceptor)
+        const { data } = await api.get("/certificates/all");
+        setAllCerts(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch certificates:", err);
       } finally {
         setLoading(false);
       }
     };
+
     if (user?.token) fetchAll();
-  }, [user]);
+  }, [user?.token]);
 
   return (
-    <div className="cert-manager-container"> {/* 2. Use class names instead of inline styles */}
+    <div className="cert-manager-container">
       <div className="cert-manager-header">
         <h2>Certificate Issuance Log</h2>
         <p>View all certificates issued to learners across the system.</p>
       </div>
-      
+
       {loading ? (
         <p className="loading-text">Loading records...</p>
       ) : (
@@ -47,10 +48,14 @@ const CertificateManager = () => {
               {allCerts.length > 0 ? (
                 allCerts.map((cert) => (
                   <tr key={cert._id}>
-                    <td className="cert-name-cell">{cert.learnerName}</td>
+                    <td className="cert-name-cell">
+                      {cert.learnerName}
+                    </td>
                     <td>{cert.courseName}</td>
                     <td>
-                      <span className="cert-id-cell">{cert.certificateId}</span>
+                      <span className="cert-id-cell">
+                        {cert.certificateId}
+                      </span>
                     </td>
                     <td className="cert-date-cell">
                       {new Date(cert.issueDate).toLocaleDateString()}

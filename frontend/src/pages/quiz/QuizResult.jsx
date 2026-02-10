@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios"; // or ../../api/axios
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -26,12 +26,8 @@ export default function QuizResult() {
     const fetchResult = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/quiz/result/${attemptId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
+          `/quiz/result/${attemptId}`,
+         
         );
 
         if (!res.data.success) {
@@ -68,16 +64,8 @@ export default function QuizResult() {
         quizSavedRef.current = true;
 
         await axios.post(
-          "http://localhost:5000/api/enrollment/complete-quiz",
-          {
-            courseId: result.course,
-            level: result.level, // Beginner / Intermediate / Advanced
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
+          "/enrollment/complete-quiz",
+          
         );
 
         console.log("✅ Quiz pass saved to enrollment");
@@ -98,12 +86,8 @@ export default function QuizResult() {
     const checkCourseCompletion = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/enrollment/my-courses",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
+          "/enrollment/my-courses",
+          
         );
 
         const enrollment = res.data.find(

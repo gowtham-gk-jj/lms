@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../api/axios";
 
 const styles = {
   container: {
@@ -101,7 +102,7 @@ export default function LearningRules() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/organization/rules")
+    fetch("/organization/rules")
       .then((res) => res.json())
       .then((data) => {
         if (data) setRules(data);
@@ -132,7 +133,7 @@ export default function LearningRules() {
       const userString = localStorage.getItem("userInfo");
       const user = userString ? JSON.parse(userString) : null;
       
-      await fetch("http://localhost:5000/api/organization/rules", {
+      await fetch("/organization/rules", {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",

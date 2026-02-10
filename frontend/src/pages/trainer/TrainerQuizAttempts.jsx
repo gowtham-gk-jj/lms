@@ -1,38 +1,30 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./TrainerQuizAttempts.css";
 
 export default function TrainerQuizAttempts() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const token = user?.token;
 
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!token) return;
+    if (!user?.token) return;
 
     const fetchAttempts = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/quiz/trainer/attempts",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await api.get("/quiz/trainer/attempts");
 
-        if (!res.data.success) {
+        if (!res.data?.success) {
           setError("No quiz attempts found");
           return;
         }
 
-        setAttempts(res.data.attempts);
+        setAttempts(res.data.attempts || []);
       } catch (err) {
         console.error(err);
         setError("Failed to load quiz attempts");
@@ -42,7 +34,7 @@ export default function TrainerQuizAttempts() {
     };
 
     fetchAttempts();
-  }, [token]);
+  }, [user]);
 
   if (loading) {
     return (
@@ -93,23 +85,15 @@ export default function TrainerQuizAttempts() {
           <tbody>
             {attempts.map((a) => (
               <tr key={a.attemptId}>
-                {/* USER NAME */}
                 <td>{a.userName || "N/A"}</td>
-
-                {/* USER EMAIL */}
-                <td className="mono">{a.userId || "N/A"}</td>
-
-                {/* COURSE */}
+                <td className="mono">{a.userEmail || "N/A"}</td>
                 <td>{a.courseTitle || "N/A"}</td>
-
                 <td>{a.level}</td>
 
-                {/* ✅ FIXED SCORE */}
                 <td>
                   {a.score} / {a.totalQuestions}
                 </td>
 
-                {/* ✅ FIXED PERCENTAGE */}
                 <td>{a.percentage}%</td>
 
                 <td>
@@ -122,7 +106,6 @@ export default function TrainerQuizAttempts() {
                   </span>
                 </td>
 
-                {/* ✅ SAFE DATE */}
                 <td>
                   {a.date
                     ? new Date(a.date).toLocaleDateString()

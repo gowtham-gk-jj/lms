@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import "./TrainerDashboard.css";
 
@@ -11,7 +11,7 @@ export default function TrainerDashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const token = user?.token;
+  const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
   /* ===============================
      FETCH COURSES
@@ -19,15 +19,12 @@ export default function TrainerDashboard() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        if (!token) {
+        if (!user) {
           navigate("/", { replace: true });
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/courses", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        const res = await api.get("/courses");
         setCourses(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Error fetching courses:", err);
@@ -37,7 +34,7 @@ export default function TrainerDashboard() {
     };
 
     fetchCourses();
-  }, [navigate, token]);
+  }, [navigate, user]);
 
   /* ===============================
      DELETE COURSE
@@ -46,10 +43,7 @@ export default function TrainerDashboard() {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await api.delete(`/courses/${id}`);
       setCourses((prev) => prev.filter((c) => c._id !== id));
     } catch {
       alert("Delete failed. You might not have permission.");
@@ -71,7 +65,6 @@ export default function TrainerDashboard() {
         <div className="trainer-sidebar-top">
           <h2>Trainer Panel</h2>
 
-          {/* 🔥 OVERVIEW */}
           <button
             className="sidebar-btn"
             onClick={() => navigate("/trainer-dashboard/overview")}
@@ -150,9 +143,9 @@ export default function TrainerDashboard() {
                 <div key={course._id} className="course-card">
                   <img
                     src={
-                      course.image?.startsWith("http")
-                        ? course.image
-                        : `http://localhost:5000/${course.image}`
+                      course.image
+                        ? `${ASSET_URL}/${course.image}`
+                        : "https://via.placeholder.com/300x180?text=No+Image"
                     }
                     alt={course.title}
                     className="course-image"

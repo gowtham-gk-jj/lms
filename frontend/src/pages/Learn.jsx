@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
+
 
 export default function Learn() {
   const { id, level } = useParams();
@@ -22,7 +23,7 @@ export default function Learn() {
       try {
         // ✅ The "Correct Way": Fetch course data from backend
         // This ensures the student is actually enrolled before showing videos
-        const res = await axios.get(`http://localhost:5000/api/courses/${id}`, {
+        const res = await axios.get(`courses/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setCourse(res.data);

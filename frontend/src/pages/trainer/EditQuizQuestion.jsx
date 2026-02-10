@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../../api/axios";
 import "./EditQuizQuestion.css";
 
 const EditQuizQuestion = () => {
   const { questionId } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [loading, setLoading] = useState(true);
 
-  /* ===== FETCH QUESTION (FIXED) ===== */
+  /* ===== FETCH QUESTION ===== */
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5000/api/quiz/question/${questionId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = await res.json();
+        const res = await api.get(`/quiz/question/${questionId}`);
 
         // ✅ NORMALIZE BACKEND DATA → UI FORMAT
-        const optionTexts = data.options.map((o) => o.text);
-        const correctOpt = data.options.find((o) => o.isCorrect);
+        const optionTexts = res.data.options.map((o) => o.text);
+        const correctOpt = res.data.options.find((o) => o.isCorrect);
 
-        setQuestion(data.question);
+        setQuestion(res.data.question);
         setOptions(optionTexts);
         setCorrectAnswer(correctOpt ? correctOpt.text : "");
       } catch (err) {
@@ -42,7 +33,7 @@ const EditQuizQuestion = () => {
     };
 
     fetchQuestion();
-  }, [questionId, token]);
+  }, [questionId]);
 
   /* ===== UPDATE QUESTION ===== */
   const handleSubmit = async (e) => {
@@ -53,37 +44,31 @@ const EditQuizQuestion = () => {
       isCorrect: opt === correctAnswer,
     }));
 
-    await fetch(
-      `http://localhost:5000/api/quiz/question/${questionId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          question,
-          options: formattedOptions,
-        }),
-      }
-    );
+    try {
+      await api.put(`/quiz/question/${questionId}`, {
+        question,
+        options: formattedOptions,
+      });
 
-    alert("Question updated successfully ✅");
-    navigate(-1);
+      alert("Question updated successfully ✅");
+      navigate(-1);
+    } catch (err) {
+      console.error("UPDATE QUESTION ERROR:", err);
+      alert("Failed to update question ❌");
+    }
   };
 
   if (loading) return <p className="eq-status">Loading...</p>;
 
   return (
     <div className="eq-page-wrapper">
-
       {/* HEADER */}
       <div className="eq-header">
         <button
           className="eq-back-btn"
           onClick={() => navigate(-1)}
         >
-          ← 
+          ←
         </button>
 
         <h1 className="eq-title">Edit Question</h1>
@@ -94,7 +79,6 @@ const EditQuizQuestion = () => {
       <div className="eq-content">
         <div className="eq-card">
           <form onSubmit={handleSubmit}>
-
             <div className="eq-form-group">
               <label>Question</label>
               <input
@@ -140,7 +124,6 @@ const EditQuizQuestion = () => {
             <button type="submit" className="eq-update-btn">
               Update Question
             </button>
-
           </form>
         </div>
       </div>

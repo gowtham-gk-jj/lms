@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import api from "../../api/axios";
 import "./TrainerQuizQuestions.css";
 
 const TrainerQuizQuestions = () => {
@@ -8,7 +9,6 @@ const TrainerQuizQuestions = () => {
   const level = Number(decodeURIComponent(encodedLevel));
   const navigate = useNavigate();
   const { user } = useAuth();
-  const token = user?.token;
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,18 +17,9 @@ const TrainerQuizQuestions = () => {
   /* ===== FETCH QUESTIONS ===== */
   const fetchQuestions = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/quiz/course/${courseId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.get(`/quiz/course/${courseId}`);
 
-      if (!res.ok) throw new Error("Failed to fetch");
-
-      const data = await res.json();
-
-      const filtered = (data.quiz || []).filter(
+      const filtered = (res.data.quiz || []).filter(
         (q) => q.level === level
       );
 
@@ -42,31 +33,20 @@ const TrainerQuizQuestions = () => {
   };
 
   useEffect(() => {
-    if (token) fetchQuestions();
-  }, [courseId, level, token]);
+    if (user?.token) fetchQuestions();
+  }, [courseId, level, user]);
 
   /* ===== DELETE SINGLE QUESTION ===== */
   const deleteQuestion = async (id) => {
     if (!window.confirm("Delete this question?")) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/quiz/question/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      await api.delete(`/quiz/question/${id}`);
 
       // update UI instantly
       setQuestions((prev) => prev.filter((q) => q._id !== id));
     } catch (err) {
-      alert(err.message || "Failed to delete question");
+      alert(err.response?.data?.message || "Failed to delete question");
     }
   };
 
@@ -75,23 +55,12 @@ const TrainerQuizQuestions = () => {
     if (!window.confirm("Delete ALL questions in this level?")) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/quiz/course/${courseId}/level/${level}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      await api.delete(`/quiz/course/${courseId}/level/${level}`);
 
       // clear UI
       setQuestions([]);
     } catch (err) {
-      alert(err.message || "Failed to delete all questions");
+      alert(err.response?.data?.message || "Failed to delete all questions");
     }
   };
 

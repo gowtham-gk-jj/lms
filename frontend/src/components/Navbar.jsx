@@ -1,8 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FaBell } from "react-icons/fa";
-import { useEffect, useState } from "react"; // ✅ ADDED
-import axios from "axios"; // ✅ ADDED
+import { useEffect, useState } from "react";
+import api from "../api/axios"; // ✅ CHANGED
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -39,17 +39,13 @@ export default function Navbar() {
       if (!user) return;
 
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          "http://localhost:5000/api/notifications",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        // ✅ FIXED API (no localhost, no manual token)
+        const res = await api.get("/notifications");
 
-        const unread = res.data.filter((n) => !n.isRead);
+        const unread = Array.isArray(res.data)
+          ? res.data.filter((n) => !n.isRead)
+          : [];
+
         setUnreadCount(unread.length);
       } catch (err) {
         console.error("Failed to fetch notifications");
@@ -71,7 +67,11 @@ export default function Navbar() {
         <nav className="navbar-links">
           <Link
             to="/"
-            className={isActive("/") && !isAdmin && !isTrainer ? "nav-active" : ""}
+            className={
+              isActive("/") && !isAdmin && !isTrainer
+                ? "nav-active"
+                : ""
+            }
           >
             Courses
           </Link>
@@ -94,7 +94,9 @@ export default function Navbar() {
           {isAdmin && (
             <Link
               to="/admin-dashboard"
-              className={isActive("/admin-dashboard") ? "nav-active" : ""}
+              className={
+                isActive("/admin-dashboard") ? "nav-active" : ""
+              }
             >
               Admin Dashboard
             </Link>
@@ -103,7 +105,9 @@ export default function Navbar() {
           {isTrainer && (
             <Link
               to="/trainer-dashboard"
-              className={isActive("/trainer-dashboard") ? "nav-active" : ""}
+              className={
+                isActive("/trainer-dashboard") ? "nav-active" : ""
+              }
             >
               Trainer Dashboard
             </Link>
@@ -112,7 +116,9 @@ export default function Navbar() {
           {isLearner && (
             <Link
               to="/learner-dashboard"
-              className={isActive("/learner-dashboard") ? "nav-active" : ""}
+              className={
+                isActive("/learner-dashboard") ? "nav-active" : ""
+              }
             >
               My Learning
             </Link>
@@ -121,7 +127,9 @@ export default function Navbar() {
           {isLearner && (
             <Link
               to="/my-certificates"
-              className={isActive("/my-certificates") ? "nav-active" : ""}
+              className={
+                isActive("/my-certificates") ? "nav-active" : ""
+              }
             >
               Certificates
             </Link>
@@ -143,7 +151,7 @@ export default function Navbar() {
             </Link>
           ) : (
             <div className="user-nav-group">
-              {/* 🔔 NOTIFICATION ICON WITH BADGE */}
+              {/* 🔔 NOTIFICATION ICON */}
               <button
                 className="notification-btn"
                 title="Notifications"

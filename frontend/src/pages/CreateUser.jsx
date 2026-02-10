@@ -31,12 +31,12 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
   try {
-    await authApi.createUser(formData, user.token);
+    await authApi.createUser(formData,);
 
     // 2. If we are in "Succession Mode", deactivate the old account now
     if (location.state?.prefill) {
       // Use the ID of the current logged-in user (you)
-      await authApi.updateUserStatus(user._id, false, user.token);
+      await authApi.updateUserStatus(user._id, false,);
       
       alert("Successor created and your old account has been deactivated. You will now be logged out.");
       logout();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
+
 import { useAuth } from "../context/AuthContext";
 import {
   BarChart,
@@ -28,12 +29,8 @@ export default function RoleDashboard({ role = "Learner", full = false }) {
         }
 
         const res = await axios.get(
-          `http://localhost:5000/api/dashboard/stats/${role}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // 🔥 FIX
-            },
-          }
+          `/dashboard/stats/${role}`,
+          
         );
 
         const data = res.data;

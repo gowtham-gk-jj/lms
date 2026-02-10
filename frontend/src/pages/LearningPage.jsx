@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import "./LearningPage.css";
 
 export default function LearningPage() {
@@ -12,7 +12,7 @@ export default function LearningPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const API_URL = "http://localhost:5000";
+ 
 
   /* ===============================
      LOAD ENROLLMENT DATA
@@ -20,12 +20,12 @@ export default function LearningPage() {
   useEffect(() => {
     const fetchLearningData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+        
+       
 
         const res = await axios.get(
-          `${API_URL}/api/enrollment/my-courses`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          `enrollment/my-courses`,
+          
         );
 
         const enrollments = Array.isArray(res.data)
@@ -79,7 +79,7 @@ export default function LearningPage() {
     try {
       setSubmitting(true);
 
-      const token = localStorage.getItem("token");
+      
       const levelId =
         enrollment.course.levels[activeLevel]._id;
 
@@ -89,7 +89,7 @@ export default function LearningPage() {
       }
 
       const res = await axios.patch(
-        `${API_URL}/api/enrollment/update-progress`,
+        `enrollment/update-progress`,
         { enrollmentId: enrollment._id, levelId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
