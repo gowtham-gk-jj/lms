@@ -1,28 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
 import "./CourseDetails.css";
 
 export default function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const token = user?.token;
 
   const [course, setCourse] = useState(null);
   const [enrollment, setEnrollment] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* ===============================
-     LOAD COURSE
-  ================================ */
+  /* ================= LOAD COURSE ================= */
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/courses/public/${id}`
-        );
+        const res = await api.get(`/courses/public/${id}`);
         setCourse(res.data);
       } catch (err) {
         console.error("Course fetch error", err);
@@ -31,28 +26,17 @@ export default function CourseDetails() {
     fetchCourse();
   }, [id]);
 
-  /* ===============================
-     LOAD ENROLLMENT
-  ================================ */
+  /* ================= LOAD ENROLLMENT ================= */
   useEffect(() => {
     const fetchEnrollment = async () => {
-      if (!token) {
+      if (!user) {
         setLoading(false);
         return;
       }
 
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/enrollment/my-courses",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        const current = res.data.find(
-          (e) => e.course._id === id
-        );
-
+        const res = await api.get("/enrollment/my-courses");
+        const current = res.data.find((e) => e.course._id === id);
         setEnrollment(current || null);
       } catch (err) {
         console.error("Enrollment fetch error", err);
@@ -62,21 +46,15 @@ export default function CourseDetails() {
     };
 
     fetchEnrollment();
-  }, [id, token]);
+  }, [id, user]);
 
-  /* ===============================
-     ACTIONS
-  ================================ */
+  /* ================= ACTIONS ================= */
   const handleEnroll = async () => {
     try {
-      await axios.post(
-        "http://localhost:5000/api/enrollment/enroll",
-        {
-          learnerId: user._id,
-          courseId: id,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post("/enrollment/enroll", {
+        learnerId: user._id,
+        courseId: id,
+      });
       window.location.reload();
     } catch (err) {
       console.error("Enroll failed", err);
@@ -91,30 +69,16 @@ export default function CourseDetails() {
     navigate(`/quiz/${id}/${levelName.toLowerCase()}`);
   };
 
-  /* ===============================
-     LOADING GUARD
-  ================================ */
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
-
-  if (!course) {
-    return <div className="error-screen">Course not found</div>;
-  }
+  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (!course) return <div className="error-screen">Course not found</div>;
 
   const levels = ["Beginner", "Intermediate", "Advanced"];
-
-  // 🔑 PROGRESS SOURCES
-  const completedLessons =
-    enrollment?.completedLessons || [];
-  const completedQuizzes =
-    enrollment?.completedQuizzes || [];
+  const completedLessons = enrollment?.completedLessons || [];
+  const completedQuizzes = enrollment?.completedQuizzes || [];
 
   return (
     <div className="course-details-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Back
-      </button>
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
 
       <div className="course-header">
         <h1>{course.title}</h1>
@@ -124,86 +88,36 @@ export default function CourseDetails() {
       <div className="level-grid">
         {levels.map((levelName, index) => {
           const levelId = course.levels[index]?._id;
-          const prevLevelId =
-            index > 0
-              ? course.levels[index - 1]?._id
-              : null;
+          const prevLevelId = index > 0 ? course.levels[index - 1]?._id : null;
 
           const isEnrolled = !!enrollment;
-
-          // 🔓 LEVEL UNLOCK — ONLY BY QUIZ PASS
           const unlocked =
-            isEnrolled &&
-            (index === 0 ||
-              completedQuizzes.includes(prevLevelId));
+            isEnrolled && (index === 0 || completedQuizzes.includes(prevLevelId));
 
-          const lessonDone =
-            completedLessons.includes(levelId);
-          const quizDone =
-            completedQuizzes.includes(levelId);
+          const lessonDone = completedLessons.includes(levelId);
+          const quizDone = completedQuizzes.includes(levelId);
 
           return (
             <div key={levelName} className="level-card">
-              <div className="level-info">
-                <span className="level-badge">
-                  Step {index + 1}
-                </span>
-                <h3>{levelName}</h3>
-              </div>
+              <h3>{levelName}</h3>
 
-              <div className="level-actions">
-                {index === 0 && !isEnrolled && (
-                  <button
-                    className="enroll-btn"
-                    onClick={handleEnroll}
-                  >
-                    Enroll Now
-                  </button>
-                )}
+              {!isEnrolled && index === 0 && (
+                <button onClick={handleEnroll}>Enroll Now</button>
+              )}
 
-                {unlocked && (
-                  <button
-                    className="video-btn"
-                    onClick={() =>
-                      handleWatchLesson(levelName)
-                    }
-                  >
-                    ▶ Watch Lesson
-                  </button>
-                )}
+              {unlocked && (
+                <button onClick={() => handleWatchLesson(levelName)}>
+                  ▶ Watch Lesson
+                </button>
+              )}
 
-                {unlocked && lessonDone && !quizDone && (
-                  <button
-                    className="video-btn quiz-start-btn"
-                    onClick={() =>
-                      handleStartQuiz(levelName)
-                    }
-                  >
-                    ▶ Start Quiz
-                  </button>
-                )}
+              {unlocked && lessonDone && !quizDone && (
+                <button onClick={() => handleStartQuiz(levelName)}>
+                  ▶ Start Quiz
+                </button>
+              )}
 
-                {quizDone && (
-                  <button
-                    className="quiz-btn completed"
-                    disabled
-                  >
-                    Quiz Passed ✅
-                  </button>
-                )}
-
-                {unlocked && !lessonDone && (
-                  <button className="enroll-btn" disabled>
-                    Complete video to unlock quiz 🔒
-                  </button>
-                )}
-
-                {!unlocked && index !== 0 && (
-                  <button className="enroll-btn" disabled>
-                    Complete previous level 🔒
-                  </button>
-                )}
-              </div>
+              {quizDone && <button disabled>Quiz Passed ✅</button>}
             </div>
           );
         })}

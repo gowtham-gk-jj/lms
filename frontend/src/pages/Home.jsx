@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios"; // ✅ central axios
 import "./Home.css";
 
 export default function Home() {
@@ -8,20 +8,29 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Define base URL for assets to keep the JSX clean
-  const ASSET_URL = "http://localhost:5000";
+  // ✅ BACKEND BASE URL (Render / Local)
+  const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get(`${ASSET_URL}/api/courses/public`);
-        setCourses(res.data);
+        // ✅ FIXED API (no localhost)
+        const res = await api.get("/courses/public");
+
+        // backend may return array or wrapped object
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data.courses || [];
+
+        setCourses(data);
       } catch (err) {
         console.error("Error fetching courses:", err);
+        setCourses([]);
       } finally {
         setLoading(false);
       }
     };
+
     fetchCourses();
   }, []);
 
@@ -50,13 +59,14 @@ export default function Home() {
                   src={`${ASSET_URL}/${course.image}`}
                   alt={course.title}
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/300x170?text=Course+Image";
+                    e.target.src =
+                      "https://via.placeholder.com/300x170?text=Course+Image";
                   }}
                 />
 
                 <div className="course-body">
                   <h3>{course.title}</h3>
-                  <p>{course.description.substring(0, 100)}...</p>
+                  <p>{course.description?.substring(0, 100)}...</p>
 
                   <div className="course-actions">
                     <a
@@ -80,7 +90,9 @@ export default function Home() {
               </div>
             ))
           ) : (
-            <p className="no-courses">No courses available at the moment.</p>
+            <p className="no-courses">
+              No courses available at the moment.
+            </p>
           )}
         </div>
       )}

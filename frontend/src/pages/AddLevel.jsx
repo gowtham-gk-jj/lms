@@ -1,93 +1,127 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Use the context we finished
-import "./AddLevel.css";
+import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
+import "./CourseDetails.css";
 
-export default function AddLevel() {
+export default function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth(); // Access user token safely
+  const { user } = useAuth();
 
-  const [level, setLevel] = useState("Beginner");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [course, setCourse] = useState(null);
+  const [enrollment, setEnrollment] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Simple YouTube URL validation
-    if (!videoUrl.includes("youtube.com") && !videoUrl.includes("youtu.be")) {
-      alert("Please enter a valid YouTube URL");
-      return;
-    }
+  /* ================= LOAD COURSE ================= */
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await api.get(`/courses/public/${id}`);
+        setCourse(res.data);
+      } catch (err) {
+        console.error("Course fetch error", err);
+      }
+    };
+    fetchCourse();
+  }, [id]);
 
-    setLoading(true);
-
-    try {
-      const token = user?.token || localStorage.getItem("token");
-
-      if (!token) {
-        alert("Session expired. Please login again.");
-        navigate("/login");
+  /* ================= LOAD ENROLLMENT ================= */
+  useEffect(() => {
+    const fetchEnrollment = async () => {
+      if (!user) {
+        setLoading(false);
         return;
       }
 
-      await axios.post(
-        `http://localhost:5000/api/courses/${id}/levels`,
-        { level, videoUrl },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      try {
+        const res = await api.get("/enrollment/my-courses");
+        const current = res.data.find((e) => e.course._id === id);
+        setEnrollment(current || null);
+      } catch (err) {
+        console.error("Enrollment fetch error", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      alert("Level added successfully ✅");
-      navigate("/trainer/dashboard"); // Updated to match the TrainerSidebar routes
+    fetchEnrollment();
+  }, [id, user]);
+
+  /* ================= ACTIONS ================= */
+  const handleEnroll = async () => {
+    try {
+      await api.post("/enrollment/enroll", {
+        learnerId: user._id,
+        courseId: id,
+      });
+      window.location.reload();
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert(err.response?.data?.message || "Failed to add level ❌");
-    } finally {
-      setLoading(false);
+      console.error("Enroll failed", err);
     }
   };
 
+  const handleWatchLesson = (levelName) => {
+    navigate(`/learn/${id}/${levelName.toLowerCase()}`);
+  };
+
+  const handleStartQuiz = (levelName) => {
+    navigate(`/quiz/${id}/${levelName.toLowerCase()}`);
+  };
+
+  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (!course) return <div className="error-screen">Course not found</div>;
+
+  const levels = ["Beginner", "Intermediate", "Advanced"];
+  const completedLessons = enrollment?.completedLessons || [];
+  const completedQuizzes = enrollment?.completedQuizzes || [];
+
   return (
-    <div className="add-level-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Back to Dashboard
-      </button>
+    <div className="course-details-page">
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
 
-      <form className="add-level-card" onSubmit={handleSubmit}>
-        <div className="form-header">
-           <h2>Add Course Content</h2>
-           <p>Choose the difficulty and provide the video lesson.</p>
-        </div>
+      <div className="course-header">
+        <h1>{course.title}</h1>
+        <p className="course-desc">{course.description}</p>
+      </div>
 
-        <div className="form-group">
-          <label>Difficulty Level</label>
-          <select value={level} onChange={(e) => setLevel(e.target.value)}>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-        </div>
+      <div className="level-grid">
+        {levels.map((levelName, index) => {
+          const levelId = course.levels[index]?._id;
+          const prevLevelId = index > 0 ? course.levels[index - 1]?._id : null;
 
-        <div className="form-group">
-          <label>YouTube Video Lesson URL</label>
-          <input
-            type="url"
-            required
-            value={videoUrl}
-            onChange={(e) => setVideoUrl(e.target.value)}
-            placeholder="https://www.youtube.com/watch?v=..."
-          />
-          <small className="helper-text">Example: https://youtu.be/dQw4w9WgXcQ</small>
-        </div>
+          const isEnrolled = !!enrollment;
+          const unlocked =
+            isEnrolled && (index === 0 || completedQuizzes.includes(prevLevelId));
 
-        <button type="submit" className="submit-level-btn" disabled={loading}>
-          {loading ? "Processing..." : "Publish Level"}
-        </button>
-      </form>
+          const lessonDone = completedLessons.includes(levelId);
+          const quizDone = completedQuizzes.includes(levelId);
+
+          return (
+            <div key={levelName} className="level-card">
+              <h3>{levelName}</h3>
+
+              {!isEnrolled && index === 0 && (
+                <button onClick={handleEnroll}>Enroll Now</button>
+              )}
+
+              {unlocked && (
+                <button onClick={() => handleWatchLesson(levelName)}>
+                  ▶ Watch Lesson
+                </button>
+              )}
+
+              {unlocked && lessonDone && !quizDone && (
+                <button onClick={() => handleStartQuiz(levelName)}>
+                  ▶ Start Quiz
+                </button>
+              )}
+
+              {quizDone && <button disabled>Quiz Passed ✅</button>}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
