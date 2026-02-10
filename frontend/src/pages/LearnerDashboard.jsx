@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
+import { useNavigate, Link } from "react-router-dom"; // Added Link
+import { getMyCourses } from "../api/enrollmentApi";
 import "./LearnerDashboardStyles.css";
 
 export default function LearnerDashboard() {
@@ -11,16 +11,14 @@ export default function LearnerDashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const res = await api.get("/enrollment/my-courses");
-        setEnrollments(Array.isArray(res.data) ? res.data : []);
+        const response = await getMyCourses();
+        setEnrollments(response.data || []);
       } catch (err) {
         console.error("Dashboard Load Error:", err);
-        setEnrollments([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
@@ -30,36 +28,43 @@ export default function LearnerDashboard() {
 
   return (
     <div className="learner-db-wrapper">
+      {/* ✅ NEW: TOP NAVIGATION WITH BACK ARROW */}
       <div className="dashboard-top-nav">
-        <Link to="/" className="back-arrow-btn">←</Link>
+        <Link to="/" className="back-arrow-btn" title="Back to Home">
+          <span>←</span>
+        </Link>
         <span className="nav-label">Home Page</span>
       </div>
 
       <div className="dashboard-content">
         <h1>My Learning Journey</h1>
-
+        
         <div className="info-box">
-          You have <strong>{enrollments.length}</strong> active enrollments
+          Welcome back! You have <strong>{enrollments.length}</strong> active enrollments.
         </div>
 
         <div className="enrollment-grid">
           {enrollments.length > 0 ? (
             enrollments.map((item) => (
               <div key={item._id} className="course-progress-card">
-                <h3>{item.course?.title}</h3>
-
-                <div className="progress-bar-bg">
-                  <div
-                    className="progress-bar-fill"
-                    style={{ width: `${item.progress || 0}%` }}
-                  />
+                <h3 className="course-name">{item.course?.title || "Untitled Course"}</h3>
+                
+                <div className="progress-section">
+                  <div className="progress-text">
+                    <span>Course Progress</span>
+                    <span>{item.progress || 0}%</span>
+                  </div>
+                  <div className="progress-bar-bg">
+                    <div 
+                      className="progress-bar-fill" 
+                      style={{ width: `${item.progress || 0}%` }} 
+                    />
+                  </div>
                 </div>
 
-                <button
+                <button 
                   className="continue-btn"
-                  onClick={() =>
-                    navigate(`/learn/${item.course?._id}/beginner`)
-                  }
+                  onClick={() => navigate(`/learn/${item.course?._id}/beginner`)}
                 >
                   Continue Learning
                 </button>
@@ -67,8 +72,10 @@ export default function LearnerDashboard() {
             ))
           ) : (
             <div className="empty-state">
-              <p>No courses enrolled yet</p>
-              <button onClick={() => navigate("/")}>Browse Courses</button>
+              <p>No courses enrolled yet.</p>
+              <button className="browse-btn" onClick={() => navigate('/')}>
+                Browse Courses
+              </button>
             </div>
           )}
         </div>
