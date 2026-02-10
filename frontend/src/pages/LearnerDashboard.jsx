@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom"; // Added Link
 import { getMyCourses } from "../api/enrollmentApi";
-import "./LearnerDashboard.css";
+import "./LearnerDashboardStyles.css";
 
 export default function LearnerDashboard() {
   const [enrollments, setEnrollments] = useState([]);
