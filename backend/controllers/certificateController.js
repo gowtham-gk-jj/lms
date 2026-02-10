@@ -1,5 +1,6 @@
 const Certificate = require("../models/certificateModel");
 const Course = require("../models/Course");
+const Organization = require("../models/Organization");
 
 /**
  * @desc    Issue a new certificate (manual or auto)
@@ -45,17 +46,25 @@ exports.issueCertificate = async (req, res) => {
 };
 
 /**
- * @desc    Get logged-in user's certificates
+ * @desc    Get logged-in user's certificates (WITH LOGO)
  * @route   GET /api/certificates/my
  * @access  Private
  */
 exports.getUserCertificates = async (req, res) => {
   try {
+    const org = await Organization.findOne();
+
     const certs = await Certificate.find({
       userId: req.user._id,
     }).sort({ issueDate: -1 });
 
-    res.json(certs);
+    const enrichedCerts = certs.map((cert) => ({
+      ...cert.toObject(),
+      orgLogo: org?.logo || "",
+      themeColor: org?.themeColor || "#2563eb",
+    }));
+
+    res.json(enrichedCerts);
   } catch (error) {
     console.error("Get user certificates error:", error);
     res.status(500).json({ message: error.message });
@@ -63,17 +72,25 @@ exports.getUserCertificates = async (req, res) => {
 };
 
 /**
- * @desc    Get all certificates (Admin / Trainer)
+ * @desc    Get all certificates (Admin / Trainer) WITH LOGO
  * @route   GET /api/certificates/all
  * @access  Private (Admin/Trainer)
  */
 exports.getAllCertificates = async (req, res) => {
   try {
+    const org = await Organization.findOne();
+
     const certs = await Certificate.find()
       .populate("userId", "name email")
       .sort({ issueDate: -1 });
 
-    res.json(certs);
+    const enrichedCerts = certs.map((cert) => ({
+      ...cert.toObject(),
+      orgLogo: org?.logo || "",
+      themeColor: org?.themeColor || "#2563eb",
+    }));
+
+    res.json(enrichedCerts);
   } catch (error) {
     console.error("Get all certificates error:", error);
     res.status(500).json({ message: error.message });

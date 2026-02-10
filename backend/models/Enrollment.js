@@ -14,13 +14,11 @@ const EnrollmentSchema = new mongoose.Schema(
       required: true,
     },
 
-    // ✅ COMPLETED VIDEOS (LEVELS)
     completedLessons: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
     },
 
-    // ✅ COMPLETED QUIZZES (PASS ONLY)
     completedQuizzes: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],

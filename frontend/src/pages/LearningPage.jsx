@@ -25,26 +25,32 @@ export default function LearningPage() {
 
         const res = await axios.get(
           `${API_URL}/api/enrollment/my-courses`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        const currentEnrollment = res.data.find(
+        const enrollments = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
+
+        const currentEnrollment = enrollments.find(
           (e) => e.course._id === courseId
         );
 
         if (!currentEnrollment) {
           setEnrollment(null);
-          setLoading(false);
           return;
         }
 
         const levels = currentEnrollment.course.levels;
 
-        const levelIndex = levels.findIndex(
-          (l) => l.name.toLowerCase() === level.toLowerCase()
-        );
+        // ✅ SAFE GUARD for level
+        const levelIndex =
+          level
+            ? levels.findIndex(
+                (l) =>
+                  l.name.toLowerCase() === level.toLowerCase()
+              )
+            : -1;
 
         const completedCount =
           currentEnrollment.completedLessons?.length || 0;
@@ -77,7 +83,6 @@ export default function LearningPage() {
       const levelId =
         enrollment.course.levels[activeLevel]._id;
 
-      // 🚫 Prevent double completion
       if (enrollment.completedLessons?.includes(levelId)) {
         alert("✅ This level is already completed.");
         return;
@@ -85,22 +90,17 @@ export default function LearningPage() {
 
       const res = await axios.patch(
         `${API_URL}/api/enrollment/update-progress`,
-        {
-          enrollmentId: enrollment._id,
-          levelId,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { enrollmentId: enrollment._id, levelId },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setEnrollment(res.data.enrollment);
+      setEnrollment(
+        res.data.enrollment || res.data.data || res.data
+      );
+
       alert("✅ Level completed successfully!");
     } catch (err) {
-      console.error(
-        "Progress Update Error:",
-        err.response?.data || err
-      );
+      console.error("Progress Update Error:", err);
       alert("❌ Failed to complete this level.");
     } finally {
       setSubmitting(false);
@@ -122,9 +122,12 @@ export default function LearningPage() {
     );
   }
 
-  const currentLevel = enrollment.course.levels[activeLevel];
+  const currentLevel =
+    enrollment.course.levels[activeLevel];
+
+  // ✅ FIXED UNLOCK LOGIC
   const unlockedIndex =
-    enrollment.completedLessons?.length || 0;
+    enrollment.completedLessons?.length ?? 0;
 
   /* ===============================
      VIDEO RENDER
@@ -231,7 +234,6 @@ export default function LearningPage() {
 
       {/* ===== MAIN CONTENT ===== */}
       <div className="video-main-content">
-        {/* ✅ BACK TO COURSE LEVELS SHORTCUT */}
         <button
           className="back-to-levels-btn"
           onClick={() => navigate(`/course/${courseId}`)}

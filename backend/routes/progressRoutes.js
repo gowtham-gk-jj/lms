@@ -1,13 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const { protect } = require("../middleware/auth");
+const { protect } = require("../middleware/authMiddleware");
+const roleMiddleware = require("../middleware/roleMiddleware");
+const Enrollment = require("../models/Enrollment");
 
-const {
-  getCourseProgress,
-  markLessonCompleted,
-} = require("../controllers/progressController");
+router.get(
+  "/",
+  protect,
+  roleMiddleware("admin"),
+  async (req, res) => {
+    try {
+      const progress = await Enrollment.find()
+        .populate("learner", "name email")
+        .populate("course", "title");
 
-router.get("/:courseId", protect, getCourseProgress);
-router.post("/lesson/:courseId/:level", protect, markLessonCompleted);
+      res.json(progress);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
 
 module.exports = router;

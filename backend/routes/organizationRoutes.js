@@ -48,48 +48,55 @@ router.post("/", async (req, res) => {
   }
 });
 
-/* ================= SAVE LOGO & BRANDING (FIXED) ================= */
-router.post(
-  "/branding/:orgId",
-  upload.single("logo"),
-  async (req, res) => {
-    try {
-      const { orgId } = req.params;
-      const { themeColor } = req.body;
-
-      const updateData = {};
-      if (themeColor) updateData.themeColor = themeColor;
-      if (req.file) updateData.logo = `/uploads/${req.file.filename}`;
-
-      const org = await Organization.findByIdAndUpdate(
-        orgId,
-        updateData,
-        { new: true }
-      );
-
-      if (!org) {
-        return res.status(404).json({
-          message: "Organization not found",
-        });
-      }
-
-      res.json({
-        message: "Logo & Branding saved successfully",
-        org,
-      });
-    } catch (error) {
-      console.error("Branding save failed:", error);
-      res.status(500).json({
-        message: error.message,
-      });
+/* ================= GET ORGANIZATION (SINGLE) ================= */
+/* ✅ Used by LogoBranding & Certificates */
+router.get("/", async (req, res) => {
+  try {
+    const org = await Organization.findOne();
+    if (!org) {
+      return res.status(404).json({ message: "Organization not found" });
     }
+    res.json(org);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-);
+});
 
-/* ================= GET ORGANIZATION ================= */
+/* ================= SAVE LOGO & BRANDING ================= */
+router.put("/branding", upload.single("logo"), async (req, res) => {
+  try {
+    let org = await Organization.findOne();
+    if (!org) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+
+    if (req.file) {
+      org.logo = `/uploads/${req.file.filename}`;
+    }
+
+    if (req.body.themeColor) {
+      org.themeColor = req.body.themeColor;
+    }
+
+    await org.save();
+
+    res.json({
+      success: true,
+      org,
+    });
+  } catch (error) {
+    console.error("Branding save failed:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/* ================= GET ORGANIZATION BY ID (OPTIONAL) ================= */
 router.get("/:orgId", async (req, res) => {
   try {
     const org = await Organization.findById(req.params.orgId);
+    if (!org) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
     res.json(org);
   } catch (error) {
     res.status(500).json({ message: error.message });

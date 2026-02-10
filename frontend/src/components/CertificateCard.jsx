@@ -3,7 +3,7 @@ import { jsPDF } from "jspdf";
 import "./CertificateCard.css";
 
 const CertificateCard = ({ cert }) => {
-  const generatePDF = async () => {
+  const generatePDF = () => {
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "pt",
@@ -14,10 +14,14 @@ const CertificateCard = ({ cert }) => {
     const pageHeight = doc.internal.pageSize.getHeight();
 
     /* ===============================
-       LOAD LOGO IMAGE
+       LOAD LOGO IMAGE (DYNAMIC)
     =============================== */
-    const logoUrl = "/lms-logo.png";
+    const logoUrl = cert.orgLogo
+      ? `http://localhost:5000${cert.orgLogo}`
+      : "/lms-logo.png";
+
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.src = logoUrl;
 
     img.onload = () => {
@@ -28,9 +32,14 @@ const CertificateCard = ({ cert }) => {
       doc.rect(0, 0, pageWidth, pageHeight, "F");
 
       /* ===============================
-         GOLD BORDER
+         BORDER (THEME COLOR)
       =============================== */
-      doc.setDrawColor(176, 137, 52);
+      const themeColor = cert.themeColor || "#2563eb";
+      const r = parseInt(themeColor.substring(1, 3), 16);
+      const g = parseInt(themeColor.substring(3, 5), 16);
+      const b = parseInt(themeColor.substring(5, 7), 16);
+
+      doc.setDrawColor(r, g, b);
       doc.setLineWidth(10);
       doc.rect(20, 20, pageWidth - 40, pageHeight - 40);
 
@@ -138,6 +147,10 @@ const CertificateCard = ({ cert }) => {
       doc.save(
         `Certificate_${cert.courseName.replace(/\s+/g, "_")}.pdf`
       );
+    };
+
+    img.onerror = () => {
+      alert("Failed to load logo image for certificate");
     };
   };
 

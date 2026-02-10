@@ -7,6 +7,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // 🔐 Admin-only protection
   if (user?.role?.toLowerCase() !== "admin") {
     return (
       <div className="db-wrapper">
@@ -26,9 +27,9 @@ const Dashboard = () => {
         </p>
       </header>
 
-      {/* ================= ADMIN DASHBOARD BUTTONS ================= */}
+      {/* ================= ADMIN DASHBOARD CARDS ================= */}
       <div className="db-grid">
-        {/* 🔥 OVERVIEW BUTTON */}
+        {/* OVERVIEW */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/overview")}
@@ -39,6 +40,7 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* MANAGE USERS */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/users")}
@@ -49,6 +51,7 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* REGISTER USER */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/users/create")}
@@ -59,6 +62,7 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* CREATE ARTICLE */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/articles/create")}
@@ -69,6 +73,7 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* ENROLL LEARNER */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/enroll")}
@@ -79,6 +84,7 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* LEARNER PROGRESS */}
         <div
           className="db-card"
           onClick={() => navigate("/admin-dashboard/progress")}
@@ -86,6 +92,17 @@ const Dashboard = () => {
           <h3 className="db-card-title">Learner Progress</h3>
           <p className="db-card-desc">
             Monitor course completion and performance.
+          </p>
+        </div>
+
+        {/* 📊 REPORTS (NEW) */}
+        <div
+          className="db-card"
+          onClick={() => navigate("/admin-dashboard/reports")}
+        >
+          <h3 className="db-card-title">Reports</h3>
+          <p className="db-card-desc">
+            Download organization-wide learning reports.
           </p>
         </div>
       </div>

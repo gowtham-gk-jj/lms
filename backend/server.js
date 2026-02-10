@@ -5,6 +5,7 @@ const path = require("path");
 const http = require("http"); // ✅ ADD
 const connectDB = require("./config/db");
 const { initSocket } = require("./socket"); // ✅ ADD
+const reportRoutes = require("./routes/reportRoutes");
 
 // ================= INIT =================
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/progress", require("./routes/progressRoutes"));
 app.use("/api/certificates", require("./routes/certificateRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
+app.use("/api/reports", reportRoutes);
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {

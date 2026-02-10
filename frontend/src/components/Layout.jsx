@@ -12,7 +12,7 @@ const Layout = () => {
     navigate("/");
   };
 
-  // Safety: only Admin allowed
+  // 🔐 Safety: only Admin allowed
   if (user?.role?.toLowerCase() !== "admin") {
     return (
       <div className="admin-layout">
@@ -35,12 +35,14 @@ const Layout = () => {
 
         <nav className="sidebar-nav">
           <ul className="nav-list">
+            {/* HOME */}
             <li>
               <NavLink to="/" className="nav-link">
                 🌐 Go to Home
               </NavLink>
             </li>
 
+            {/* DASHBOARD */}
             <li>
               <NavLink
                 to="/admin-dashboard"
@@ -53,17 +55,21 @@ const Layout = () => {
               </NavLink>
             </li>
 
+            {/* USERS */}
             <li>
               <NavLink
                 to="/admin-dashboard/users"
+                end
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
               >
                 👥 User Directory
               </NavLink>
+
             </li>
 
+            {/* REGISTER USER */}
             <li>
               <NavLink
                 to="/admin-dashboard/users/create"
@@ -75,6 +81,7 @@ const Layout = () => {
               </NavLink>
             </li>
 
+            {/* CREATE ARTICLE */}
             <li>
               <NavLink
                 to="/admin-dashboard/articles/create"
@@ -86,6 +93,7 @@ const Layout = () => {
               </NavLink>
             </li>
 
+            {/* ENROLL LEARNER */}
             <li>
               <NavLink
                 to="/admin-dashboard/enroll"
@@ -97,6 +105,7 @@ const Layout = () => {
               </NavLink>
             </li>
 
+            {/* LEARNER PROGRESS */}
             <li>
               <NavLink
                 to="/admin-dashboard/progress"
@@ -108,6 +117,19 @@ const Layout = () => {
               </NavLink>
             </li>
 
+            {/* 📑 REPORTS (NEW) */}
+            <li>
+              <NavLink
+                to="/admin-dashboard/reports"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active-nav" : ""}`
+                }
+              >
+                📑 Reports
+              </NavLink>
+            </li>
+
+            {/* ORGANIZATION SETTINGS */}
             <li>
               <NavLink
                 to="/admin-dashboard/organization"

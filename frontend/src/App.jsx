@@ -58,6 +58,9 @@ import CertificateManager from "./pages/trainer/CertificateManager";
 
 /* ================= NOTIFICATIONS ================= */
 import NotificationsPage from "./pages/NotificationsPage";
+import AdminReports from "./pages/AdminReports";
+import LearnerProgress from "./pages/LearnerProgress";
+
 
 
 function App() {
@@ -137,7 +140,9 @@ function App() {
             <Route path="users/create" element={<CreateUser />} />
             <Route path="articles/create" element={<AdminArticles />} />
             <Route path="enroll" element={<AdminEnrollment />} />
-            <Route path="progress" element={<AdminProgressPage />} />
+            <Route path="/admin-dashboard/reports" element={<AdminReports />}/>
+            <Route path="progress" element={<LearnerProgress />} />
+
 
             <Route path="organization" element={<OrganizationSetup />}>
               <Route index element={<OrganizationProfile />} />
