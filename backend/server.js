@@ -10,16 +10,21 @@ const reportRoutes = require("./routes/reportRoutes");
 
 // ================= INIT =================
 dotenv.config();
+connectDB(); // ✅ Connect DB FIRST
 
 const app = express();
 
 // ================= MIDDLEWARE =================
 app.use(
   cors({
-    origin: "*", // ✅ allow all (safe for backend)
+    origin: [
+      "http://localhost:5173",
+      "https://lms-taupe-nine.vercel.app" // ✅ your Vercel frontend
+    ],
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -44,18 +49,12 @@ app.get("/", (req, res) => {
   res.send("LMS API is Running ✅");
 });
 
-// ================= SERVER =================
+// ================= SERVER + SOCKET =================
 const server = http.createServer(app);
+initSocket(server); // ✅ init socket ONCE
 
-// ================= START SERVER FIRST =================
+// ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
-
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-
-  // ✅ Connect DB AFTER server starts
-  connectDB();
-
-  // ✅ Init socket AFTER server starts
-  initSocket(server);
 });
