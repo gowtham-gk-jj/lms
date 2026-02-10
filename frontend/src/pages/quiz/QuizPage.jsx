@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -17,25 +17,19 @@ export default function QuizPage() {
      LOAD QUIZ QUESTIONS
   ================================ */
   useEffect(() => {
-    if (!user || !user.token) {
+    if (!user?.token) {
       navigate("/login");
       return;
     }
 
     const fetchQuiz = async () => {
       try {
-        const res = await axios.get(
-          `/quiz/play/${courseId}/${level}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
+        const res = await api.get(
+          `/quiz/play/${courseId}/${level}`
         );
 
         if (
-          !res.data ||
-          !res.data.success ||
+          !res.data?.success ||
           !Array.isArray(res.data.questions) ||
           res.data.questions.length === 0
         ) {
@@ -44,6 +38,7 @@ export default function QuizPage() {
 
         setQuestions(res.data.questions);
       } catch (err) {
+        console.error(err);
         navigate(`/course/${courseId}`);
       } finally {
         setLoading(false);
@@ -64,7 +59,7 @@ export default function QuizPage() {
   };
 
   /* ===============================
-     SUBMIT QUIZ ✅ FIXED FLOW
+     SUBMIT QUIZ
   ================================ */
   const handleSubmit = async () => {
     if (Object.keys(answers).length !== questions.length) {
@@ -82,7 +77,7 @@ export default function QuizPage() {
     const total = questions.length;
 
     try {
-      const res = await axios.post(
+      const res = await api.post(
         "/quiz/submit",
         {
           courseId,
@@ -90,15 +85,9 @@ export default function QuizPage() {
           score,
           total,
           answers,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
         }
       );
 
-      // ✅ ALWAYS GO TO RESULT PAGE
       navigate(`/quiz/result/${res.data.result._id}`);
     } catch (err) {
       console.error(err);
@@ -118,6 +107,7 @@ export default function QuizPage() {
         >
           ← Back
         </button>
+
         <h1 className="quiz-title">
           {level.toUpperCase()} Quiz
         </h1>
