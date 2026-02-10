@@ -9,7 +9,6 @@ export default function QuizStart() {
   const { user } = useAuth();
 
   const handleStartQuiz = async () => {
-    // ❌ Not logged in
     if (!user?.token) {
       alert("Please login to start the quiz");
       navigate("/login");
@@ -17,22 +16,19 @@ export default function QuizStart() {
     }
 
     try {
-      // ✅ USE CENTRALIZED API INSTANCE
       const res = await api.get(
         `/quiz/play/${courseId}/${level}`
       );
 
-      // ❌ No questions
       if (
         !res.data ||
         !res.data.success ||
         !Array.isArray(res.data.questions) ||
         res.data.questions.length === 0
       ) {
-        throw new Error("No quiz available");
+        throw new Error("No quiz");
       }
 
-      // ✅ Quiz exists → go to play page
       navigate(`/quiz/${courseId}/${level}/play`);
     } catch (err) {
       console.error(err);
@@ -43,7 +39,6 @@ export default function QuizStart() {
 
   return (
     <div className="quiz-start-page">
-      {/* HEADER */}
       <div className="quiz-start-header">
         <button
           className="quiz-start-back-btn"
@@ -53,7 +48,6 @@ export default function QuizStart() {
         </button>
       </div>
 
-      {/* CARD */}
       <div className="quiz-start-card">
         <h2 className="quiz-start-title">
           {level.toUpperCase()} Quiz
