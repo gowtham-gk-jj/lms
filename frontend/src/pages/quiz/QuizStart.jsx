@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../api/axios"; 
+import api from "../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizStart.css";
 
@@ -10,17 +10,16 @@ export default function QuizStart() {
 
   const handleStartQuiz = async () => {
     // ❌ Not logged in
-    if (!user || !user.token) {
+    if (!user?.token) {
       alert("Please login to start the quiz");
       navigate("/login");
       return;
     }
 
     try {
-      // ✅ USE THE REAL QUIZ ENDPOINT
-      const res = await axios.get(
-        `/quiz/play/${courseId}/${level}`,
-        
+      // ✅ USE CENTRALIZED API INSTANCE
+      const res = await api.get(
+        `/quiz/play/${courseId}/${level}`
       );
 
       // ❌ No questions
@@ -30,12 +29,13 @@ export default function QuizStart() {
         !Array.isArray(res.data.questions) ||
         res.data.questions.length === 0
       ) {
-        throw new Error("No quiz");
+        throw new Error("No quiz available");
       }
 
-      // ✅ Quiz exists
+      // ✅ Quiz exists → go to play page
       navigate(`/quiz/${courseId}/${level}/play`);
     } catch (err) {
+      console.error(err);
       alert("Quiz not available for this level");
       navigate(`/course/${courseId}`);
     }
