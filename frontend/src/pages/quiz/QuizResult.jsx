@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios"; // or ../../api/axios
+import api from "../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -14,7 +14,7 @@ export default function QuizResult() {
   const [error, setError] = useState("");
   const [courseCompleted, setCourseCompleted] = useState(false);
 
-  // ✅ prevent duplicate API calls
+  // ✅ Prevent duplicate save
   const quizSavedRef = useRef(false);
 
   /* ===============================
@@ -25,18 +25,16 @@ export default function QuizResult() {
 
     const fetchResult = async () => {
       try {
-        const res = await axios.get(
-          `/quiz/result/${attemptId}`,
-         
-        );
+        const res = await api.get(`/quiz/result/${attemptId}`);
 
-        if (!res.data.success) {
+        if (!res.data?.success) {
           setError("Result not found");
           return;
         }
 
         setResult(res.data.result);
       } catch (err) {
+        console.error(err);
         setError("Failed to load result");
       } finally {
         setLoading(false);
@@ -50,23 +48,15 @@ export default function QuizResult() {
      SAVE QUIZ PASS → ENROLLMENT
   ================================ */
   useEffect(() => {
-    if (
-      !result ||
-      !result.passed ||
-      quizSavedRef.current ||
-      !user?.token
-    ) {
-      return;
-    }
+    if (!result || !result.passed || quizSavedRef.current) return;
 
     const saveQuizPass = async () => {
       try {
         quizSavedRef.current = true;
 
-        await axios.post(
-          "/enrollment/complete-quiz",
-          
-        );
+        await api.post("/enrollment/complete-quiz", {
+          attemptId,
+        });
 
         console.log("✅ Quiz pass saved to enrollment");
       } catch (err) {
@@ -75,23 +65,20 @@ export default function QuizResult() {
     };
 
     saveQuizPass();
-  }, [result, user]);
+  }, [result, attemptId]);
 
   /* ===============================
      CHECK COURSE COMPLETION
   ================================ */
   useEffect(() => {
-    if (!result?.passed || !user?.token) return;
+    if (!result?.passed) return;
 
     const checkCourseCompletion = async () => {
       try {
-        const res = await axios.get(
-          "/enrollment/my-courses",
-          
-        );
+        const res = await api.get("/enrollment/my-courses");
 
         const enrollment = res.data.find(
-          (e) => e.course._id === result.course
+          (e) => e.course?._id === result.course
         );
 
         if (!enrollment) return;
@@ -109,7 +96,7 @@ export default function QuizResult() {
     };
 
     checkCourseCompletion();
-  }, [result, user]);
+  }, [result]);
 
   /* ===============================
      UI STATES
@@ -157,7 +144,6 @@ export default function QuizResult() {
             flexWrap: "wrap",
           }}
         >
-          {/* REVIEW */}
           <button
             className="quiz-submit-btn"
             onClick={() => navigate(`/quiz/review/${attemptId}`)}
@@ -165,7 +151,6 @@ export default function QuizResult() {
             Review Answers
           </button>
 
-          {/* PASSED → COURSE */}
           {result.passed && (
             <button
               className="quiz-submit-btn"
@@ -176,7 +161,6 @@ export default function QuizResult() {
             </button>
           )}
 
-          {/* 🎓 COURSE COMPLETED → CERTIFICATE */}
           {courseCompleted && (
             <button
               className="quiz-submit-btn"
@@ -187,7 +171,6 @@ export default function QuizResult() {
             </button>
           )}
 
-          {/* FAILED → RETRY */}
           {!result.passed && (
             <button
               className="quiz-submit-btn"
