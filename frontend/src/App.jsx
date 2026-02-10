@@ -11,7 +11,7 @@ import Unauthorized from "./pages/Unauthorized";
 import CourseDetails from "./pages/CourseDetails";
 
 /* ================= LEARNER ================= */
-import LearnerDashboard from "./pages/Learnerdashboard";
+import LearnerDashboard from "./pages/LearnerDashboard";
 import LearningPage from "./pages/LearningPage";
 
 /* ================= ADMIN ================= */
@@ -21,7 +21,6 @@ import UserManagement from "./pages/UserManagement";
 import CreateUser from "./pages/CreateUser";
 import AdminArticles from "./pages/AdminArticles";
 import AdminEnrollment from "./pages/AdminEnrollment";
-import AdminProgressPage from "./pages/AdminProgressPage";
 import RoleDashboard from "./pages/RoleDashboard";
 
 /* ================= ORGANIZATION ================= */
