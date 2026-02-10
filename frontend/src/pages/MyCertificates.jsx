@@ -1,38 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import api from "../api/axios";
 import CertificateCard from "../components/CertificateCard";
 import "./MyCertificates.css";
 
 const MyCertificates = () => {
-  const { user } = useAuth();
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user?.token) {
-      setLoading(false);
-      return;
-    }
-
     const fetchCerts = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/certificates/my",
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-
-        console.log("🎓 Certificates from backend:", res.data);
+        const res = await api.get("/certificates/my");
         setCertificates(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
-        console.error(
-          "❌ Error fetching certificates:",
-          err.response?.data || err
-        );
+        console.error("Certificate fetch failed", err);
         setCertificates([]);
       } finally {
         setLoading(false);
@@ -40,25 +21,20 @@ const MyCertificates = () => {
     };
 
     fetchCerts();
-  }, [user?.token]);
+  }, []);
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">My Achievement Certificates</h2>
+    <div className="container">
+      <h2>My Certificates</h2>
 
       {loading ? (
-        <p>Loading your certificates...</p>
+        <p>Loading...</p>
       ) : certificates.length > 0 ? (
-        <div className="cert-grid">
-          {certificates.map((cert) => (
-            <CertificateCard key={cert._id} cert={cert} />
-          ))}
-        </div>
+        certificates.map((c) => (
+          <CertificateCard key={c._id} cert={c} />
+        ))
       ) : (
-        <p>
-          You haven’t earned any certificates yet. Complete a course to see them
-          here!
-        </p>
+        <p>No certificates yet</p>
       )}
     </div>
   );
