@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios"; 
+import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
@@ -15,23 +15,23 @@ export default function QuizReview() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user || !user.token) return;
+    if (!user?.token) return;
 
     const fetchReview = async () => {
       try {
-        const res = await axios.get(
-          `/quiz/review/${attemptId}`,
-          
+        const res = await api.get(
+          `/quiz/review/${attemptId}`
         );
 
-        if (!res.data.success) {
+        if (!res.data?.success) {
           setError("No review data found");
           return;
         }
 
-        setQuestions(res.data.questions);
-        setAnswers(res.data.answers);
+        setQuestions(res.data.questions || []);
+        setAnswers(res.data.answers || {});
       } catch (err) {
+        console.error(err);
         setError("Failed to load quiz review");
       } finally {
         setLoading(false);
@@ -61,6 +61,7 @@ export default function QuizReview() {
           const correctAnswer = q.options.find(
             (o) => o.isCorrect
           )?.text;
+
           const userAnswer = answers[q._id];
 
           return (
