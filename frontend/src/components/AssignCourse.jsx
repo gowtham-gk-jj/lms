@@ -16,31 +16,37 @@ const AssignCourseForm = () => {
     setLoading(true);
 
     try {
-      /* ================= FETCH LEARNERS ================= */
+      /* ================= FETCH USERS ================= */
       const resUsers = await api.get("/auth/users");
 
-      const allUsers = Array.isArray(resUsers.data)
+      const usersList = Array.isArray(resUsers.data)
         ? resUsers.data
-        : resUsers.data.users || [];
+        : resUsers.data.users ||
+          resUsers.data.data ||
+          [];
 
-      setLearners(
-        allUsers.filter((u) =>
-          ["learner", "student"].includes(
-            u.role?.toLowerCase().trim()
-          )
+      const learnerList = usersList.filter((u) =>
+        ["learner", "student"].includes(
+          u.role?.toLowerCase()?.trim()
         )
       );
+
+      setLearners(learnerList);
 
       /* ================= FETCH COURSES ================= */
       const resCourses = await api.get("/courses");
 
-      const actualCourses = Array.isArray(resCourses.data)
+      const courseList = Array.isArray(resCourses.data)
         ? resCourses.data
-        : resCourses.data.courses || [];
+        : resCourses.data.courses ||
+          resCourses.data.data ||
+          [];
 
-      setCourses(actualCourses);
+      setCourses(courseList);
     } catch (err) {
-      console.error("Fetch Error:", err);
+      console.error("❌ Admin Enrollment Load Error:", err);
+      setLearners([]);
+      setCourses([]);
     } finally {
       setLoading(false);
     }
@@ -60,30 +66,38 @@ const AssignCourseForm = () => {
         courseId: selectedCourse,
       });
 
-      alert("🎉 Success! Course assigned.");
+      alert("🎉 Course assigned successfully!");
       setSelectedLearner("");
       setSelectedCourse("");
     } catch (err) {
       alert(
         err.response?.data?.message ||
-          "Server error. Please try again."
+          "Enrollment failed"
       );
     }
   };
 
-  if (loading)
-    return <div className="loader-box">Syncing Database...</div>;
+  if (loading) {
+    return (
+      <div className="loader-box">
+        Syncing Database...
+      </div>
+    );
+  }
 
   return (
     <div className="assign-section">
       <h3>👤 Administrative Enrollment</h3>
 
       <form onSubmit={assignCourse} className="assign-form">
+        {/* LEARNER */}
         <div className="form-group">
           <label>Learner</label>
           <select
             value={selectedLearner}
-            onChange={(e) => setSelectedLearner(e.target.value)}
+            onChange={(e) =>
+              setSelectedLearner(e.target.value)
+            }
             className="assign-select"
             required
           >
@@ -92,17 +106,20 @@ const AssignCourseForm = () => {
             </option>
             {learners.map((l) => (
               <option key={l._id} value={l._id}>
-                {l.name}
+                {l.name} ({l.email})
               </option>
             ))}
           </select>
         </div>
 
+        {/* COURSE */}
         <div className="form-group">
           <label>Course to Assign</label>
           <select
             value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
+            onChange={(e) =>
+              setSelectedCourse(e.target.value)
+            }
             className="assign-select"
             required
           >
