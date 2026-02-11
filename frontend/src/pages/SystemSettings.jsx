@@ -11,12 +11,14 @@ export default function SystemSettings() {
 
   const [loading, setLoading] = useState(false);
 
-  /* 🔹 LOAD EXISTING SETTINGS */
+  /* ================= LOAD SETTINGS ================= */
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await api.get("/organization/settings");
-        if (res.data) setSettings(res.data);
+        const res = await api.get("/api/organization/settings"); // ✅ FIXED
+        if (res.data) {
+          setSettings(res.data);
+        }
       } catch (err) {
         console.warn("No system settings found on server.");
       }
@@ -34,12 +36,12 @@ export default function SystemSettings() {
     });
   };
 
-  /* 🔹 SAVE SETTINGS */
+  /* ================= SAVE SETTINGS ================= */
   const handleSave = async () => {
     try {
       setLoading(true);
 
-      await api.put("/organization/settings", settings);
+      await api.put("/api/organization/settings", settings); // ✅ FIXED
 
       alert("System settings updated successfully!");
     } catch (err) {

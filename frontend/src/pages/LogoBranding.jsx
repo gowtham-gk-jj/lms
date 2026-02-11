@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./LogoBranding.css";
 import api from "../api/axios";
 
-
 export default function LogoBranding() {
   const fileRef = useRef(null);
   const [logoFile, setLogoFile] = useState(null);
@@ -11,44 +10,59 @@ export default function LogoBranding() {
   const [themeColor, setThemeColor] = useState("#2563eb");
   const [loading, setLoading] = useState(false);
 
+  /* ================= LOAD BRANDING ================= */
   useEffect(() => {
     const loadBranding = async () => {
       try {
-        const res = await api.get("/organization");
+        const res = await api.get("/api/organization"); // ✅ FIXED
         const data = res.data;
 
         if (data?.themeColor) setThemeColor(data.themeColor);
-        if (data?.logo)
-          setLogoPreview(`${import.meta.env.VITE_API_BASE_URL}${data.logo}`);
 
-      } catch {
-        console.log("No branding found");
+        if (data?.logo) {
+          setLogoPreview(
+            `${import.meta.env.VITE_API_BASE_URL}${data.logo}`
+          );
+        }
+      } catch (err) {
+        console.log("No branding found", err);
       }
     };
+
     loadBranding();
   }, []);
 
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     setLogoFile(file);
     setLogoPreview(URL.createObjectURL(file));
   };
 
+  /* ================= SAVE BRANDING ================= */
   const handleSave = async () => {
-   
-
     setLoading(true);
+
     try {
       const formData = new FormData();
+
       if (logoFile) formData.append("logo", logoFile);
       formData.append("themeColor", themeColor);
 
-      await api.put("/organization/branding", formData);
-
+      await api.put(
+        "/api/organization/branding", // ✅ FIXED
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       alert("✅ Branding updated successfully");
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("❌ Failed to save branding");
     } finally {
       setLoading(false);
@@ -79,6 +93,7 @@ export default function LogoBranding() {
           >
             Change Logo
           </button>
+
           <input
             ref={fileRef}
             type="file"
@@ -88,6 +103,7 @@ export default function LogoBranding() {
         </div>
 
         <h4 className="section-label">Theme Color</h4>
+
         <div className="color-picker">
           {["#2563eb", "#16a34a", "#f59e0b", "#dc2626", "#7c3aed"].map(
             (color) => (
