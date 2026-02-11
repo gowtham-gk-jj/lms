@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import api from "../../api/axios"; // ✅ correct path
+import { useAuth } from "../../context/AuthContext";
 import "./EditCourse.css";
 
 export default function EditCourse() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const token = user?.token;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,21 +23,35 @@ export default function EditCourse() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        // ✅ FIXED: use api instance + correct endpoint
-        const res = await api.get(`/courses/${id}`);
+        const res = await api.get(
+          `/courses/${id}`, // 🔥 make sure backend route matches
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        setTitle(res.data.title || "");
-        setDescription(res.data.description || "");
+        // 🔥 Safe response handling
+        const data = res.data?.data || res.data;
+
+        setTitle(data?.title || "");
+        setDescription(data?.description || "");
       } catch (err) {
-        console.error(err);
-        alert("Failed to load course details");
+        console.error("FETCH COURSE ERROR:", err);
+        alert(
+          err?.response?.data?.message ||
+            "Failed to load course details"
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCourse();
-  }, [id]);
+    if (id && token) {
+      fetchCourse();
+    }
+  }, [id, token]);
 
   /* ===============================
      UPDATE COURSE
@@ -52,18 +69,25 @@ export default function EditCourse() {
     try {
       setUpdating(true);
 
-      // ✅ FIXED: remove localhost + use api instance
-      await api.put(`/courses/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await api.put(
+        `/courses/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 🔥 important
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       alert("✅ Course updated successfully");
       navigate("/trainer-dashboard");
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Failed to update course");
+      console.error("UPDATE COURSE ERROR:", err);
+      alert(
+        err?.response?.data?.message ||
+          "Failed to update course"
+      );
     } finally {
       setUpdating(false);
     }
