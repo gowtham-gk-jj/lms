@@ -17,26 +17,31 @@ export default function TrainerDashboard() {
      FETCH COURSES
   ================================ */
   useEffect(() => {
+    if (!user) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     const fetchCourses = async () => {
       try {
-        if (!user) {
-          navigate("/", { replace: true });
-          return;
-        }
+        const res = await api.get("/courses");
 
-        // ✅ FIXED: Added /api
-        const res = await api.get("/api/api/courses");
+        // Handle different backend response formats safely
+        const data =
+          Array.isArray(res.data)
+            ? res.data
+            : res.data.courses || [];
 
-        setCourses(Array.isArray(res.data) ? res.data : []);
+        setCourses(data);
       } catch (err) {
-        console.error("Error fetching courses:", err);
+        console.error("Error fetching courses:", err.response?.data || err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCourses();
-  }, [navigate, user]);
+  }, [user, navigate]);
 
   /* ===============================
      DELETE COURSE
@@ -45,12 +50,10 @@ export default function TrainerDashboard() {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
 
     try {
-      // ✅ FIXED: Added /api
-      await api.delete(`/api/api/courses/${id}`);
-
+      await api.delete(`/courses/${id}`);
       setCourses((prev) => prev.filter((c) => c._id !== id));
     } catch (err) {
-      console.error(err);
+      console.error("Delete error:", err.response?.data || err.message);
       alert("Delete failed. You might not have permission.");
     }
   };
@@ -70,61 +73,37 @@ export default function TrainerDashboard() {
         <div className="trainer-sidebar-top">
           <h2>Trainer Panel</h2>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/trainer-dashboard/overview")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/trainer-dashboard/overview")}>
             📊 Overview
           </button>
 
-          <button
-            className="sidebar-btn active"
-            onClick={() => navigate("/trainer-dashboard")}
-          >
+          <button className="sidebar-btn active" onClick={() => navigate("/trainer-dashboard")}>
             📚 My Courses
           </button>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/trainer/quizzes")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/trainer/quizzes")}>
             📝 View Quizzes
           </button>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/trainer/quiz-attempts")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/trainer/quiz-attempts")}>
             📊 Practice Quiz Results
           </button>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/trainer/create-quiz")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/trainer/create-quiz")}>
             ➕ Create Quiz
           </button>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/trainer/create-course")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/trainer/create-course")}>
             ➕ Create Course
           </button>
 
-          <button
-            className="sidebar-btn"
-            onClick={() => navigate("/")}
-          >
+          <button className="sidebar-btn" onClick={() => navigate("/")}>
             🌐 View Site
           </button>
         </div>
 
         <div className="trainer-sidebar-bottom">
-          <button
-            className="sidebar-btn logout-btn"
-            onClick={handleLogout}
-          >
+          <button className="sidebar-btn logout-btn" onClick={handleLogout}>
             🚪 Logout
           </button>
         </div>
@@ -155,8 +134,7 @@ export default function TrainerDashboard() {
                     alt={course.title}
                     className="course-image"
                     onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/300x180?text=No+Image";
+                      e.target.src = "https://via.placeholder.com/300x180?text=No+Image";
                     }}
                   />
 
@@ -169,18 +147,14 @@ export default function TrainerDashboard() {
                     <div className="course-actions">
                       <button
                         className="btn-add"
-                        onClick={() =>
-                          navigate(`/trainer/add-level/${course._id}`)
-                        }
+                        onClick={() => navigate(`/trainer/add-level/${course._id}`)}
                       >
                         Levels
                       </button>
 
                       <button
                         className="btn-edit"
-                        onClick={() =>
-                          navigate(`/trainer/edit-course/${course._id}`)
-                        }
+                        onClick={() => navigate(`/trainer/edit-course/${course._id}`)}
                       >
                         ✏️
                       </button>
