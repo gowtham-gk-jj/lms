@@ -49,3 +49,17 @@
     gap: 20px;
     padding: 20px 0;
 }
+.back-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #1e40af;
+}

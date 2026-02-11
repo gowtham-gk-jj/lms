@@ -22,35 +22,33 @@ const CertificateCard = ({ cert }) => {
         import.meta.env.VITE_API_BASE_URL ||
         "";
 
+      // Ensure proper slash handling
       const logoUrl = cert?.orgLogo
         ? `${BASE_URL}/${cert.orgLogo.replace(/^\/+/, "")}`
-        : "/lms-logo.png";
+        : null;
 
-      console.log("Logo URL:", logoUrl);
+      let base64Logo = null;
 
       /* ===============================
          LOAD IMAGE SAFELY
       ================================ */
-      let base64Logo = null;
+      if (logoUrl) {
+        try {
+          const response = await fetch(logoUrl);
 
-      try {
-        const response = await fetch(logoUrl);
+          if (response.ok) {
+            const blob = await response.blob();
 
-        if (!response.ok) {
-          throw new Error("Image fetch failed");
+            base64Logo = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            });
+          }
+        } catch (err) {
+          console.warn("Logo could not be loaded. Continuing without logo.");
         }
-
-        const blob = await response.blob();
-
-        base64Logo = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      } catch (imgErr) {
-        console.error("Logo load error:", imgErr);
-        // Continue without logo (no crash)
       }
 
       /* ===============================
@@ -79,9 +77,13 @@ const CertificateCard = ({ cert }) => {
          LOGO (OPTIONAL)
       ================================ */
       if (base64Logo) {
+        const format = base64Logo.includes("image/jpeg")
+          ? "JPEG"
+          : "PNG";
+
         doc.addImage(
           base64Logo,
-          "PNG",
+          format,
           pageWidth / 2 - 70,
           70,
           140,
@@ -174,8 +176,9 @@ const CertificateCard = ({ cert }) => {
          SAVE FILE
       ================================ */
       doc.save(
-        `Certificate_${cert?.courseName
-          ?.replace(/\s+/g, "_") || "Course"}.pdf`
+        `Certificate_${
+          cert?.courseName?.replace(/\s+/g, "_") || "Course"
+        }.pdf`
       );
     } catch (err) {
       console.error("PDF generation error:", err);
