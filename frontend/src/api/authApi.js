@@ -1,4 +1,4 @@
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/auth`;
 
 /**
  * Common response handler
@@ -6,17 +6,16 @@ const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`;
 const handleResponse = async (response) => {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    throw new Error(data.message || "Something went wrong");
   }
   return data;
 };
 
 /**
  * Helper to attach token automatically
- * ✅ Exported so enrollmentApi.js can use it for Module 5
  */
 export const authHeader = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   return token
     ? { Authorization: `Bearer ${token}` }
     : {};
@@ -27,26 +26,29 @@ export const authApi = {
 
   login: async (email, password) => {
     const response = await fetch(`${BASE_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
     const result = await handleResponse(response);
 
-    // ✅ FIX 1: STORE TOKEN (THIS WAS MISSING)
+    // ✅ Store token
     if (result.token) {
-      localStorage.setItem('token', result.token);
+      localStorage.setItem("token", result.token);
     }
 
-    // ✅ FIX 2: STORE ROLE (USED FOR ROUTING)
+    // ✅ Store role
     if (result.user?.role) {
-      localStorage.setItem('role', result.user.role);
+      localStorage.setItem("role", result.user.role);
     }
 
-    // ✅ EXISTING LOGIC (UNCHANGED)
+    // ✅ Store userId
     if (result.user && (result.user._id || result.user.id)) {
-      localStorage.setItem('userId', result.user._id || result.user.id);
+      localStorage.setItem(
+        "userId",
+        result.user._id || result.user.id
+      );
     }
 
     return result;
@@ -54,42 +56,43 @@ export const authApi = {
 
   forgotPassword: async (email) => {
     const response = await fetch(`${BASE_URL}/forgot-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
     return handleResponse(response);
   },
 
   resetPassword: async (token, password) => {
-    const response = await fetch(`${BASE_URL}/reset-password/${token}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    });
+    const response = await fetch(
+      `${BASE_URL}/reset-password/${token}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      }
+    );
     return handleResponse(response);
   },
 
   /* ================= ADMIN ================= */
 
-  // ✅ GET ALL USERS
   getAllUsers: async () => {
     const response = await fetch(`${BASE_URL}/users`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...authHeader(),
       },
     });
     return handleResponse(response);
   },
 
-  // ✅ CREATE USER
   createUser: async (userData) => {
     const response = await fetch(`${BASE_URL}/users`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...authHeader(),
       },
       body: JSON.stringify(userData),
@@ -97,14 +100,13 @@ export const authApi = {
     return handleResponse(response);
   },
 
-  // ✅ ACTIVATE / DEACTIVATE USER
   updateUserStatus: async (userId, isActive) => {
     const response = await fetch(
       `${BASE_URL}/users/${userId}/status`,
       {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...authHeader(),
         },
         body: JSON.stringify({ isActive }),

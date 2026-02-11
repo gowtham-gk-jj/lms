@@ -8,7 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // ✅ CORRECT ASSET BASE URL
+  // ✅ Asset base URL (Render)
   const ASSET_URL = import.meta.env.VITE_ASSET_URL;
 
   useEffect(() => {
@@ -52,18 +52,26 @@ export default function Home() {
         <div className="course-grid">
           {courses.length > 0 ? (
             courses.map((course) => {
-              // ✅ FIX WINDOWS PATH
-              const imagePath = course.image?.replace(/\\/g, "/");
-              const syllabusPath = course.syllabus?.replace(/\\/g, "/");
+              const imagePath = course.image
+                ? course.image.replace(/\\/g, "/")
+                : null;
+
+              const syllabusPath = course.syllabus
+                ? course.syllabus.replace(/\\/g, "/")
+                : null;
 
               return (
                 <div key={course._id} className="course-card">
                   <img
-                    src={`${ASSET_URL}/${imagePath}`}
+                    src={
+                      imagePath
+                        ? `${ASSET_URL}/${imagePath}`
+                        : "/course-placeholder.png"
+                    }
                     alt={course.title}
                     onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/300x170?text=Course+Image";
+                      e.target.onerror = null; // ✅ prevent loop
+                      e.target.src = "/course-placeholder.png";
                     }}
                   />
 
@@ -72,14 +80,16 @@ export default function Home() {
                     <p>{course.description?.substring(0, 100)}...</p>
 
                     <div className="course-actions">
-                      <a
-                        href={`${ASSET_URL}/${syllabusPath}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="syllabus-btn"
-                      >
-                        Syllabus
-                      </a>
+                      {syllabusPath && (
+                        <a
+                          href={`${ASSET_URL}/${syllabusPath}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="syllabus-btn"
+                        >
+                          Syllabus
+                        </a>
+                      )}
 
                       <button
                         type="button"
