@@ -2,77 +2,39 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../api/axios";
 
-
 export default function Enroll() {
-  const { id, level } = useParams(); // id: Course ID, level: Beginner/Intermediate/Advanced
+  const { id, level } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleEnroll = async () => {
-    const storedUser = JSON.parse(localStorage.getItem("userInfo"));
-    const token = storedUser?.token;
-
-    if (!token) {
-      alert("Please login to enroll in this course.");
-      navigate("/login");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      // ✅ The "Correct Way": API Call to persist enrollment in Database
-      // Endpoint usually looks like /api/enroll or /api/courses/:id/enroll
-      await axios.post(
-        `courses/${id}/enroll`,
-        { level },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      await api.post(
+        `/api/courses/${id}/enroll`,
+        { level }
       );
 
       alert(`Successfully enrolled in ${level} level! 🎉`);
-      
-      // Navigate to the learning area/video player
-      navigate(`/course/${id}`); 
+      navigate(`/course/${id}`);
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Enrollment failed. Please try again.");
+      alert(err.response?.data?.message || "Enrollment failed.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <span style={styles.badge}>Final Step</span>
-        <h2 style={styles.title}>Confirm Enrollment</h2>
-        <p style={styles.subtitle}>
-          You are about to start the <strong>{level.toUpperCase()}</strong> module. 
-          Ready to begin your learning journey?
-        </p>
-        
-        <div style={styles.btnGroup}>
-          <button 
-            style={styles.cancelBtn} 
-            onClick={() => navigate(-1)}
-            disabled={loading}
-          >
-            Cancel
-          </button>
-          <button 
-            style={styles.confirmBtn} 
-            onClick={handleEnroll}
-            disabled={loading}
-          >
-            {loading ? "Processing..." : "Confirm & Start"}
-          </button>
-        </div>
-      </div>
+    <div>
+      <button onClick={handleEnroll} disabled={loading}>
+        {loading ? "Processing..." : "Confirm & Start"}
+      </button>
     </div>
   );
 }
+
 
 const styles = {
   container: {

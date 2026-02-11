@@ -1,20 +1,14 @@
-import { downloadReportCSV } from "../services/reportService";
+import React from "react";
 import api from "../api/axios";
-
 
 const AdminReports = () => {
   const handleDownload = async () => {
     try {
-      
+      const res = await api.get("/api/reports/export", {
+        responseType: "blob",
+      });
 
-      if (!token) {
-        alert("Please login again");
-        return;
-      }
-
-      const csvData = await downloadReportCSV(token);
-
-      const blob = new Blob([csvData], { type: "text/csv" });
+      const blob = new Blob([res.data], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -33,20 +27,7 @@ const AdminReports = () => {
   return (
     <div style={{ padding: "30px" }}>
       <h2>📊 Admin Reports</h2>
-      <p>Download organization-wide learning reports</p>
-
-      <button
-        onClick={handleDownload}
-        style={{
-          padding: "12px 24px",
-          backgroundColor: "#2563eb",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          fontSize: "16px",
-        }}
-      >
+      <button onClick={handleDownload}>
         ⬇️ Download CSV Report
       </button>
     </div>

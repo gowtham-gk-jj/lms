@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-
 import { useAuth } from "../context/AuthContext";
 import {
   BarChart,
@@ -13,7 +12,7 @@ import {
 } from "recharts";
 
 export default function RoleDashboard({ role = "Learner", full = false }) {
-  const { user } = useAuth(); // 🔥 GET TOKEN
+  const { user } = useAuth();
   const token = user?.token;
 
   const [stats, setStats] = useState(null);
@@ -28,15 +27,13 @@ export default function RoleDashboard({ role = "Learner", full = false }) {
           return;
         }
 
-        const res = await axios.get(
-          `/dashboard/stats/${role}`,
-          
+        const res = await api.get(
+          `/api/dashboard/stats/${role}`
         );
 
         const data = res.data;
         setStats(data);
 
-        // ROLE-BASED CHART
         if (role === "Learner") {
           setChartData([
             { name: "Completed", value: data.personalProgress || 0 },
@@ -59,19 +56,13 @@ export default function RoleDashboard({ role = "Learner", full = false }) {
     fetchStats();
   }, [role, token]);
 
-  if (loading) {
-    return <p style={{ padding: "20px" }}>Loading overview...</p>;
-  }
-
-  if (!stats) {
-    return <p style={{ padding: "20px" }}>No dashboard data available</p>;
-  }
+  if (loading) return <p style={{ padding: "20px" }}>Loading overview...</p>;
+  if (!stats) return <p style={{ padding: "20px" }}>No dashboard data available</p>;
 
   return (
     <div style={{ padding: full ? "30px" : "10px" }}>
       <h2 style={{ marginBottom: "20px" }}>Overview</h2>
 
-      {/* ================= KPI CARDS ================= */}
       <div
         style={{
           display: "grid",
@@ -80,45 +71,29 @@ export default function RoleDashboard({ role = "Learner", full = false }) {
           marginBottom: "30px",
         }}
       >
-        {/* ADMIN */}
         {role === "Admin" && (
           <>
             <KpiCard title="Total Users" value={stats.users} />
             <KpiCard title="Total Courses" value={stats.courses} />
-            <KpiCard
-              title="Average Completion"
-              value={`${stats.averageCompletion}%`}
-            />
+            <KpiCard title="Average Completion" value={`${stats.averageCompletion}%`} />
           </>
         )}
 
-        {/* TRAINER */}
         {role === "Trainer" && (
           <>
             <KpiCard title="Courses Handled" value={stats.coursesHandled} />
-            <KpiCard
-              title="Average Progress"
-              value={`${stats.avgCompletion}%`}
-            />
+            <KpiCard title="Average Progress" value={`${stats.avgCompletion}%`} />
           </>
         )}
 
-        {/* LEARNER */}
         {role === "Learner" && (
           <>
-            <KpiCard
-              title="Enrolled Courses"
-              value={stats.enrolledCourses}
-            />
-            <KpiCard
-              title="Your Progress"
-              value={`${stats.personalProgress}%`}
-            />
+            <KpiCard title="Enrolled Courses" value={stats.enrolledCourses} />
+            <KpiCard title="Your Progress" value={`${stats.personalProgress}%`} />
           </>
         )}
       </div>
 
-      {/* ================= CHART ================= */}
       <div
         style={{
           background: "#fff",
@@ -150,7 +125,6 @@ export default function RoleDashboard({ role = "Learner", full = false }) {
   );
 }
 
-/* ================= KPI CARD ================= */
 function KpiCard({ title, value }) {
   return (
     <div

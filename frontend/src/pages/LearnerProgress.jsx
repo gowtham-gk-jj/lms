@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../api/axios";
-
+import { progressApi } from "../api/progressApi";
 import "./LearnerProgress.css";
 
 const LearnerProgress = () => {
@@ -8,20 +7,11 @@ const LearnerProgress = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  
-
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        
-
-        const res = await axios.get(`/progress`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setEnrollments(Array.isArray(res.data) ? res.data : []);
+        const data = await progressApi.getAllProgress();
+        setEnrollments(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to load progress:", err);
       } finally {
@@ -34,12 +24,8 @@ const LearnerProgress = () => {
 
   const filteredEnrollments = enrollments.filter(
     (e) =>
-      e.learner?.name
-        ?.toLowerCase()
-        .includes(search.toLowerCase()) ||
-      e.course?.title
-        ?.toLowerCase()
-        .includes(search.toLowerCase())
+      e.learner?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      e.course?.title?.toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading) {
