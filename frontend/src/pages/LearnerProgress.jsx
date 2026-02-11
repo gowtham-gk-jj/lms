@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { progressApi } from "../api/progressApi";
+import { progressApi } from "../api/adminProgressApi";
 import "./LearnerProgress.css";
 
 const LearnerProgress = () => {
