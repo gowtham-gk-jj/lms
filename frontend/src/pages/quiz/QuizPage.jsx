@@ -47,7 +47,7 @@ export default function QuizPage() {
         setQuestions(res.data.questions);
       } catch (err) {
         console.error("Quiz Load Error:", err);
-        navigate(`/api/course/${courseId}`);
+        navigate(`/course/${courseId}`);
       } finally {
         setLoading(false);
       }
@@ -116,7 +116,7 @@ export default function QuizPage() {
       <div className="quiz-header">
         <button
           className="quiz-back-btn"
-          onClick={() => navigate(`/api/course/${courseId}`)}
+          onClick={() => navigate(`/course/${courseId}`)}
         >
           ← Back
         </button>

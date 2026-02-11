@@ -9,53 +9,75 @@ export default function QuizReview() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const token = user?.token;
+
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user?.token) return;
+    if (!token) {
+      setLoading(false);
+      setError("Please login to view review");
+      return;
+    }
 
     const fetchReview = async () => {
       try {
         const res = await api.get(
-          `/quiz/review/${attemptId}`
+          `/api/quiz/review/${attemptId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
-        if (!res.data?.success) {
+        const data = res.data;
+
+        if (!data?.success) {
           setError("No review data found");
           return;
         }
 
-        setQuestions(res.data.questions || []);
-        setAnswers(res.data.answers || {});
+        setQuestions(data.questions || []);
+        setAnswers(data.answers || {});
       } catch (err) {
-        console.error(err);
-        setError("Failed to load quiz review");
+        console.error("Review Load Error:", err);
+
+        if (err.response?.status === 401) {
+          navigate("/login");
+        } else {
+          setError("Failed to load quiz review");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchReview();
-  }, [attemptId, user]);
+  }, [attemptId, token, navigate]);
 
-  if (loading) return <p className="quiz-status">Loading review...</p>;
-  if (error) return <p className="quiz-status">{error}</p>;
+  if (loading)
+    return <p className="quiz-status">Loading review...</p>;
+
+  if (error)
+    return <p className="quiz-status">{error}</p>;
 
   return (
     <div className="quiz-page-wrapper">
-      {/* ===== HEADER ===== */}
       <div className="quiz-header">
-        <button className="quiz-back-btn" onClick={() => navigate(-1)}>
+        <button
+          className="quiz-back-btn"
+          onClick={() => navigate(-1)}
+        >
           ← Back
         </button>
         <h1 className="quiz-title">Quiz Review</h1>
         <div />
       </div>
 
-      {/* ===== QUESTIONS ===== */}
       <div className="quiz-content">
         {questions.map((q, index) => {
           const correctAnswer = q.options.find(
@@ -65,7 +87,10 @@ export default function QuizReview() {
           const userAnswer = answers[q._id];
 
           return (
-            <div key={q._id} className="quiz-question-card">
+            <div
+              key={q._id}
+              className="quiz-question-card"
+            >
               <div className="quiz-question">
                 {index + 1}. {q.question}
               </div>
@@ -89,6 +114,7 @@ export default function QuizReview() {
                         type="radio"
                         checked={userAnswer === opt.text}
                         disabled
+                        readOnly
                       />
                       <span>{opt.text}</span>
                     </label>
