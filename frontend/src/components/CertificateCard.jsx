@@ -1,8 +1,11 @@
 import React from "react";
 import { jsPDF } from "jspdf";
+import { useNavigate } from "react-router-dom";
 import "./CertificateCard.css";
 
 const CertificateCard = ({ cert }) => {
+  const navigate = useNavigate();
+
   const generatePDF = async () => {
     try {
       const doc = new jsPDF({
@@ -22,7 +25,6 @@ const CertificateCard = ({ cert }) => {
         import.meta.env.VITE_API_BASE_URL ||
         "";
 
-      // Ensure proper slash handling
       const logoUrl = cert?.orgLogo
         ? `${BASE_URL}/${cert.orgLogo.replace(/^\/+/, "")}`
         : null;
@@ -188,6 +190,15 @@ const CertificateCard = ({ cert }) => {
 
   return (
     <div className="certificate-card">
+
+      {/* 🔙 Back Button */}
+      <button
+        className="cert-back-btn"
+        onClick={() => navigate(-1)}
+      >
+        ← Back
+      </button>
+
       <div className="cert-info">
         <h4>{cert?.courseName}</h4>
         <p>
