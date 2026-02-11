@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { progressApi } from "../api/adminProgressApi";
+import api from "../api/axios";
 import "./LearnerProgress.css";
 
 const LearnerProgress = () => {
@@ -10,8 +10,8 @@ const LearnerProgress = () => {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const data = await progressApi.getAllProgress();
-        setEnrollments(Array.isArray(data) ? data : []);
+        const res = await api.get("/api/progress");
+        setEnrollments(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Failed to load progress:", err);
       } finally {
