@@ -66,12 +66,12 @@ export default function Home() {
                     src={
                       imagePath
                         ? `${ASSET_URL}/${imagePath}`
-                        : "/course-placeholder.png"
+                        : "/api/course-placeholder.png"
                     }
                     alt={course.title}
                     onError={(e) => {
                       e.target.onerror = null; // ✅ prevent loop
-                      e.target.src = "/course-placeholder.png";
+                      e.target.src = "/api/course-placeholder.png";
                     }}
                   />
 
