@@ -17,7 +17,7 @@ const AssignCourseForm = () => {
 
     try {
       /* ================= FETCH USERS ================= */
-      const resUsers = await api.get("/auth/users");
+      const resUsers = await api.get("/api/auth/users");
 
       const usersList = Array.isArray(resUsers.data)
         ? resUsers.data
@@ -34,7 +34,7 @@ const AssignCourseForm = () => {
       setLearners(learnerList);
 
       /* ================= FETCH COURSES ================= */
-      const resCourses = await api.get("/courses");
+      const resCourses = await api.get("/api/courses");
 
       const courseList = Array.isArray(resCourses.data)
         ? resCourses.data
@@ -61,7 +61,7 @@ const AssignCourseForm = () => {
     }
 
     try {
-      await api.post("/enrollment/enroll", {
+      await api.post("/api/enrollment/enroll", {
         learnerId: selectedLearner,
         courseId: selectedCourse,
       });
@@ -90,7 +90,6 @@ const AssignCourseForm = () => {
       <h3>👤 Administrative Enrollment</h3>
 
       <form onSubmit={assignCourse} className="assign-form">
-        {/* LEARNER */}
         <div className="form-group">
           <label>Learner</label>
           <select
@@ -112,7 +111,6 @@ const AssignCourseForm = () => {
           </select>
         </div>
 
-        {/* COURSE */}
         <div className="form-group">
           <label>Course to Assign</label>
           <select
