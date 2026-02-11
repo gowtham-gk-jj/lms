@@ -19,7 +19,7 @@ export default function CourseDetails() {
     const fetchCourse = async () => {
       try {
         // ❌ DO NOT add /api here
-        const res = await api.get(`/courses/public/${id}`);
+        const res = await api.get(`/api/courses/public/${id}`);
         setCourse(res.data);
       } catch (err) {
         console.error("Course fetch error:", err.response?.data || err.message);
