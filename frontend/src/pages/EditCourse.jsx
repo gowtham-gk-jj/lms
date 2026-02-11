@@ -24,7 +24,7 @@ export default function EditCourse() {
     const fetchCourse = async () => {
       try {
         const res = await api.get(
-          `/courses/${id}`, // 🔥 make sure backend route matches
+          `/api/courses/${id}`, // 🔥 make sure backend route matches
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ export default function EditCourse() {
       setUpdating(true);
 
       await api.put(
-        `/courses/${id}`,
+        `/api/courses/${id}`,
         formData,
         {
           headers: {
