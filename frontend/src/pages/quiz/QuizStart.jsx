@@ -29,11 +29,11 @@ export default function QuizStart() {
         throw new Error("No quiz");
       }
 
-      navigate(`/api/quiz/${courseId}/${level}/play`);
+      navigate(`/quiz/${courseId}/${level}/play`);
     } catch (err) {
       console.error(err);
       alert("Quiz not available for this level");
-      navigate(`/api/course/${courseId}`);
+      navigate(`/course/${courseId}`);
     }
   };
 
@@ -42,7 +42,7 @@ export default function QuizStart() {
       <div className="quiz-start-header">
         <button
           className="quiz-start-back-btn"
-          onClick={() => navigate(`/api/course/${courseId}`)}
+          onClick={() => navigate(`/course/${courseId}`)}
         >
           ← Back
         </button>
