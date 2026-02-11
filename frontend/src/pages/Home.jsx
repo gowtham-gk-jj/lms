@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await api.get("/courses/public");
+        const res = await api.get("/api/courses/public");
 
         const data = Array.isArray(res.data)
           ? res.data
@@ -95,7 +95,7 @@ export default function Home() {
                         type="button"
                         className="know-btn"
                         onClick={() =>
-                          navigate(`/course/${course._id}`)
+                          navigate(`/api/course/${course._id}`)
                         }
                       >
                         Know More
