@@ -14,13 +14,25 @@ connectDB(); // ✅ Connect DB FIRST
 
 const app = express();
 
-// ================= CORS CONFIG =================
+// ================= CORS CONFIG (FIXED) =================
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://lms-taupe-nine.vercel.app", // ✅ Vercel frontend
-    ],
+    origin: function (origin, callback) {
+      // allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      // allow localhost
+      if (origin.startsWith("http://localhost")) {
+        return callback(null, true);
+      }
+
+      // allow all Vercel deployments
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
