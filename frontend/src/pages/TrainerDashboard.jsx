@@ -25,7 +25,7 @@ export default function TrainerDashboard() {
         }
 
         // ✅ FIXED: Added /api
-        const res = await api.get("/api/courses");
+        const res = await api.get("/api/api/courses");
 
         setCourses(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
@@ -46,7 +46,7 @@ export default function TrainerDashboard() {
 
     try {
       // ✅ FIXED: Added /api
-      await api.delete(`/api/courses/${id}`);
+      await api.delete(`/api/api/courses/${id}`);
 
       setCourses((prev) => prev.filter((c) => c._id !== id));
     } catch (err) {
