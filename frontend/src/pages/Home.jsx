@@ -8,13 +8,13 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // ✅ Asset base URL (Render)
   const ASSET_URL = import.meta.env.VITE_ASSET_URL;
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await api.get("/api/courses/public");
+        // ✅ DO NOT include /api here if baseURL already has it
+        const res = await api.get("/courses/public");
 
         const data = Array.isArray(res.data)
           ? res.data
@@ -34,7 +34,6 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      {/* HERO */}
       <div className="hero">
         <h1>
           Learning <span>Management</span> System
@@ -66,12 +65,12 @@ export default function Home() {
                     src={
                       imagePath
                         ? `${ASSET_URL}/${imagePath}`
-                        : "/api/course-placeholder.png"
+                        : "/course-placeholder.png"
                     }
                     alt={course.title}
                     onError={(e) => {
-                      e.target.onerror = null; // ✅ prevent loop
-                      e.target.src = "/api/course-placeholder.png";
+                      e.target.onerror = null;
+                      e.target.src = "/course-placeholder.png";
                     }}
                   />
 
@@ -95,7 +94,7 @@ export default function Home() {
                         type="button"
                         className="know-btn"
                         onClick={() =>
-                          navigate(`/api/course/${course._id}`)
+                          navigate(`/course/${course._id}`)
                         }
                       >
                         Know More
