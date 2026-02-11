@@ -83,17 +83,27 @@ router.get("/", protect, async (req, res) => {
 
 /* ================= PUBLIC COURSES ================= */
 router.get("/public", async (req, res) => {
-  const courses = await Course.find();
-  res.json(courses);
+  try {
+    const courses = await Course.find();
+    res.status(200).json(courses);
+  } catch (error) {
+    console.error("PUBLIC COURSES ERROR:", error.message);
+    res.status(500).json({ message: "Failed to fetch public courses" });
+  }
 });
 
-/* ================= SINGLE COURSE ================= */
+/* ================= SINGLE PUBLIC COURSE ================= */
 router.get("/public/:id", async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
-    if (!course) return res.status(404).json({ message: "Not found" });
-    res.json(course);
-  } catch {
+
+    if (!course) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(course);
+  } catch (error) {
+    console.error("PUBLIC COURSE ERROR:", error.message);
     res.status(400).json({ message: "Invalid ID" });
   }
 });
@@ -159,8 +169,13 @@ router.put(
 
 /* ================= DELETE COURSE ================= */
 router.delete("/:id", protect, async (req, res) => {
-  await Course.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+  try {
+    await Course.findByIdAndDelete(req.params.id);
+    res.json({ message: "Deleted" });
+  } catch (error) {
+    console.error("DELETE COURSE ERROR:", error.message);
+    res.status(500).json({ message: "Failed to delete course" });
+  }
 });
 
 module.exports = router;
