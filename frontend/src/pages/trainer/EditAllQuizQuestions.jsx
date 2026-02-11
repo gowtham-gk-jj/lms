@@ -15,7 +15,7 @@ const EditAllQuizQuestions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await api.get(`/quiz/course/${courseId}`);
+        const res = await api.get(`/api/quiz/course/${courseId}`);
 
         const filtered = (res.data.quiz || []).filter(
           (q) => q.level === level
@@ -60,7 +60,7 @@ const EditAllQuizQuestions = () => {
           isCorrect: opt === q.correctAnswer,
         }));
 
-        await api.put(`/quiz/question/${q._id}`, {
+        await api.put(`/api/quiz/question/${q._id}`, {
           question: q.question,
           options: formattedOptions,
         });
