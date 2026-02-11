@@ -10,32 +10,32 @@ const reportRoutes = require("./routes/reportRoutes");
 
 // ================= INIT =================
 dotenv.config();
-connectDB(); // ✅ Connect DB FIRST
+connectDB();
 
 const app = express();
 
-// ================= CORS CONFIG (FIXED) =================
+// ================= CORS CONFIG (FINAL FIX) =================
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (Postman, mobile apps)
+      // Allow Postman / server-to-server
       if (!origin) return callback(null, true);
 
-      // allow localhost
+      // Allow localhost
       if (origin.startsWith("http://localhost")) {
         return callback(null, true);
       }
 
-      // allow all Vercel deployments
+      // Allow all Vercel deployments
       if (origin.endsWith(".vercel.app")) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      return callback(new Error("CORS blocked"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
+    credentials: false, // ✅ FIXED (you are not using cookies)
   })
 );
 
@@ -75,7 +75,7 @@ app.use((err, req, res, next) => {
 
 // ================= SERVER + SOCKET =================
 const server = http.createServer(app);
-initSocket(server); // ✅ Init socket ONCE
+initSocket(server);
 
 // ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
