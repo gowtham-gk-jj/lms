@@ -16,7 +16,7 @@ const EditQuizQuestion = () => {
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
-        const res = await api.get(`/quiz/question/${questionId}`);
+        const res = await api.get(`/api/quiz/question/${questionId}`);
 
         // ✅ NORMALIZE BACKEND DATA → UI FORMAT
         const optionTexts = res.data.options.map((o) => o.text);
@@ -45,7 +45,7 @@ const EditQuizQuestion = () => {
     }));
 
     try {
-      await api.put(`/quiz/question/${questionId}`, {
+      await api.put(`/api/quiz/question/${questionId}`, {
         question,
         options: formattedOptions,
       });
