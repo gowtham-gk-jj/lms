@@ -11,76 +11,90 @@ export default function TrainerQuizDashboard() {
   const [coursesWithQuizzes, setCoursesWithQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ asset base (render / local)
   const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    if (!user?.token) return;
+    if (!user?.token) {
+      setLoading(false);
+      return;
+    }
 
     const fetchQuizDashboard = async () => {
       try {
-        const res = await api.get("/quiz/trainer/quizzes");
+        // ✅ FIXED ROUTE
+        const res = await api.get("/api/quiz/trainer/quizzes");
 
-        const quizzes = res.data?.quizzes || [];
+        const quizzes =
+          res.data?.quizzes ||
+          res.data?.data ||
+          res.data ||
+          [];
 
-        /**
-         * Backend returns flat list:
-         * [{ courseId, courseTitle, level, questionCount }]
-         *
-         * Convert to unique course cards
-         */
         const map = new Map();
 
         quizzes.forEach((q) => {
+          if (!q.courseId) return;
+
           if (!map.has(q.courseId)) {
             map.set(q.courseId, {
               _id: q.courseId,
               title: q.courseTitle,
-              image: q.courseImage || "uploads/default-course.png",
+              image:
+                q.courseImage ||
+                "uploads/default-course.png",
             });
           }
         });
 
         setCoursesWithQuizzes([...map.values()]);
       } catch (err) {
-        console.error("LOAD QUIZ DASHBOARD ERROR:", err);
+        console.error(
+          "LOAD QUIZ DASHBOARD ERROR:",
+          err.response?.data || err.message
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuizDashboard();
-  }, [user]);
+  }, [user?.token]);
 
   return (
     <div className="tqd-page-wrapper">
-
-      {/* HEADER */}
       <div className="tqd-header">
         <button
           className="tqd-back-btn"
           onClick={() => navigate(-1)}
-          aria-label="Go back"
         >
           ←
         </button>
 
-        <h1 className="tqd-title">Quiz Management</h1>
+        <h1 className="tqd-title">
+          Quiz Management
+        </h1>
 
         <div className="tqd-header-spacer"></div>
       </div>
 
-      {/* CONTENT */}
       <div className="tqd-content">
-        {loading && <p className="tqd-status">Loading...</p>}
-
-        {!loading && coursesWithQuizzes.length === 0 && (
-          <p className="tqd-status">No quizzes created yet.</p>
+        {loading && (
+          <p className="tqd-status">Loading...</p>
         )}
+
+        {!loading &&
+          coursesWithQuizzes.length === 0 && (
+            <p className="tqd-status">
+              No quizzes created yet.
+            </p>
+          )}
 
         <div className="tqd-grid">
           {coursesWithQuizzes.map((course) => (
-            <div key={course._id} className="tqd-card">
+            <div
+              key={course._id}
+              className="tqd-card"
+            >
               <img
                 src={`${ASSET_URL}/${course.image}`}
                 alt={course.title}
@@ -95,7 +109,9 @@ export default function TrainerQuizDashboard() {
 
                 <button
                   onClick={() =>
-                    navigate(`/trainer/course/${course._id}/quizzes`)
+                    navigate(
+                      `/trainer/course/${course._id}/quizzes`
+                    )
                   }
                 >
                   View Levels

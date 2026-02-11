@@ -17,15 +17,22 @@ const TrainerQuizQuestions = () => {
   /* ===== FETCH QUESTIONS ===== */
   const fetchQuestions = async () => {
     try {
-      const res = await api.get(`/quiz/course/${courseId}`);
+      // ✅ FIXED ROUTE
+      const res = await api.get(`/api/quiz/course/${courseId}`);
 
-      const filtered = (res.data.quiz || []).filter(
-        (q) => q.level === level
+      const quizArray =
+        res.data?.quiz ||
+        res.data?.data ||
+        res.data ||
+        [];
+
+      const filtered = quizArray.filter(
+        (q) => Number(q.level) === level
       );
 
       setQuestions(filtered);
     } catch (err) {
-      console.error(err);
+      console.error("FETCH QUESTIONS ERROR:", err);
       setError("Failed to load questions");
     } finally {
       setLoading(false);
@@ -33,20 +40,29 @@ const TrainerQuizQuestions = () => {
   };
 
   useEffect(() => {
-    if (user?.token) fetchQuestions();
-  }, [courseId, level, user]);
+    if (user?.token) {
+      fetchQuestions();
+    } else {
+      setLoading(false);
+    }
+  }, [courseId, level, user?.token]);
 
   /* ===== DELETE SINGLE QUESTION ===== */
   const deleteQuestion = async (id) => {
     if (!window.confirm("Delete this question?")) return;
 
     try {
-      await api.delete(`/quiz/question/${id}`);
+      // ✅ FIXED ROUTE
+      await api.delete(`/api/quiz/question/${id}`);
 
-      // update UI instantly
-      setQuestions((prev) => prev.filter((q) => q._id !== id));
+      setQuestions((prev) =>
+        prev.filter((q) => q._id !== id)
+      );
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete question");
+      alert(
+        err.response?.data?.message ||
+          "Failed to delete question"
+      );
     }
   };
 
@@ -55,26 +71,32 @@ const TrainerQuizQuestions = () => {
     if (!window.confirm("Delete ALL questions in this level?")) return;
 
     try {
-      await api.delete(`/quiz/course/${courseId}/level/${level}`);
+      // ✅ FIXED ROUTE
+      await api.delete(
+        `/api/quiz/course/${courseId}/level/${level}`
+      );
 
-      // clear UI
       setQuestions([]);
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete all questions");
+      alert(
+        err.response?.data?.message ||
+          "Failed to delete all questions"
+      );
     }
   };
 
-  if (loading) return <p className="tqq-status">Loading...</p>;
-  if (error) return <p className="tqq-status">{error}</p>;
+  if (loading)
+    return <p className="tqq-status">Loading...</p>;
+
+  if (error)
+    return <p className="tqq-status">{error}</p>;
 
   return (
     <div className="tqq-page-wrapper">
-      {/* ===== HEADER ===== */}
       <div className="tqq-header">
         <button
           className="tqq-back-btn"
           onClick={() => navigate(-1)}
-          aria-label="Go back"
         >
           ←
         </button>
@@ -87,7 +109,9 @@ const TrainerQuizQuestions = () => {
           <button
             className="tqq-edit-all-btn"
             onClick={() =>
-              navigate(`/trainer/edit-questions/${courseId}/${level}`)
+              navigate(
+                `/trainer/edit-questions/${courseId}/${level}`
+              )
             }
           >
             ✏️ Edit All
@@ -102,7 +126,6 @@ const TrainerQuizQuestions = () => {
         </div>
       </div>
 
-      {/* ===== CONTENT ===== */}
       <div className="tqq-content">
         {questions.length === 0 ? (
           <p className="tqq-status">
@@ -110,7 +133,10 @@ const TrainerQuizQuestions = () => {
           </p>
         ) : (
           questions.map((q, index) => (
-            <div key={q._id} className="tqq-card">
+            <div
+              key={q._id}
+              className="tqq-card"
+            >
               <div className="tqq-card-top">
                 <strong>
                   {index + 1}. {q.question}
@@ -120,7 +146,9 @@ const TrainerQuizQuestions = () => {
                   <button
                     className="tqq-edit-btn"
                     onClick={() =>
-                      navigate(`/trainer/edit-question/${q._id}`)
+                      navigate(
+                        `/trainer/edit-question/${q._id}`
+                      )
                     }
                   >
                     Edit
@@ -128,7 +156,9 @@ const TrainerQuizQuestions = () => {
 
                   <button
                     className="tqq-delete-btn"
-                    onClick={() => deleteQuestion(q._id)}
+                    onClick={() =>
+                      deleteQuestion(q._id)
+                    }
                   >
                     Delete
                   </button>
@@ -136,7 +166,7 @@ const TrainerQuizQuestions = () => {
               </div>
 
               <ul className="tqq-options">
-                {q.options.map((opt, i) => (
+                {q.options?.map((opt, i) => (
                   <li
                     key={i}
                     className={

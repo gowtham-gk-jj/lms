@@ -9,23 +9,18 @@ export default function CreateQuiz() {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
 
-  /* ================= COURSE ================= */
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(
     searchParams.get("course") || ""
   );
   const [level, setLevel] = useState("Beginner");
 
-  /* ================= SINGLE QUESTION ================= */
   const [questionType, setQuestionType] = useState("mcq");
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
 
-  /* ================= QUESTIONS LIST ================= */
   const [questions, setQuestions] = useState([]);
-
-  /* ================= BULK ================= */
   const [bulkText, setBulkText] = useState("");
 
   /* ================= LOAD COURSES ================= */
@@ -33,12 +28,14 @@ export default function CreateQuiz() {
     if (!user?.token) return;
 
     api
-      .get("/courses")
-      .then((res) => setCourses(res.data))
+      .get("/api/courses") // ✅ FIXED
+      .then((res) =>
+        setCourses(Array.isArray(res.data) ? res.data : [])
+      )
       .catch(() => alert("Failed to load courses"));
   }, [user?.token]);
 
-  /* ================= ADD SINGLE QUESTION ================= */
+  /* ================= ADD QUESTION ================= */
   const addQuestion = () => {
     if (!question.trim()) {
       alert("Enter a question");
@@ -83,83 +80,6 @@ export default function CreateQuiz() {
     setQuestionType("mcq");
   };
 
-  /* ================= BULK UPLOAD ================= */
-  const addBulkQuestions = () => {
-    if (!bulkText.trim()) {
-      alert("Paste questions first");
-      return;
-    }
-
-    const lines = bulkText
-      .split("\n")
-      .map((l) => l.trim())
-      .filter(Boolean);
-
-    const parsed = [];
-    let qText = "";
-    let opts = [];
-    let ans = "";
-
-    const flush = () => {
-      if (!qText || !ans) return;
-
-      if (opts.length === 2) {
-        parsed.push({
-          questionType: "true_false",
-          question: qText,
-          options: ["True", "False"],
-          correctAnswer: ans === "A" ? "True" : "False",
-        });
-      } else if (opts.length === 4) {
-        const idx = ["A", "B", "C", "D"].indexOf(ans);
-        if (idx !== -1) {
-          parsed.push({
-            questionType: "mcq",
-            question: qText,
-            options: opts,
-            correctAnswer: opts[idx],
-          });
-        }
-      }
-
-      qText = "";
-      opts = [];
-      ans = "";
-    };
-
-    lines.forEach((line) => {
-      if (/^\d+\./.test(line)) {
-        flush();
-        qText = line.replace(/^\d+\.\s*/, "");
-        return;
-      }
-
-      if (/^A\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^B\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^C\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^D\)/i.test(line)) opts.push(line.slice(2).trim());
-
-      if (/^answer:/i.test(line)) {
-        ans = line.replace(/answer:/i, "").trim().toUpperCase();
-      }
-    });
-
-    flush();
-
-    if (!parsed.length) {
-      alert("No valid questions detected");
-      return;
-    }
-
-    setQuestions((prev) => [...prev, ...parsed]);
-    setBulkText("");
-  };
-
-  /* ================= DELETE QUESTION ================= */
-  const deleteQuestion = (index) => {
-    setQuestions((prev) => prev.filter((_, i) => i !== index));
-  };
-
   /* ================= SAVE QUIZ ================= */
   const saveQuiz = async () => {
     if (!selectedCourse || questions.length === 0) {
@@ -196,7 +116,7 @@ export default function CreateQuiz() {
     });
 
     try {
-      const res = await api.post("/quiz", {
+      const res = await api.post("/api/quiz", { // ✅ FIXED
         courseId: selectedCourse,
         level: levelMap[level],
         questions: formattedQuestions,
@@ -214,7 +134,6 @@ export default function CreateQuiz() {
     }
   };
 
-  /* ================= UI ================= */
   return (
     <div className="cq-page-wrapper">
       <div className="cq-header">
@@ -245,8 +164,6 @@ export default function CreateQuiz() {
             <option>Advanced</option>
           </select>
         </div>
-
-        {/* UI REMAINS UNCHANGED */}
       </div>
     </div>
   );

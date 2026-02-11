@@ -16,17 +16,24 @@ const CourseQuizList = () => {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        // ✅ NEW API (token auto-attached)
-        const res = await api.get(`/quiz/course/${courseId}`);
+        // ✅ FIXED: Added /api
+        const res = await api.get(`/api/quiz/course/${courseId}`);
 
-        /**
-         * Backend returns:
-         * { success: true, quiz: [ { level, ... } ] }
-         */
+        // Safe fallback handling
+        const quizArray =
+          res.data?.quiz ||
+          res.data?.data ||
+          res.data ||
+          [];
+
         const levelMap = new Map();
 
-        (res.data.quiz || []).forEach((q) => {
-          levelMap.set(q.level, (levelMap.get(q.level) || 0) + 1);
+        quizArray.forEach((q) => {
+          if (!q.level) return;
+          levelMap.set(
+            q.level,
+            (levelMap.get(q.level) || 0) + 1
+          );
         });
 
         const formatted = [...levelMap.entries()].map(
@@ -38,36 +45,42 @@ const CourseQuizList = () => {
 
         setLevels(formatted);
       } catch (err) {
-        console.error(err);
+        console.error("Quiz Level Load Error:", err);
         setError("Failed to load quiz levels");
       } finally {
         setLoading(false);
       }
     };
 
-    if (user?.token) fetchLevels();
+    if (user?.token) {
+      fetchLevels();
+    } else {
+      setLoading(false);
+    }
   }, [courseId, user?.token]);
 
-  if (loading) return <p className="cql-status">Loading...</p>;
-  if (error) return <p className="cql-status">{error}</p>;
+  if (loading)
+    return <p className="cql-status">Loading...</p>;
+
+  if (error)
+    return <p className="cql-status">{error}</p>;
 
   return (
     <div className="cql-page-wrapper">
-      {/* HEADER */}
       <div className="cql-header">
         <button
           className="cql-back-btn"
           onClick={() => navigate(-1)}
-          aria-label="Go back"
         >
           ←
         </button>
 
-        <h1 className="cql-title">Quiz Levels</h1>
+        <h1 className="cql-title">
+          Quiz Levels
+        </h1>
         <div className="cql-header-spacer"></div>
       </div>
 
-      {/* CONTENT */}
       <div className="cql-content">
         {levels.length === 0 ? (
           <p className="cql-status">
@@ -76,7 +89,10 @@ const CourseQuizList = () => {
         ) : (
           <div className="cql-grid">
             {levels.map((level) => (
-              <div key={level._id} className="cql-card">
+              <div
+                key={level._id}
+                className="cql-card"
+              >
                 <div>
                   <div className="cql-level">
                     Level {level._id}
