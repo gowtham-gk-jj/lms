@@ -17,13 +17,14 @@ export default function CourseDetails() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        // ✅ FIXED: added /api
-        const res = await api.get(`/api/courses/public/${id}`);
+        // ❌ DO NOT add /api here
+        const res = await api.get(`/courses/public/${id}`);
         setCourse(res.data);
       } catch (err) {
-        console.error("Course fetch error", err);
+        console.error("Course fetch error:", err.response?.data || err.message);
       }
     };
+
     fetchCourse();
   }, [id]);
 
@@ -36,8 +37,8 @@ export default function CourseDetails() {
       }
 
       try {
-        // ✅ FIXED: added /api
-        const res = await api.get("/api/enrollment/my-courses");
+        // ❌ DO NOT add /api here
+        const res = await api.get("/enrollment/my-courses");
 
         const current = res.data.find(
           (e) => e.course?._id === id
@@ -45,7 +46,10 @@ export default function CourseDetails() {
 
         setEnrollment(current || null);
       } catch (err) {
-        console.error("Enrollment fetch error", err);
+        console.error(
+          "Enrollment fetch error:",
+          err.response?.data || err.message
+        );
       } finally {
         setLoading(false);
       }
@@ -55,17 +59,17 @@ export default function CourseDetails() {
   }, [id, user]);
 
   /* ================= ACTIONS ================= */
+
   const handleEnroll = async () => {
     try {
-      // ✅ FIXED: added /api
-      await api.post("/api/enrollment/enroll", {
+      await api.post("/enrollment/enroll", {
         learnerId: user._id,
         courseId: id,
       });
 
       window.location.reload();
     } catch (err) {
-      console.error("Enroll failed", err);
+      console.error("Enroll failed:", err.response?.data || err.message);
     }
   };
 
