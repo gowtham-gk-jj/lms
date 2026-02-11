@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../../api/axios"; 
+import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./CreateQuiz.css";
 
@@ -89,12 +89,84 @@ export default function CreateQuiz() {
     setQuestionType("mcq");
   };
 
+  /* ================= BULK UPLOAD ================= */
+  const addBulkQuestions = () => {
+    if (!bulkText.trim()) {
+      alert("Paste questions first");
+      return;
+    }
+
+    const lines = bulkText
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
+
+    const parsed = [];
+    let qText = "";
+    let opts = [];
+    let ans = "";
+
+    const flush = () => {
+      if (!qText || !ans) return;
+
+      if (opts.length === 2) {
+        parsed.push({
+          questionType: "true_false",
+          question: qText,
+          options: ["True", "False"],
+          correctAnswer: ans === "A" ? "True" : "False",
+        });
+      } else if (opts.length === 4) {
+        const idx = ["A", "B", "C", "D"].indexOf(ans);
+        if (idx !== -1) {
+          parsed.push({
+            questionType: "mcq",
+            question: qText,
+            options: opts,
+            correctAnswer: opts[idx],
+          });
+        }
+      }
+
+      qText = "";
+      opts = [];
+      ans = "";
+    };
+
+    lines.forEach((line) => {
+      if (/^\d+\./.test(line)) {
+        flush();
+        qText = line.replace(/^\d+\.\s*/, "");
+        return;
+      }
+
+      if (/^A\)/i.test(line)) opts.push(line.slice(2).trim());
+      if (/^B\)/i.test(line)) opts.push(line.slice(2).trim());
+      if (/^C\)/i.test(line)) opts.push(line.slice(2).trim());
+      if (/^D\)/i.test(line)) opts.push(line.slice(2).trim());
+
+      if (/^answer:/i.test(line)) {
+        ans = line.replace(/answer:/i, "").trim().toUpperCase();
+      }
+    });
+
+    flush();
+
+    if (!parsed.length) {
+      alert("No valid questions detected");
+      return;
+    }
+
+    setQuestions((prev) => [...prev, ...parsed]);
+    setBulkText("");
+  };
+
   /* ================= DELETE QUESTION ================= */
   const deleteQuestion = (index) => {
     setQuestions((prev) => prev.filter((_, i) => i !== index));
   };
 
-  /* ================= SAVE QUIZ (NEW API) ================= */
+  /* ================= SAVE QUIZ ================= */
   const saveQuiz = async () => {
     if (!selectedCourse || questions.length === 0) {
       alert("Select course and add questions");
@@ -168,6 +240,8 @@ export default function CreateQuiz() {
       </div>
 
       <div className="create-quiz-page">
+
+        {/* COURSE + LEVEL */}
         <div className="quiz-meta cq-card">
           <select
             value={selectedCourse}
@@ -187,6 +261,97 @@ export default function CreateQuiz() {
             <option>Advanced</option>
           </select>
         </div>
+
+        {/* SINGLE QUESTION */}
+        <div className="single-question-card cq-card">
+          <h3>Add Single Question</h3>
+
+          <select
+            value={questionType}
+            onChange={(e) => setQuestionType(e.target.value)}
+          >
+            <option value="mcq">MCQ</option>
+            <option value="true_false">True / False</option>
+          </select>
+
+          <textarea
+            placeholder="Enter question"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+
+          {questionType === "mcq" && (
+            <>
+              <div className="cq-options">
+                {options.map((o, i) => (
+                  <input
+                    key={i}
+                    placeholder={`Option ${i + 1}`}
+                    value={o}
+                    onChange={(e) => {
+                      const copy = [...options];
+                      copy[i] = e.target.value;
+                      setOptions(copy);
+                    }}
+                  />
+                ))}
+              </div>
+
+              <select
+                value={correctAnswer}
+                onChange={(e) => setCorrectAnswer(e.target.value)}
+              >
+                <option value="">Correct Answer</option>
+                {options.map((o, i) => (
+                  <option key={i} value={o}>
+                    {o || `Option ${i + 1}`}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
+
+          {questionType === "true_false" && (
+            <select
+              value={correctAnswer}
+              onChange={(e) => setCorrectAnswer(e.target.value)}
+            >
+              <option value="">Correct Answer</option>
+              <option value="True">True</option>
+              <option value="False">False</option>
+            </select>
+          )}
+
+          <button onClick={addQuestion} className="cq-btn-primary">
+            ➕ Add Question
+          </button>
+        </div>
+
+        {/* BULK QUESTION */}
+        <div className="cq-card">
+          <h3>⚡ Bulk Question Upload</h3>
+          <textarea
+            rows="10"
+            value={bulkText}
+            onChange={(e) => setBulkText(e.target.value)}
+            placeholder="Paste numbered questions here..."
+          />
+          <button onClick={addBulkQuestions} className="cq-btn-secondary">
+            ⚡ Add Bulk Questions
+          </button>
+        </div>
+
+        {/* PREVIEW */}
+        <h3>Added Questions ({questions.length})</h3>
+
+        {questions.map((q, i) => (
+          <div key={i} className="question-card cq-preview">
+            <b>{i + 1}. {q.question}</b>
+            <p>{q.questionType === "true_false" ? "True / False" : "MCQ"}</p>
+            <p>✅ {q.correctAnswer}</p>
+            <button onClick={() => deleteQuestion(i)}>Delete</button>
+          </div>
+        ))}
 
         {questions.length > 0 && (
           <button className="save-btn cq-save-btn" onClick={saveQuiz}>
