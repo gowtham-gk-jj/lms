@@ -7,13 +7,20 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const user =
-      JSON.parse(localStorage.getItem("userInfo")) ||
-      JSON.parse(localStorage.getItem("user"));
+    let user = null;
+
+    try {
+      user =
+        JSON.parse(localStorage.getItem("userInfo")) ||
+        JSON.parse(localStorage.getItem("user"));
+    } catch (e) {
+      user = null;
+    }
 
     const token = user?.token;
 
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 

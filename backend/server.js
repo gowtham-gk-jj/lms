@@ -14,17 +14,20 @@ connectDB(); // ✅ Connect DB FIRST
 
 const app = express();
 
-// ================= MIDDLEWARE =================
+// ================= CORS CONFIG =================
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://lms-taupe-nine.vercel.app" // ✅ your Vercel frontend
+      "https://lms-taupe-nine.vercel.app", // ✅ Vercel frontend
     ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
+// ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -46,12 +49,21 @@ app.use("/api/reports", reportRoutes);
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
-  res.send("LMS API is Running ✅");
+  res.status(200).send("✅ LMS API is Running");
+});
+
+// ================= ERROR HANDLER =================
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.message);
+  res.status(500).json({
+    success: false,
+    message: err.message || "Server Error",
+  });
 });
 
 // ================= SERVER + SOCKET =================
 const server = http.createServer(app);
-initSocket(server); // ✅ init socket ONCE
+initSocket(server); // ✅ Init socket ONCE
 
 // ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
