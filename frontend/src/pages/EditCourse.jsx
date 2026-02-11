@@ -21,7 +21,7 @@ export default function EditCourse() {
     const fetchCourse = async () => {
       try {
         // ✅ FIXED: use api instance + correct endpoint
-        const res = await api.get(`/api/courses/${id}`);
+        const res = await api.get(`/courses/${id}`);
 
         setTitle(res.data.title || "");
         setDescription(res.data.description || "");
@@ -53,7 +53,7 @@ export default function EditCourse() {
       setUpdating(true);
 
       // ✅ FIXED: remove localhost + use api instance
-      await api.put(`/api/courses/${id}`, formData, {
+      await api.put(`/courses/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
