@@ -16,14 +16,12 @@ const AssignCourseForm = () => {
     setLoading(true);
 
     try {
-      /* ================= FETCH USERS ================= */
+      // ✅ FIXED: added /api
       const resUsers = await api.get("/api/auth/users");
 
       const usersList = Array.isArray(resUsers.data)
         ? resUsers.data
-        : resUsers.data.users ||
-          resUsers.data.data ||
-          [];
+        : resUsers.data.users || [];
 
       const learnerList = usersList.filter((u) =>
         ["learner", "student"].includes(
@@ -33,16 +31,15 @@ const AssignCourseForm = () => {
 
       setLearners(learnerList);
 
-      /* ================= FETCH COURSES ================= */
+      // ✅ FIXED: added /api
       const resCourses = await api.get("/api/courses");
 
       const courseList = Array.isArray(resCourses.data)
         ? resCourses.data
-        : resCourses.data.courses ||
-          resCourses.data.data ||
-          [];
+        : resCourses.data.courses || [];
 
       setCourses(courseList);
+
     } catch (err) {
       console.error("❌ Admin Enrollment Load Error:", err);
       setLearners([]);
@@ -61,6 +58,7 @@ const AssignCourseForm = () => {
     }
 
     try {
+      // ✅ FIXED: added /api
       await api.post("/api/enrollment/enroll", {
         learnerId: selectedLearner,
         courseId: selectedCourse,
@@ -70,34 +68,24 @@ const AssignCourseForm = () => {
       setSelectedLearner("");
       setSelectedCourse("");
     } catch (err) {
-      alert(
-        err.response?.data?.message ||
-          "Enrollment failed"
-      );
+      alert(err.response?.data?.message || "Enrollment failed");
     }
   };
 
   if (loading) {
-    return (
-      <div className="loader-box">
-        Syncing Database...
-      </div>
-    );
+    return <div>Syncing Database...</div>;
   }
 
   return (
-    <div className="assign-section">
-      <h3>👤 Administrative Enrollment</h3>
+    <div>
+      <h3>Administrative Enrollment</h3>
 
-      <form onSubmit={assignCourse} className="assign-form">
-        <div className="form-group">
+      <form onSubmit={assignCourse}>
+        <div>
           <label>Learner</label>
           <select
             value={selectedLearner}
-            onChange={(e) =>
-              setSelectedLearner(e.target.value)
-            }
-            className="assign-select"
+            onChange={(e) => setSelectedLearner(e.target.value)}
             required
           >
             <option value="">
@@ -111,14 +99,11 @@ const AssignCourseForm = () => {
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Course to Assign</label>
+        <div>
+          <label>Course</label>
           <select
             value={selectedCourse}
-            onChange={(e) =>
-              setSelectedCourse(e.target.value)
-            }
-            className="assign-select"
+            onChange={(e) => setSelectedCourse(e.target.value)}
             required
           >
             <option value="">
@@ -132,9 +117,7 @@ const AssignCourseForm = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn-enroll">
-          Confirm Enrollment
-        </button>
+        <button type="submit">Confirm Enrollment</button>
       </form>
     </div>
   );
