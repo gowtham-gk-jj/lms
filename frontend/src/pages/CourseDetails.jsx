@@ -13,13 +13,13 @@ export default function CourseDetails() {
   const [enrollment, setEnrollment] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
+  
   /* ================= LOAD COURSE ================= */
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         // ❌ DO NOT add /api here
-        const res = await api.get(`/api/courses/public/${id}`);
+        const res = await api.get(`/courses/public/${id}`);
         setCourse(res.data);
       } catch (err) {
         console.error("Course fetch error:", err.response?.data || err.message);
@@ -39,7 +39,7 @@ export default function CourseDetails() {
 
       try {
         // ❌ DO NOT add /api here
-        const res = await api.get("/api/enrollment/my-courses");
+        const res = await api.get("/enrollment/my-courses");
 
         const current = res.data.find(
           (e) => e.course?._id === id
@@ -63,7 +63,7 @@ export default function CourseDetails() {
 
   const handleEnroll = async () => {
     try {
-      await api.post("/api/enrollment/enroll", {
+      await api.post("/enrollment/enroll", {
         learnerId: user._id,
         courseId: id,
       });
