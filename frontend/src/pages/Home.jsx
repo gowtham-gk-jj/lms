@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   // ✅ Backend base URL for images (NO /api here)
-  const ASSET_URL = import.meta.env.VITE_ASSET_URL;
+  const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
   /* ===============================
      FETCH PUBLIC COURSES
