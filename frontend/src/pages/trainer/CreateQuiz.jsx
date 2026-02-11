@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../../api/axios";
+import api from "../api/axios"; // ✅ NEW API IMPORT
 import { useAuth } from "../../context/AuthContext";
 import "./CreateQuiz.css";
 
@@ -8,6 +8,7 @@ export default function CreateQuiz() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
+  const token = user?.token;
 
   /* ================= COURSE ================= */
   const [courses, setCourses] = useState([]);
@@ -30,13 +31,18 @@ export default function CreateQuiz() {
 
   /* ================= LOAD COURSES ================= */
   useEffect(() => {
-    if (!user?.token) return;
+    if (!token) return;
 
     api
-      .get("/courses")
+      .get("/courses", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => setCourses(res.data))
-      .catch(() => alert("Failed to load courses"));
-  }, [user?.token]);
+      .catch((err) => {
+        console.error("LOAD COURSE ERROR:", err);
+        alert("Failed to load courses");
+      });
+  }, [token]);
 
   /* ================= ADD SINGLE QUESTION ================= */
   const addQuestion = () => {
@@ -83,84 +89,12 @@ export default function CreateQuiz() {
     setQuestionType("mcq");
   };
 
-  /* ================= BULK UPLOAD ================= */
-  const addBulkQuestions = () => {
-    if (!bulkText.trim()) {
-      alert("Paste questions first");
-      return;
-    }
-
-    const lines = bulkText
-      .split("\n")
-      .map((l) => l.trim())
-      .filter(Boolean);
-
-    const parsed = [];
-    let qText = "";
-    let opts = [];
-    let ans = "";
-
-    const flush = () => {
-      if (!qText || !ans) return;
-
-      if (opts.length === 2) {
-        parsed.push({
-          questionType: "true_false",
-          question: qText,
-          options: ["True", "False"],
-          correctAnswer: ans === "A" ? "True" : "False",
-        });
-      } else if (opts.length === 4) {
-        const idx = ["A", "B", "C", "D"].indexOf(ans);
-        if (idx !== -1) {
-          parsed.push({
-            questionType: "mcq",
-            question: qText,
-            options: opts,
-            correctAnswer: opts[idx],
-          });
-        }
-      }
-
-      qText = "";
-      opts = [];
-      ans = "";
-    };
-
-    lines.forEach((line) => {
-      if (/^\d+\./.test(line)) {
-        flush();
-        qText = line.replace(/^\d+\.\s*/, "");
-        return;
-      }
-
-      if (/^A\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^B\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^C\)/i.test(line)) opts.push(line.slice(2).trim());
-      if (/^D\)/i.test(line)) opts.push(line.slice(2).trim());
-
-      if (/^answer:/i.test(line)) {
-        ans = line.replace(/answer:/i, "").trim().toUpperCase();
-      }
-    });
-
-    flush();
-
-    if (!parsed.length) {
-      alert("No valid questions detected");
-      return;
-    }
-
-    setQuestions((prev) => [...prev, ...parsed]);
-    setBulkText("");
-  };
-
   /* ================= DELETE QUESTION ================= */
   const deleteQuestion = (index) => {
     setQuestions((prev) => prev.filter((_, i) => i !== index));
   };
 
-  /* ================= SAVE QUIZ ================= */
+  /* ================= SAVE QUIZ (NEW API) ================= */
   const saveQuiz = async () => {
     if (!selectedCourse || questions.length === 0) {
       alert("Select course and add questions");
@@ -196,21 +130,29 @@ export default function CreateQuiz() {
     });
 
     try {
-      const res = await api.post("/quiz", {
-        courseId: selectedCourse,
-        level: levelMap[level],
-        questions: formattedQuestions,
-      });
+      const response = await api.post(
+        "/quiz",
+        {
+          courseId: selectedCourse,
+          level: levelMap[level],
+          questions: formattedQuestions,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-      if (res.status === 201 || res.data?.success) {
+      if (response.status === 201 || response.data?.success) {
         alert("Quiz saved successfully ✅");
         navigate("/trainer-dashboard");
-      } else {
-        alert("Quiz creation failed");
       }
-    } catch (err) {
-      console.error("SAVE QUIZ ERROR:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Quiz creation failed");
+    } catch (error) {
+      console.error("SAVE QUIZ ERROR:", error);
+      alert(
+        error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Quiz creation failed"
+      );
     }
   };
 
@@ -246,7 +188,11 @@ export default function CreateQuiz() {
           </select>
         </div>
 
-        {/* UI REMAINS UNCHANGED */}
+        {questions.length > 0 && (
+          <button className="save-btn cq-save-btn" onClick={saveQuiz}>
+            💾 Save Quiz
+          </button>
+        )}
       </div>
     </div>
   );
