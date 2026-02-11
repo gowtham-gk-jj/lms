@@ -21,13 +21,17 @@ export default function QuizResult() {
      LOAD QUIZ RESULT
   ================================ */
   useEffect(() => {
-    if (!user?.token) return;
+    if (!user?.token) {
+      setLoading(false);
+      setError("Please login to view quiz result");
+      return;
+    }
 
     const fetchResult = async () => {
       try {
         const res = await api.get(`/quiz/result/${attemptId}`);
 
-        if (!res.data?.success) {
+        if (!res.data?.success || !res.data?.result) {
           setError("Result not found");
           return;
         }
@@ -35,30 +39,33 @@ export default function QuizResult() {
         setResult(res.data.result);
       } catch (err) {
         console.error(err);
-        setError("Failed to load result");
+
+        if (err.response?.status === 401) {
+          navigate("/login");
+        } else {
+          setError("Failed to load result");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchResult();
-  }, [attemptId, user]);
+  }, [attemptId, user?.token, navigate]);
 
   /* ===============================
      SAVE QUIZ PASS → ENROLLMENT
   ================================ */
   useEffect(() => {
-    if (!result || !result.passed || quizSavedRef.current) return;
+    if (!result?.passed || quizSavedRef.current) return;
 
     const saveQuizPass = async () => {
       try {
         quizSavedRef.current = true;
 
-        await api.post("/enrollment/complete-quiz", {
-          attemptId,
-        });
+        await api.post("/enrollment/complete-quiz", { attemptId });
 
-        console.log("✅ Quiz pass saved to enrollment");
+        console.log("✅ Quiz pass saved");
       } catch (err) {
         console.error("❌ Failed to save quiz pass", err);
       }
@@ -77,17 +84,20 @@ export default function QuizResult() {
       try {
         const res = await api.get("/enrollment/my-courses");
 
-        const enrollment = res.data.find(
+        const enrollments =
+          res.data?.enrollments || res.data || [];
+
+        const enrollment = enrollments.find(
           (e) => e.course?._id === result.course
         );
 
         if (!enrollment) return;
 
-        const totalLevels = enrollment.course.levels.length;
+        const totalLevels = enrollment.course?.levels?.length || 0;
         const completedLevels =
           enrollment.completedLessons?.length || 0;
 
-        if (completedLevels === totalLevels) {
+        if (completedLevels === totalLevels && totalLevels > 0) {
           setCourseCompleted(true);
         }
       } catch (err) {
@@ -177,7 +187,7 @@ export default function QuizResult() {
               style={{ backgroundColor: "#2563eb" }}
               onClick={() =>
                 navigate(
-                  `/quiz/${result.course}/${result.level.toLowerCase()}`
+                  `/quiz/${result.course}/${result.level?.toLowerCase()}`
                 )
               }
             >
