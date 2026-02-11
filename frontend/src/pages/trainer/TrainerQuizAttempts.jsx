@@ -17,7 +17,7 @@ export default function TrainerQuizAttempts() {
 
     const fetchAttempts = async () => {
       try {
-        const res = await api.get("/quiz/trainer/attempts");
+        const res = await api.get("/api/quiz/trainer/attempts");
 
         if (!res.data?.success) {
           setError("No quiz attempts found");
