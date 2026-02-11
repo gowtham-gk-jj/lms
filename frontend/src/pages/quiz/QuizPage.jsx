@@ -9,6 +9,8 @@ export default function QuizPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const token = user?.token;
+
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ export default function QuizPage() {
      LOAD QUIZ QUESTIONS
   ================================ */
   useEffect(() => {
-    if (!user?.token) {
+    if (!token) {
       navigate("/login");
       return;
     }
@@ -25,7 +27,12 @@ export default function QuizPage() {
     const fetchQuiz = async () => {
       try {
         const res = await api.get(
-          `/quiz/play/${courseId}/${level}`
+          `/api/quiz/play/${courseId}/${level}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (
@@ -38,7 +45,7 @@ export default function QuizPage() {
 
         setQuestions(res.data.questions);
       } catch (err) {
-        console.error(err);
+        console.error("Quiz Load Error:", err);
         navigate(`/course/${courseId}`);
       } finally {
         setLoading(false);
@@ -46,7 +53,7 @@ export default function QuizPage() {
     };
 
     fetchQuiz();
-  }, [courseId, level, user, navigate]);
+  }, [courseId, level, token, navigate]);
 
   /* ===============================
      HANDLE ANSWER CHANGE
@@ -78,28 +85,33 @@ export default function QuizPage() {
 
     try {
       const res = await api.post(
-        "/quiz/submit",
+        "/api/quiz/submit", // ✅ FIXED
         {
           courseId,
           level,
           score,
           total,
           answers,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       navigate(`/quiz/result/${res.data.result._id}`);
     } catch (err) {
-      console.error(err);
+      console.error("Submit Error:", err);
       alert("Failed to submit quiz");
     }
   };
 
-  if (loading) return <p className="quiz-status">Loading...</p>;
+  if (loading)
+    return <p className="quiz-status">Loading...</p>;
 
   return (
     <div className="quiz-page-wrapper">
-      {/* ===== HEADER ===== */}
       <div className="quiz-header">
         <button
           className="quiz-back-btn"
@@ -114,7 +126,6 @@ export default function QuizPage() {
         <div />
       </div>
 
-      {/* ===== QUESTIONS ===== */}
       <div className="quiz-content">
         {questions.map((q, index) => (
           <div key={q._id} className="quiz-question-card">
@@ -142,7 +153,6 @@ export default function QuizPage() {
         ))}
       </div>
 
-      {/* ===== SUBMIT ===== */}
       <div className="quiz-submit-wrapper">
         <button
           className="quiz-submit-btn"
