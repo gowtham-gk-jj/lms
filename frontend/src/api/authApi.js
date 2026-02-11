@@ -1,51 +1,121 @@
-import api from "./axios";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+/**
+ * Common response handler
+ */
+const handleResponse = async (response) => {
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || "Something went wrong");
+  }
+
+  return data;
+};
+
+/**
+ * Helper to attach token automatically
+ */
+export const authHeader = () => {
+  const token = localStorage.getItem("token");
+  return token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
+};
 
 export const authApi = {
+  /* ================= AUTH ================= */
+
   login: async (email, password) => {
-    const res = await api.post("/api/auth/login", {
-      email,
-      password,
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
-    const data = res.data;
+    const result = await handleResponse(response);
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    if (result.token) {
+      localStorage.setItem("token", result.token);
     }
 
-    return data;
+    if (result.user?.role) {
+      localStorage.setItem("role", result.user.role);
+    }
+
+    if (result.user && (result.user._id || result.user.id)) {
+      localStorage.setItem(
+        "userId",
+        result.user._id || result.user.id
+      );
+    }
+
+    return result;
   },
 
   forgotPassword: async (email) => {
-    const res = await api.post("/api/auth/forgot-password", {
-      email,
+    const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
     });
-    return res.data;
+
+    return handleResponse(response);
   },
 
   resetPassword: async (token, password) => {
-    const res = await api.put(
-      `/api/auth/reset-password/${token}`,
-      { password }
+    const response = await fetch(
+      `${API_BASE}/api/auth/reset-password/${token}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      }
     );
-    return res.data;
+
+    return handleResponse(response);
   },
 
+  /* ================= ADMIN ================= */
+
   getAllUsers: async () => {
-    const res = await api.get("/api/auth/users");
-    return res.data;
+    const response = await fetch(`${API_BASE}/api/auth/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+    });
+
+    return handleResponse(response);
   },
 
   createUser: async (userData) => {
-    const res = await api.post("/api/auth/users", userData);
-    return res.data;
+    const response = await fetch(`${API_BASE}/api/auth/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+      body: JSON.stringify(userData),
+    });
+
+    return handleResponse(response);
   },
 
   updateUserStatus: async (userId, isActive) => {
-    const res = await api.put(
-      `/api/auth/users/${userId}/status`,
-      { isActive }
+    const response = await fetch(
+      `${API_BASE}/api/auth/users/${userId}/status`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeader(),
+        },
+        body: JSON.stringify({ isActive }),
+      }
     );
-    return res.data;
+
+    return handleResponse(response);
   },
 };
