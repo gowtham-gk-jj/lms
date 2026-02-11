@@ -3,78 +3,134 @@ const router = express.Router();
 const Organization = require("../models/Organization");
 const { protect, admin } = require("../middleware/authMiddleware");
 
-/**
- * @desc    Fetch Organization settings
- * @route   GET /api/organization
- * @access  Public (So anyone can see the logo/name)
- */
+/* =====================================================
+   GET MAIN ORGANIZATION PROFILE
+   GET /api/organization
+===================================================== */
 router.get("/", async (req, res) => {
   try {
-    // We use findOne() without filters because there is only one organization document
-    const org = await Organization.findOne();
-    
+    let org = await Organization.findOne();
+
     if (!org) {
-      return res.status(200).json({}); // Return empty object if not setup yet
+      return res.status(200).json({});
     }
 
     res.json(org);
   } catch (error) {
     console.error("Fetch Organization Error:", error);
-    res.status(500).json({ message: "Failed to load organization settings" });
+    res.status(500).json({ message: "Failed to load organization" });
   }
 });
 
-/**
- * @desc    Create or Update Organization settings
- * @route   PUT /api/organization
- * @access  Private/Admin (Only Admins can change branding/rules)
- */
+/* =====================================================
+   UPDATE MAIN ORGANIZATION PROFILE
+   PUT /api/organization
+===================================================== */
 router.put("/", protect, admin, async (req, res) => {
   try {
-    const { 
-      name, 
-      email, 
-      phone, 
-      address, 
-      logo, 
-      primaryColor, 
-      learningRules, 
-      systemSettings 
-    } = req.body;
-
-    // Use findOneAndUpdate with upsert: true
-    // This finds the first document and updates it, or creates it if it doesn't exist
     const updatedOrg = await Organization.findOneAndUpdate(
-      {}, // Search for any document
+      {},
+      { $set: req.body },
       {
-        $set: {
-          name,
-          email,
-          phone,
-          address,
-          logo,
-          primaryColor,
-          learningRules,
-          systemSettings,
-          updatedAt: Date.now()
-        }
-      },
-      {
-        new: true,           // Return the modified document
-        upsert: true,        // Create if it doesn't exist
-        runValidators: true, // Ensure data matches the Model rules
-        setDefaultsOnInsert: true
+        new: true,
+        upsert: true,
+        runValidators: true,
+        setDefaultsOnInsert: true,
       }
     );
 
-    console.log("✅ Organization settings updated successfully");
     res.json(updatedOrg);
   } catch (error) {
     console.error("Update Organization Error:", error);
-    res.status(400).json({ 
-      message: "Update failed", 
-      details: error.message 
+    res.status(400).json({
+      message: "Update failed",
+      details: error.message,
     });
+  }
+});
+
+/* =====================================================
+   GET LEARNING RULES
+   GET /api/organization/rules
+===================================================== */
+router.get("/rules", async (req, res) => {
+  try {
+    let org = await Organization.findOne();
+
+    if (!org) {
+      org = await Organization.create({});
+    }
+
+    res.json(org.learningRules || {});
+  } catch (error) {
+    console.error("Get Rules Error:", error);
+    res.status(500).json({ message: "Failed to load rules" });
+  }
+});
+
+/* =====================================================
+   UPDATE LEARNING RULES
+   PUT /api/organization/rules
+===================================================== */
+router.put("/rules", protect, admin, async (req, res) => {
+  try {
+    let org = await Organization.findOne();
+
+    if (!org) {
+      org = new Organization({});
+    }
+
+    org.learningRules = req.body;
+    await org.save();
+
+    res.json({ message: "Rules updated", rules: org.learningRules });
+  } catch (error) {
+    console.error("Update Rules Error:", error);
+    res.status(500).json({ message: "Failed to update rules" });
+  }
+});
+
+/* =====================================================
+   GET SYSTEM SETTINGS
+   GET /api/organization/settings
+===================================================== */
+router.get("/settings", async (req, res) => {
+  try {
+    let org = await Organization.findOne();
+
+    if (!org) {
+      org = await Organization.create({});
+    }
+
+    res.json(org.systemSettings || {});
+  } catch (error) {
+    console.error("Get Settings Error:", error);
+    res.status(500).json({ message: "Failed to load settings" });
+  }
+});
+
+/* =====================================================
+   UPDATE SYSTEM SETTINGS
+   PUT /api/organization/settings
+===================================================== */
+router.put("/settings", protect, admin, async (req, res) => {
+  try {
+    let org = await Organization.findOne();
+
+    if (!org) {
+      org = new Organization({});
+    }
+
+    org.systemSettings = req.body;
+    await org.save();
+
+    res.json({
+      message: "System settings updated",
+      settings: org.systemSettings,
+    });
+  } catch (error) {
+    console.error("Update Settings Error:", error);
+    res.status(500).json({ message: "Failed to update settings" });
   }
 });
 
