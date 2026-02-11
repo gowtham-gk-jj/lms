@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
 import "./EditCourse.css";
 
 export default function EditCourse() {
@@ -15,53 +14,51 @@ export default function EditCourse() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
 
+  /* ===============================
+     FETCH COURSE DETAILS
+  ================================ */
   useEffect(() => {
-    axios
-      .get(`/courses/public/${id}`)
-      .then((res) => {
-        setTitle(res.data.title);
-        setDescription(res.data.description);
-        setLoading(false);
-      })
-      .catch((err) => {
+    const fetchCourse = async () => {
+      try {
+        // ✅ FIXED: use api instance + correct endpoint
+        const res = await api.get(`/api/courses/${id}`);
+
+        setTitle(res.data.title || "");
+        setDescription(res.data.description || "");
+      } catch (err) {
         console.error(err);
         alert("Failed to load course details");
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchCourse();
   }, [id]);
 
+  /* ===============================
+     UPDATE COURSE
+  ================================ */
   const handleUpdate = async (e) => {
     e.preventDefault();
-    
-    const storedUser = JSON.parse(localStorage.getItem("userInfo"));
-    const token = storedUser?.token;
-
-    if (!token) {
-      alert("Session expired. Please login again.");
-      navigate("/login");
-      return;
-    }
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    
-    // Only append files if the user actually selected new ones
+
     if (image) formData.append("image", image);
     if (syllabus) formData.append("syllabus", syllabus);
 
     try {
       setUpdating(true);
-      await axios.put(
-        `http://localhost:5000/api/courses/${id}`,
-        formData,
-        {
-          headers: { 
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}` 
-          },
-        }
-      );
+
+      // ✅ FIXED: remove localhost + use api instance
+      await api.put(`/api/courses/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       alert("✅ Course updated successfully");
       navigate("/trainer-dashboard");
     } catch (err) {
@@ -72,7 +69,8 @@ export default function EditCourse() {
     }
   };
 
-  if (loading) return <div className="loading">Fetching course data...</div>;
+  if (loading)
+    return <div className="loading">Fetching course data...</div>;
 
   return (
     <div className="edit-course-page">
@@ -108,20 +106,20 @@ export default function EditCourse() {
         <div className="form-group file-group">
           <label>Update Course Thumbnail</label>
           <p className="file-hint">Leave empty to keep current image</p>
-          <input 
-            type="file" 
+          <input
+            type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])} 
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
 
         <div className="form-group file-group">
           <label>Update Syllabus (PDF)</label>
           <p className="file-hint">Leave empty to keep current syllabus</p>
-          <input 
-            type="file" 
+          <input
+            type="file"
             accept="application/pdf"
-            onChange={(e) => setSyllabus(e.target.files[0])} 
+            onChange={(e) => setSyllabus(e.target.files[0])}
           />
         </div>
 

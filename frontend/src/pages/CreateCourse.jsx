@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import "./CreateCourse.css"; 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import "./CreateCourse.css";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ 
-    title: '', 
-    description: '' 
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
   });
 
   const [image, setImage] = useState(null);
-
-  // 🔥 ADD: syllabus PDF state
   const [syllabus, setSyllabus] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -21,45 +20,37 @@ const CreateCourse = () => {
     setLoading(true);
 
     const data = new FormData();
-    data.append('title', formData.title);
-    data.append('description', formData.description);
+    data.append("title", formData.title);
+    data.append("description", formData.description);
 
-    if (image) {
-      data.append('image', image);
-    }
-
-    // 🔥 ADD: append syllabus PDF
-    if (syllabus) {
-      data.append('syllabus', syllabus);
-    }
+    if (image) data.append("image", image);
+    if (syllabus) data.append("syllabus", syllabus);
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/courses', data, {
-        headers: { 
-          Authorization: `Bearer ${token}`, 
-          'Content-Type': 'multipart/form-data' 
-        }
+      // ✅ FIXED: use api instance (auto baseURL + token)
+      await api.post("/api/courses", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      alert("Success! Course Created.");
-      navigate('/trainer-dashboard');
+      alert("✅ Course Created Successfully!");
+      navigate("/trainer-dashboard");
 
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || "Error creating course");
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="create-course-wrapper">
-      {/* 🔹 FIXED GREEN ROUND ARROW IN TOP-LEFT */}
-      <button 
+      <button
         type="button"
-        className="round-back-btn" 
-        onClick={() => navigate('/trainer-dashboard')}
+        className="round-back-btn"
+        onClick={() => navigate("/trainer-dashboard")}
         title="Back to Dashboard"
       >
         ←
@@ -74,49 +65,52 @@ const CreateCourse = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Course Title</label>
-            <input 
-              type="text" 
-              placeholder="Enter a catchy title..."
-              required 
+            <input
+              type="text"
+              required
               value={formData.title}
-              onChange={e => setFormData({...formData, title: e.target.value})} 
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
+              placeholder="Enter a catchy title..."
             />
           </div>
-          
+
           <div className="form-group">
             <label>Course Description</label>
-            <textarea 
-              placeholder="Describe what students will learn..."
-              required 
+            <textarea
+              required
               value={formData.description}
-              onChange={e => setFormData({...formData, description: e.target.value})} 
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              placeholder="Describe what students will learn..."
             />
           </div>
-          
+
           <div className="form-group">
             <label>Course Thumbnail</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept="image/*"
-                onChange={e => setImage(e.target.files[0])} 
-              />
-            </div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
           </div>
 
-          {/* 🔥 ADD: PDF UPLOAD */}
           <div className="form-group">
             <label>Course Syllabus (PDF)</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept="application/pdf"
-                onChange={e => setSyllabus(e.target.files[0])} 
-              />
-            </div>
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setSyllabus(e.target.files[0])}
+            />
           </div>
 
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={loading}
+          >
             {loading ? "Creating..." : "Create Course"}
           </button>
         </form>

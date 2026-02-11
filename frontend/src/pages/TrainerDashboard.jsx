@@ -24,7 +24,9 @@ export default function TrainerDashboard() {
           return;
         }
 
-        const res = await api.get("/courses");
+        // ✅ FIXED: Added /api
+        const res = await api.get("/api/courses");
+
         setCourses(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Error fetching courses:", err);
@@ -43,9 +45,12 @@ export default function TrainerDashboard() {
     if (!window.confirm("Are you sure you want to delete this course?")) return;
 
     try {
-      await api.delete(`/courses/${id}`);
+      // ✅ FIXED: Added /api
+      await api.delete(`/api/courses/${id}`);
+
       setCourses((prev) => prev.filter((c) => c._id !== id));
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Delete failed. You might not have permission.");
     }
   };
@@ -144,7 +149,7 @@ export default function TrainerDashboard() {
                   <img
                     src={
                       course.image
-                        ? `${ASSET_URL}/${course.image}`
+                        ? `${ASSET_URL}${course.image}`
                         : "https://via.placeholder.com/300x180?text=No+Image"
                     }
                     alt={course.title}

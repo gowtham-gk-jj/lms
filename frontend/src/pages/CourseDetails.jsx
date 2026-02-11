@@ -17,7 +17,8 @@ export default function CourseDetails() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await api.get(`/courses/public/${id}`);
+        // ✅ FIXED: added /api
+        const res = await api.get(`/api/courses/public/${id}`);
         setCourse(res.data);
       } catch (err) {
         console.error("Course fetch error", err);
@@ -35,8 +36,13 @@ export default function CourseDetails() {
       }
 
       try {
-        const res = await api.get("/enrollment/my-courses");
-        const current = res.data.find((e) => e.course._id === id);
+        // ✅ FIXED: added /api
+        const res = await api.get("/api/enrollment/my-courses");
+
+        const current = res.data.find(
+          (e) => e.course?._id === id
+        );
+
         setEnrollment(current || null);
       } catch (err) {
         console.error("Enrollment fetch error", err);
@@ -51,10 +57,12 @@ export default function CourseDetails() {
   /* ================= ACTIONS ================= */
   const handleEnroll = async () => {
     try {
-      await api.post("/enrollment/enroll", {
+      // ✅ FIXED: added /api
+      await api.post("/api/enrollment/enroll", {
         learnerId: user._id,
         courseId: id,
       });
+
       window.location.reload();
     } catch (err) {
       console.error("Enroll failed", err);
@@ -78,7 +86,9 @@ export default function CourseDetails() {
 
   return (
     <div className="course-details-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Back
+      </button>
 
       <div className="course-header">
         <h1>{course.title}</h1>
@@ -87,12 +97,16 @@ export default function CourseDetails() {
 
       <div className="level-grid">
         {levels.map((levelName, index) => {
-          const levelId = course.levels[index]?._id;
-          const prevLevelId = index > 0 ? course.levels[index - 1]?._id : null;
+          const levelId = course.levels?.[index]?._id;
+          const prevLevelId =
+            index > 0 ? course.levels?.[index - 1]?._id : null;
 
           const isEnrolled = !!enrollment;
+
           const unlocked =
-            isEnrolled && (index === 0 || completedQuizzes.includes(prevLevelId));
+            isEnrolled &&
+            (index === 0 ||
+              completedQuizzes.includes(prevLevelId));
 
           const lessonDone = completedLessons.includes(levelId);
           const quizDone = completedQuizzes.includes(levelId);
@@ -102,22 +116,36 @@ export default function CourseDetails() {
               <h3>{levelName}</h3>
 
               {!isEnrolled && index === 0 && (
-                <button onClick={handleEnroll}>Enroll Now</button>
+                <button onClick={handleEnroll}>
+                  Enroll Now
+                </button>
               )}
 
               {unlocked && (
-                <button onClick={() => handleWatchLesson(levelName)}>
+                <button
+                  onClick={() =>
+                    handleWatchLesson(levelName)
+                  }
+                >
                   ▶ Watch Lesson
                 </button>
               )}
 
               {unlocked && lessonDone && !quizDone && (
-                <button onClick={() => handleStartQuiz(levelName)}>
+                <button
+                  onClick={() =>
+                    handleStartQuiz(levelName)
+                  }
+                >
                   ▶ Start Quiz
                 </button>
               )}
 
-              {quizDone && <button disabled>Quiz Passed ✅</button>}
+              {quizDone && (
+                <button disabled>
+                  Quiz Passed ✅
+                </button>
+              )}
             </div>
           );
         })}
