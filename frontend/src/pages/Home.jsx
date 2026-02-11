@@ -14,7 +14,7 @@ export default function Home() {
     const fetchCourses = async () => {
       try {
         // ✅ DO NOT include /api here if baseURL already has it
-        const res = await api.get("/courses/public");
+        const res = await api.get("/api/courses/public");
 
         const data = Array.isArray(res.data)
           ? res.data
@@ -65,12 +65,12 @@ export default function Home() {
                     src={
                       imagePath
                         ? `${ASSET_URL}/${imagePath}`
-                        : "/course-placeholder.png"
+                        : "/api/api/course-placeholder.png"
                     }
                     alt={course.title}
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "/course-placeholder.png";
+                      e.target.src = "/api/api/course-placeholder.png";
                     }}
                   />
 
@@ -94,7 +94,7 @@ export default function Home() {
                         type="button"
                         className="know-btn"
                         onClick={() =>
-                          navigate(`/course/${course._id}`)
+                          navigate(`/api/course/${course._id}`)
                         }
                       >
                         Know More
