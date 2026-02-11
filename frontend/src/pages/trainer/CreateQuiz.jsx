@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import api from "../../api/axios";
+import api from "../../api/axios"; 
 import { useAuth } from "../../context/AuthContext";
 import "./CreateQuiz.css";
 
