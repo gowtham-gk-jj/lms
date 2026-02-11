@@ -1,10 +1,8 @@
 import React from "react";
 import { jsPDF } from "jspdf";
-import { useNavigate } from "react-router-dom";
 import "./CertificateCard.css";
 
 const CertificateCard = ({ cert }) => {
-  const navigate = useNavigate();
 
   const generatePDF = async () => {
     try {
@@ -19,7 +17,7 @@ const CertificateCard = ({ cert }) => {
 
       /* ===============================
          PRODUCTION SAFE BASE URL
-      ================================ */
+      =============================== */
       const BASE_URL =
         import.meta.env.VITE_ASSET_BASE_URL ||
         import.meta.env.VITE_API_BASE_URL ||
@@ -32,8 +30,8 @@ const CertificateCard = ({ cert }) => {
       let base64Logo = null;
 
       /* ===============================
-         LOAD IMAGE SAFELY
-      ================================ */
+         LOAD LOGO SAFELY
+      =============================== */
       if (logoUrl) {
         try {
           const response = await fetch(logoUrl);
@@ -49,19 +47,19 @@ const CertificateCard = ({ cert }) => {
             });
           }
         } catch (err) {
-          console.warn("Logo could not be loaded. Continuing without logo.");
+          console.warn("Logo failed to load. Continuing without logo.");
         }
       }
 
       /* ===============================
          BACKGROUND
-      ================================ */
+      =============================== */
       doc.setFillColor(248, 249, 250);
       doc.rect(0, 0, pageWidth, pageHeight, "F");
 
       /* ===============================
          BORDER
-      ================================ */
+      =============================== */
       const themeColor = cert?.themeColor || "#2563eb";
 
       const r = parseInt(themeColor.substring(1, 3), 16);
@@ -77,7 +75,7 @@ const CertificateCard = ({ cert }) => {
 
       /* ===============================
          LOGO (OPTIONAL)
-      ================================ */
+      =============================== */
       if (base64Logo) {
         const format = base64Logo.includes("image/jpeg")
           ? "JPEG"
@@ -95,7 +93,7 @@ const CertificateCard = ({ cert }) => {
 
       /* ===============================
          TITLE
-      ================================ */
+      =============================== */
       doc.setFont("times", "bold");
       doc.setFontSize(32);
       doc.setTextColor(44, 62, 80);
@@ -107,21 +105,8 @@ const CertificateCard = ({ cert }) => {
       );
 
       /* ===============================
-         SUBTITLE
-      ================================ */
-      doc.setFont("times", "normal");
-      doc.setFontSize(16);
-      doc.setTextColor(90, 90, 90);
-      doc.text(
-        "THIS CERTIFICATE IS PROUDLY PRESENTED TO",
-        pageWidth / 2,
-        290,
-        { align: "center" }
-      );
-
-      /* ===============================
          NAME
-      ================================ */
+      =============================== */
       doc.setFont("times", "bold");
       doc.setFontSize(34);
       doc.setTextColor(22, 160, 133);
@@ -133,8 +118,8 @@ const CertificateCard = ({ cert }) => {
       );
 
       /* ===============================
-         COURSE NAME
-      ================================ */
+         COURSE
+      =============================== */
       doc.setFont("times", "bold");
       doc.setFontSize(22);
       doc.setTextColor(44, 62, 80);
@@ -147,7 +132,7 @@ const CertificateCard = ({ cert }) => {
 
       /* ===============================
          FOOTER
-      ================================ */
+      =============================== */
       doc.setFontSize(12);
       doc.setTextColor(120, 120, 120);
 
@@ -168,20 +153,12 @@ const CertificateCard = ({ cert }) => {
         { align: "center" }
       );
 
-      doc.text(
-        "Authorized LMS Signature",
-        pageWidth - 240,
-        pageHeight - 120
-      );
-
-      /* ===============================
-         SAVE FILE
-      ================================ */
       doc.save(
         `Certificate_${
           cert?.courseName?.replace(/\s+/g, "_") || "Course"
         }.pdf`
       );
+
     } catch (err) {
       console.error("PDF generation error:", err);
       alert("Something went wrong while generating certificate.");
@@ -190,15 +167,6 @@ const CertificateCard = ({ cert }) => {
 
   return (
     <div className="certificate-card">
-
-      {/* 🔙 Back Button */}
-      <button
-        className="cert-back-btn"
-        onClick={() => navigate(-1)}
-      >
-        ← Back
-      </button>
-
       <div className="cert-info">
         <h4>{cert?.courseName}</h4>
         <p>
