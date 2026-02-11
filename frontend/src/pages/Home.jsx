@@ -110,7 +110,7 @@ export default function Home() {
                         type="button"
                         className="know-btn"
                         onClick={() =>
-                          navigate(`/api/course/${course._id}`)
+                          navigate(`/course/${course._id}`)
                         }
                       >
                         Know More
