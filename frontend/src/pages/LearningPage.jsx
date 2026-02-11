@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import "./LearningPage.css";
+
+const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function LearningPage() {
   const { courseId, level } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const token = user?.token;
 
   const [enrollment, setEnrollment] = useState(null);
   const [activeLevel, setActiveLevel] = useState(0);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-
- 
 
   /* ===============================
      LOAD ENROLLMENT DATA
@@ -20,12 +24,13 @@ export default function LearningPage() {
   useEffect(() => {
     const fetchLearningData = async () => {
       try {
-        
-       
-
-        const res = await axios.get(
-          `enrollment/my-courses`,
-          
+        const res = await api.get(
+          "/api/enrollment/my-courses",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const enrollments = Array.isArray(res.data)
@@ -33,7 +38,7 @@ export default function LearningPage() {
           : res.data.data || [];
 
         const currentEnrollment = enrollments.find(
-          (e) => e.course._id === courseId
+          (e) => e.course?._id === courseId
         );
 
         if (!currentEnrollment) {
@@ -43,14 +48,12 @@ export default function LearningPage() {
 
         const levels = currentEnrollment.course.levels;
 
-        // ✅ SAFE GUARD for level
-        const levelIndex =
-          level
-            ? levels.findIndex(
-                (l) =>
-                  l.name.toLowerCase() === level.toLowerCase()
-              )
-            : -1;
+        const levelIndex = level
+          ? levels.findIndex(
+              (l) =>
+                l.name.toLowerCase() === level.toLowerCase()
+            )
+          : -1;
 
         const completedCount =
           currentEnrollment.completedLessons?.length || 0;
@@ -67,8 +70,12 @@ export default function LearningPage() {
       }
     };
 
-    fetchLearningData();
-  }, [courseId, level]);
+    if (token) {
+      fetchLearningData();
+    } else {
+      setLoading(false);
+    }
+  }, [courseId, level, token]);
 
   /* ===============================
      MARK LEVEL AS COMPLETED
@@ -79,23 +86,33 @@ export default function LearningPage() {
     try {
       setSubmitting(true);
 
-      
       const levelId =
         enrollment.course.levels[activeLevel]._id;
 
-      if (enrollment.completedLessons?.includes(levelId)) {
+      if (
+        enrollment.completedLessons?.includes(levelId)
+      ) {
         alert("✅ This level is already completed.");
         return;
       }
 
-      const res = await axios.patch(
-        `enrollment/update-progress`,
-        { enrollmentId: enrollment._id, levelId },
-        { headers: { Authorization: `Bearer ${token}` } }
+      const res = await api.patch(
+        "/api/enrollment/update-progress",
+        {
+          enrollmentId: enrollment._id,
+          levelId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       setEnrollment(
-        res.data.enrollment || res.data.data || res.data
+        res.data.enrollment ||
+          res.data.data ||
+          res.data
       );
 
       alert("✅ Level completed successfully!");
@@ -111,7 +128,11 @@ export default function LearningPage() {
      UI STATES
   ================================ */
   if (loading) {
-    return <div className="loading-screen">Entering Classroom...</div>;
+    return (
+      <div className="loading-screen">
+        Entering Classroom...
+      </div>
+    );
   }
 
   if (!enrollment) {
@@ -125,7 +146,6 @@ export default function LearningPage() {
   const currentLevel =
     enrollment.course.levels[activeLevel];
 
-  // ✅ FIXED UNLOCK LOGIC
   const unlockedIndex =
     enrollment.completedLessons?.length ?? 0;
 
@@ -143,7 +163,8 @@ export default function LearningPage() {
 
     const url = currentLevel.videoUrl;
     const isYouTube =
-      url.includes("youtube.com") || url.includes("youtu.be");
+      url.includes("youtube.com") ||
+      url.includes("youtu.be");
 
     if (isYouTube) {
       let videoId = "";
@@ -175,13 +196,17 @@ export default function LearningPage() {
 
   return (
     <div className="learning-container">
-      {/* ===== SIDEBAR ===== */}
       <div className="lesson-sidebar">
         <div className="sidebar-top-nav">
-          <Link to="/learner-dashboard" className="back-arrow-btn">
+          <Link
+            to="/learner-dashboard"
+            className="back-arrow-btn"
+          >
             ←
           </Link>
-          <span className="nav-label">Course Content</span>
+          <span className="nav-label">
+            Course Content
+          </span>
         </div>
 
         <div className="sidebar-header">
@@ -189,14 +214,17 @@ export default function LearningPage() {
 
           <div className="sidebar-progress-box">
             <div className="progress-label">
-              Completion: {enrollment.progress || 0}%
+              Completion:{" "}
+              {enrollment.progress || 0}%
             </div>
 
             <div className="sidebar-pb-bg">
               <div
                 className="sidebar-pb-fill"
                 style={{
-                  width: `${enrollment.progress || 0}%`,
+                  width: `${
+                    enrollment.progress || 0
+                  }%`,
                 }}
               />
             </div>
@@ -204,39 +232,45 @@ export default function LearningPage() {
         </div>
 
         <ul className="level-list">
-          {enrollment.course.levels.map((lvl, index) => {
-            const isUnlocked = index <= unlockedIndex;
-            const isActive = index === activeLevel;
+          {enrollment.course.levels.map(
+            (lvl, index) => {
+              const isUnlocked =
+                index <= unlockedIndex;
+              const isActive =
+                index === activeLevel;
 
-            return (
-              <li
-                key={lvl._id}
-                className={
-                  isActive
-                    ? "active-level"
-                    : isUnlocked
-                    ? "unlocked-level"
-                    : "locked-level"
-                }
-                onClick={() =>
-                  isUnlocked &&
-                  navigate(
-                    `/learn/${courseId}/${lvl.name.toLowerCase()}`
-                  )
-                }
-              >
-                {lvl.name} {!isUnlocked && " 🔒"}
-              </li>
-            );
-          })}
+              return (
+                <li
+                  key={lvl._id}
+                  className={
+                    isActive
+                      ? "active-level"
+                      : isUnlocked
+                      ? "unlocked-level"
+                      : "locked-level"
+                  }
+                  onClick={() =>
+                    isUnlocked &&
+                    navigate(
+                      `/learn/${courseId}/${lvl.name.toLowerCase()}`
+                    )
+                  }
+                >
+                  {lvl.name}{" "}
+                  {!isUnlocked && " 🔒"}
+                </li>
+              );
+            }
+          )}
         </ul>
       </div>
 
-      {/* ===== MAIN CONTENT ===== */}
       <div className="video-main-content">
         <button
           className="back-to-levels-btn"
-          onClick={() => navigate(`/course/${courseId}`)}
+          onClick={() =>
+            navigate(`/course/${courseId}`)
+          }
         >
           ← Back to Course Levels
         </button>
@@ -255,7 +289,9 @@ export default function LearningPage() {
             onClick={handleMarkComplete}
             disabled={submitting}
           >
-            {submitting ? "Saving..." : "Mark as Completed"}
+            {submitting
+              ? "Saving..."
+              : "Mark as Completed"}
           </button>
         </div>
       </div>
