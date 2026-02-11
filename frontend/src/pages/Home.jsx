@@ -74,7 +74,7 @@ export default function Home() {
                     src={
                       imagePath
                         ? `${ASSET_URL}/${imagePath}`
-                        : "/course-placeholder.png"
+                        : "/api/course-placeholder.png"
                     }
                     alt={course.title}
                     onError={(e) => {
