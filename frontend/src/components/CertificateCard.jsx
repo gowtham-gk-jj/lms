@@ -9,14 +9,16 @@ const CertificateCard = ({ cert }) => {
       unit: "pt",
       format: "a4",
     });
-";
+
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
     /* ===============================
        BASE URL (PRODUCTION SAFE)
     =============================== */
-    const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
+    const BASE_URL =
+      import.meta.env.VITE_ASSET_BASE_URL ||
+      "http://localhost:5000";
 
     const logoUrl = cert?.orgLogo
       ? `${BASE_URL}${cert.orgLogo}`
