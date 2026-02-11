@@ -24,10 +24,19 @@ export default function TrainerDashboard() {
           return;
         }
 
-        const res = await api.get("/courses");
-        setCourses(Array.isArray(res.data) ? res.data : []);
+        // ✅ FIXED — added /api
+        const res = await api.get("/api/courses");
+
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data.courses || [];
+
+        setCourses(data);
       } catch (err) {
-        console.error("Error fetching courses:", err);
+        console.error(
+          "Error fetching courses:",
+          err.response?.data || err.message
+        );
       } finally {
         setLoading(false);
       }
@@ -40,12 +49,19 @@ export default function TrainerDashboard() {
      DELETE COURSE
   ================================ */
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this course?")) return;
+    if (!window.confirm("Are you sure you want to delete this course?"))
+      return;
 
     try {
-      await api.delete(`/courses/${id}`);
+      // ✅ FIXED — added /api
+      await api.delete(`/api/courses/${id}`);
+
       setCourses((prev) => prev.filter((c) => c._id !== id));
-    } catch {
+    } catch (err) {
+      console.error(
+        "Delete failed:",
+        err.response?.data || err.message
+      );
       alert("Delete failed. You might not have permission.");
     }
   };
@@ -60,7 +76,6 @@ export default function TrainerDashboard() {
 
   return (
     <div className="trainer-dashboard">
-      {/* ===== SIDEBAR ===== */}
       <aside className="trainer-sidebar">
         <div className="trainer-sidebar-top">
           <h2>Trainer Panel</h2>
@@ -125,7 +140,6 @@ export default function TrainerDashboard() {
         </div>
       </aside>
 
-      {/* ===== MAIN CONTENT ===== */}
       <main className="trainer-content">
         <div className="dashboard-header">
           <h1>Welcome, {user?.name || "Trainer"}</h1>
