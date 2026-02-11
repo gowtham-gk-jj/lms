@@ -39,7 +39,7 @@ export default function CourseDetails() {
 
       try {
         // ❌ DO NOT add /api here
-        const res = await api.get("/enrollment/my-courses");
+        const res = await api.get("/api/enrollment/my-courses");
 
         const current = res.data.find(
           (e) => e.course?._id === id
@@ -63,7 +63,7 @@ export default function CourseDetails() {
 
   const handleEnroll = async () => {
     try {
-      await api.post("/enrollment/enroll", {
+      await api.post("/api/enrollment/enroll", {
         learnerId: user._id,
         courseId: id,
       });
