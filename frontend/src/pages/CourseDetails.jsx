@@ -90,71 +90,78 @@ export default function CourseDetails() {
   const completedQuizzes = enrollment?.completedQuizzes || [];
 
   return (
-    <div className="course-details-page">
+  <div className="course-details-page">
+    <div className="course-top">
       <button className="back-btn" onClick={() => navigate(-1)}>
         ← Back
       </button>
 
       <div className="course-header">
         <h1>{course.title}</h1>
-        <p className="course-desc">{course.description}</p>
+        <p>{course.description}</p>
       </div>
+    </div>
 
-      <div className="level-grid">
-        {levels.map((levelName, index) => {
-          const levelId = course.levels?.[index]?._id;
-          const prevLevelId =
-            index > 0 ? course.levels?.[index - 1]?._id : null;
+    <div className="level-grid">
+      {levels.map((levelName, index) => {
+        const levelId = course.levels?.[index]?._id;
+        const prevLevelId =
+          index > 0 ? course.levels?.[index - 1]?._id : null;
 
-          const isEnrolled = !!enrollment;
+        const isEnrolled = !!enrollment;
 
-          const unlocked =
-            isEnrolled &&
-            (index === 0 ||
-              completedQuizzes.includes(prevLevelId));
+        const unlocked =
+          isEnrolled &&
+          (index === 0 || completedQuizzes.includes(prevLevelId));
 
-          const lessonDone = completedLessons.includes(levelId);
-          const quizDone = completedQuizzes.includes(levelId);
+        const lessonDone = completedLessons.includes(levelId);
+        const quizDone = completedQuizzes.includes(levelId);
 
-          return (
-            <div key={levelName} className="level-card">
+        return (
+          <div
+            key={levelName}
+            className={`level-card ${unlocked ? "active" : "locked"}`}
+          >
+            <div className="level-header">
               <h3>{levelName}</h3>
+              {quizDone && <span className="badge">Completed</span>}
+            </div>
 
-              {!isEnrolled && index === 0 && (
-                <button onClick={handleEnroll}>
-                  Enroll Now
-                </button>
-              )}
+            {!isEnrolled && index === 0 && (
+              <button className="primary-btn" onClick={handleEnroll}>
+                Enroll Now
+              </button>
+            )}
 
-              {unlocked && (
+            {unlocked && (
+              <>
                 <button
-                  onClick={() =>
-                    handleWatchLesson(levelName)
-                  }
+                  className="secondary-btn"
+                  onClick={() => handleWatchLesson(levelName)}
                 >
                   ▶ Watch Lesson
                 </button>
-              )}
 
-              {unlocked && lessonDone && !quizDone && (
-                <button
-                  onClick={() =>
-                    handleStartQuiz(levelName)
-                  }
-                >
-                  ▶ Start Quiz
-                </button>
-              )}
+                {!quizDone && (
+                  <button
+                    className="primary-btn"
+                    onClick={() => handleStartQuiz(levelName)}
+                  >
+                    📝 Start Quiz
+                  </button>
+                )}
+              </>
+            )}
 
-              {quizDone && (
-                <button disabled>
-                  Quiz Passed ✅
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
+            {!unlocked && (
+              <div className="locked-overlay">
+                🔒 Complete previous level
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
-  );
+  </div>
+);
 }
