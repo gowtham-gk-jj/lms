@@ -9,15 +9,17 @@ const CertificateCard = ({ cert }) => {
       unit: "pt",
       format: "a4",
     });
-
+";
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
     /* ===============================
-       LOAD LOGO IMAGE (DYNAMIC)
+       BASE URL (PRODUCTION SAFE)
     =============================== */
-    const logoUrl = cert.orgLogo
-      ? `http://localhost:5000${cert.orgLogo}`
+    const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
+
+    const logoUrl = cert?.orgLogo
+      ? `${BASE_URL}${cert.orgLogo}`
       : "/lms-logo.png";
 
     const img = new Image();
@@ -32,7 +34,7 @@ const CertificateCard = ({ cert }) => {
       doc.rect(0, 0, pageWidth, pageHeight, "F");
 
       /* ===============================
-         BORDER (THEME COLOR)
+         BORDER
       =============================== */
       const themeColor = cert.themeColor || "#2563eb";
       const r = parseInt(themeColor.substring(1, 3), 16);
@@ -47,10 +49,11 @@ const CertificateCard = ({ cert }) => {
       doc.rect(40, 40, pageWidth - 80, pageHeight - 80);
 
       /* ===============================
-         LOGO (CENTER TOP)
+         LOGO
       =============================== */
       const logoWidth = 140;
       const logoHeight = 140;
+
       doc.addImage(
         img,
         "PNG",
@@ -92,9 +95,12 @@ const CertificateCard = ({ cert }) => {
       doc.setFont("times", "bold");
       doc.setFontSize(34);
       doc.setTextColor(22, 160, 133);
-      doc.text(cert.learnerName.toUpperCase(), pageWidth / 2, 340, {
-        align: "center",
-      });
+      doc.text(
+        cert?.learnerName?.toUpperCase() || "",
+        pageWidth / 2,
+        340,
+        { align: "center" }
+      );
 
       /* ===============================
          COURSE TEXT
@@ -112,9 +118,12 @@ const CertificateCard = ({ cert }) => {
       doc.setFont("times", "bold");
       doc.setFontSize(22);
       doc.setTextColor(44, 62, 80);
-      doc.text(cert.courseName, pageWidth / 2, 430, {
-        align: "center",
-      });
+      doc.text(
+        cert?.courseName || "",
+        pageWidth / 2,
+        430,
+        { align: "center" }
+      );
 
       /* ===============================
          FOOTER
@@ -123,13 +132,15 @@ const CertificateCard = ({ cert }) => {
       doc.setTextColor(120, 120, 120);
 
       doc.text(
-        `Date: ${new Date(cert.issueDate).toLocaleDateString()}`,
+        `Date: ${new Date(
+          cert?.issueDate
+        ).toLocaleDateString()}`,
         120,
         pageHeight - 120
       );
 
       doc.text(
-        `Certificate ID: ${cert.certificateId}`,
+        `Certificate ID: ${cert?.certificateId || ""}`,
         pageWidth / 2,
         pageHeight - 120,
         { align: "center" }
@@ -145,7 +156,10 @@ const CertificateCard = ({ cert }) => {
          SAVE PDF
       =============================== */
       doc.save(
-        `Certificate_${cert.courseName.replace(/\s+/g, "_")}.pdf`
+        `Certificate_${cert?.courseName?.replace(
+          /\s+/g,
+          "_"
+        )}.pdf`
       );
     };
 
@@ -157,13 +171,17 @@ const CertificateCard = ({ cert }) => {
   return (
     <div className="certificate-card">
       <div className="cert-info">
-        <h4>{cert.courseName}</h4>
+        <h4>{cert?.courseName}</h4>
         <p>
-          Issued on {new Date(cert.issueDate).toLocaleDateString()}
+          Issued on{" "}
+          {new Date(cert?.issueDate).toLocaleDateString()}
         </p>
       </div>
 
-      <button className="btn-download-cert" onClick={generatePDF}>
+      <button
+        className="btn-download-cert"
+        onClick={generatePDF}
+      >
         Download Certificate
       </button>
     </div>
