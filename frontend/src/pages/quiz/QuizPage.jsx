@@ -4,6 +4,7 @@ import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
+const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 export default function QuizPage() {
   const { courseId, level } = useParams();
   const navigate = useNavigate();
