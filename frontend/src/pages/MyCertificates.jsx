@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
-
 import { useAuth } from "../context/AuthContext";
 import CertificateCard from "../components/CertificateCard";
 import "./MyCertificates.css";
@@ -18,15 +17,21 @@ const MyCertificates = () => {
 
     const fetchCerts = async () => {
       try {
-        const res = await axios.get(
-          "/certificates/my");
+        // ✅ FIX 1: use api instance
+        // ✅ FIX 2: add /api
+        const res = await api.get("/api/certificates/my");
 
         console.log("🎓 Certificates from backend:", res.data);
-        setCertificates(Array.isArray(res.data) ? res.data : []);
+
+        setCertificates(
+          Array.isArray(res.data)
+            ? res.data
+            : res.data.certificates || []
+        );
       } catch (err) {
         console.error(
           "❌ Error fetching certificates:",
-          err.response?.data || err
+          err.response?.data || err.message
         );
         setCertificates([]);
       } finally {
@@ -51,8 +56,7 @@ const MyCertificates = () => {
         </div>
       ) : (
         <p>
-          You haven’t earned any certificates yet. Complete a course to see them
-          here!
+          You haven’t earned any certificates yet. Complete a course to see them here!
         </p>
       )}
     </div>
