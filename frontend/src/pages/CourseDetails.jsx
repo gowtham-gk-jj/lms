@@ -13,6 +13,7 @@ export default function CourseDetails() {
   const [enrollment, setEnrollment] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
   /* ================= LOAD COURSE ================= */
   useEffect(() => {
     const fetchCourse = async () => {
