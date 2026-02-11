@@ -27,7 +27,7 @@ export const authApi = {
   /* ================= AUTH ================= */
 
   login: async (email, password) => {
-    const response = await fetch(`${API_BASE}/auth/login`, {
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -54,7 +54,7 @@ export const authApi = {
   },
 
   forgotPassword: async (email) => {
-    const response = await fetch(`${API_BASE}/auth/forgot-password`, {
+    const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -65,7 +65,7 @@ export const authApi = {
 
   resetPassword: async (token, password) => {
     const response = await fetch(
-      `${API_BASE}/auth/reset-password/${token}`,
+      `${API_BASE}/api/auth/reset-password/${token}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -79,7 +79,7 @@ export const authApi = {
   /* ================= ADMIN ================= */
 
   getAllUsers: async () => {
-    const response = await fetch(`${API_BASE}/auth/users`, {
+    const response = await fetch(`${API_BASE}/api/auth/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export const authApi = {
   },
 
   createUser: async (userData) => {
-    const response = await fetch(`${API_BASE}/auth/users`, {
+    const response = await fetch(`${API_BASE}/api/auth/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export const authApi = {
 
   updateUserStatus: async (userId, isActive) => {
     const response = await fetch(
-      `${API_BASE}/auth/users/${userId}/status`,
+      `${API_BASE}/api/auth/users/${userId}/status`,
       {
         method: "PUT",
         headers: {
