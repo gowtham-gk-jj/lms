@@ -34,7 +34,7 @@ export default function CreateQuiz() {
     if (!token) return;
 
     api
-      .get("/courses", {
+      .get("/api/courses", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setCourses(res.data))
@@ -131,7 +131,7 @@ export default function CreateQuiz() {
 
     try {
       const response = await api.post(
-        "/quiz",
+        "/api/quiz",
         {
           courseId: selectedCourse,
           level: levelMap[level],
