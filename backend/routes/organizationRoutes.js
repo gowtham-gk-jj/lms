@@ -14,61 +14,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* ================= CREATE ORGANIZATION ================= */
-router.post("/", async (req, res) => {
-  try {
-    const { name, shortName, description, website, email, phone } = req.body;
-
-    if (!name || !email) {
-      return res.status(400).json({
-        message: "Organization name and email are required",
-      });
-    }
-
-    const existingOrg = await Organization.findOne({ email });
-    if (existingOrg) {
-      return res.status(409).json({
-        message: "Organization already exists",
-      });
-    }
-
-    const org = await Organization.create({
-      name,
-      shortName,
-      description,
-      website,
-      email,
-      phone,
-    });
-
-    res.status(201).json(org);
-  } catch (error) {
-    console.error("Create failed:", error);
-    res.status(500).json({ message: error.message });
-  }
-});
-
-/* ================= GET ORGANIZATION (SINGLE) ================= */
-/* ✅ Used by LogoBranding & Certificates */
+/* =========================================================
+   GET MAIN ORGANIZATION
+   ========================================================= */
 router.get("/", async (req, res) => {
   try {
     const org = await Organization.findOne();
-    if (!org) {
-      return res.status(404).json({ message: "Organization not found" });
-    }
-    res.json(org);
+    res.json(org || {});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-/* ================= SAVE LOGO & BRANDING ================= */
+/* =========================================================
+   CREATE OR UPDATE ORGANIZATION PROFILE
+   ========================================================= */
+router.put("/", async (req, res) => {
+  try {
+    const updated = await Organization.findOneAndUpdate(
+      {},
+      { $set: req.body },
+      { new: true, upsert: true }
+    );
+
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/* =========================================================
+   BRANDING (LOGO + THEME COLOR)
+   ========================================================= */
 router.put("/branding", upload.single("logo"), async (req, res) => {
   try {
     let org = await Organization.findOne();
-    if (!org) {
-      return res.status(404).json({ message: "Organization not found" });
-    }
+    if (!org) org = new Organization();
 
     if (req.file) {
       org.logo = `/uploads/${req.file.filename}`;
@@ -80,24 +61,59 @@ router.put("/branding", upload.single("logo"), async (req, res) => {
 
     await org.save();
 
-    res.json({
-      success: true,
-      org,
-    });
+    res.json(org);
   } catch (error) {
-    console.error("Branding save failed:", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-/* ================= GET ORGANIZATION BY ID (OPTIONAL) ================= */
-router.get("/:orgId", async (req, res) => {
+/* =========================================================
+   LEARNING RULES
+   ========================================================= */
+router.get("/rules", async (req, res) => {
   try {
-    const org = await Organization.findById(req.params.orgId);
-    if (!org) {
-      return res.status(404).json({ message: "Organization not found" });
-    }
-    res.json(org);
+    const org = await Organization.findOne();
+    res.json(org?.learningRules || {});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put("/rules", async (req, res) => {
+  try {
+    const updated = await Organization.findOneAndUpdate(
+      {},
+      { $set: { learningRules: req.body } },
+      { new: true, upsert: true }
+    );
+
+    res.json(updated.learningRules);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/* =========================================================
+   SYSTEM SETTINGS
+   ========================================================= */
+router.get("/settings", async (req, res) => {
+  try {
+    const org = await Organization.findOne();
+    res.json(org?.systemSettings || {});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.put("/settings", async (req, res) => {
+  try {
+    const updated = await Organization.findOneAndUpdate(
+      {},
+      { $set: { systemSettings: req.body } },
+      { new: true, upsert: true }
+    );
+
+    res.json(updated.systemSettings);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
