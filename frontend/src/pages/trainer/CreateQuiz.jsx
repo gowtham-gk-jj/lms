@@ -1,91 +1,85 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./CreateQuiz.css";
 
 export default function CreateQuiz() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { user } = useAuth();
 
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(
-    searchParams.get("course") || ""
-  );
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [level, setLevel] = useState("Beginner");
 
-  const [questionType, setQuestionType] = useState("mcq");
+  const [questionType, setQuestionType] = useState("MCQ");
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
 
   const [questions, setQuestions] = useState([]);
-  const [bulkText, setBulkText] = useState("");
 
   /* ================= LOAD COURSES ================= */
   useEffect(() => {
-    if (!user?.token) return;
+    if (!user) return;
 
-    api
-      .get("/api/courses") // ✅ FIXED
-      .then((res) =>
-        setCourses(Array.isArray(res.data) ? res.data : [])
-      )
-      .catch(() => alert("Failed to load courses"));
-  }, [user?.token]);
+    const fetchCourses = async () => {
+      try {
+        const res = await api.get("/courses");
+        setCourses(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCourses();
+  }, [user]);
 
   /* ================= ADD QUESTION ================= */
   const addQuestion = () => {
-    if (!question.trim()) {
-      alert("Enter a question");
-      return;
+    if (!question.trim()) return alert("Enter question");
+
+    if (questionType === "MCQ") {
+      if (options.some((o) => !o.trim()))
+        return alert("Fill all 4 options");
+
+      if (!correctAnswer)
+        return alert("Select correct answer");
     }
 
-    if (questionType === "true_false") {
-      if (!["True", "False"].includes(correctAnswer)) {
-        alert("Select True or False");
-        return;
-      }
+    const newQuestion = {
+      question,
+      type: questionType,
+      options:
+        questionType === "MCQ"
+          ? options.map((opt) => ({
+              text: opt,
+              isCorrect: opt === correctAnswer,
+            }))
+          : [
+              { text: "True", isCorrect: correctAnswer === "True" },
+              { text: "False", isCorrect: correctAnswer === "False" },
+            ],
+    };
 
-      setQuestions((prev) => [
-        ...prev,
-        {
-          questionType: "true_false",
-          question: question.trim(),
-          options: ["True", "False"],
-          correctAnswer,
-        },
-      ]);
-    } else {
-      if (options.some((o) => !o.trim()) || !correctAnswer) {
-        alert("Fill all MCQ fields");
-        return;
-      }
+    setQuestions([...questions, newQuestion]);
 
-      setQuestions((prev) => [
-        ...prev,
-        {
-          questionType: "mcq",
-          question: question.trim(),
-          options,
-          correctAnswer,
-        },
-      ]);
-    }
-
+    // Reset
     setQuestion("");
     setOptions(["", "", "", ""]);
     setCorrectAnswer("");
-    setQuestionType("mcq");
+  };
+
+  /* ================= DELETE QUESTION ================= */
+  const deleteQuestion = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
   };
 
   /* ================= SAVE QUIZ ================= */
   const saveQuiz = async () => {
-    if (!selectedCourse || questions.length === 0) {
-      alert("Select course and add questions");
-      return;
-    }
+    if (!selectedCourse) return alert("Select course");
+    if (questions.length === 0)
+      return alert("Add at least one question");
 
     const levelMap = {
       Beginner: 1,
@@ -93,78 +87,153 @@ export default function CreateQuiz() {
       Advanced: 3,
     };
 
-    const formattedQuestions = questions.map((q) => {
-      if (q.questionType === "true_false") {
-        return {
-          question: q.question,
-          type: "TRUE_FALSE",
-          options: [
-            { text: "True", isCorrect: q.correctAnswer === "True" },
-            { text: "False", isCorrect: q.correctAnswer === "False" },
-          ],
-        };
-      }
-
-      return {
-        question: q.question,
-        type: "MCQ",
-        options: q.options.map((opt) => ({
-          text: opt,
-          isCorrect: opt === q.correctAnswer,
-        })),
-      };
-    });
-
     try {
-      const res = await api.post("/api/quiz", { // ✅ FIXED
+      await api.post("/quiz", {
         courseId: selectedCourse,
         level: levelMap[level],
-        questions: formattedQuestions,
+        questions,
       });
 
-      if (res.status === 201 || res.data?.success) {
-        alert("Quiz saved successfully ✅");
-        navigate("/trainer-dashboard");
-      } else {
-        alert("Quiz creation failed");
-      }
+      alert("Quiz Created Successfully ✅");
+      navigate("/trainer-dashboard");
     } catch (err) {
-      console.error("SAVE QUIZ ERROR:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Quiz creation failed");
+      console.error(err);
+      alert("Failed to create quiz");
     }
   };
 
   return (
-    <div className="cq-page-wrapper">
-      <div className="cq-header">
-        <button className="cq-back-btn" onClick={() => navigate(-1)}>
-          ←
-        </button>
-        <h1 className="cq-title">Create Quiz</h1>
-        <div className="cq-header-spacer"></div>
+    <div className="create-quiz-wrapper">
+
+      <h2>Create Quiz</h2>
+
+      {/* ================= COURSE & LEVEL ================= */}
+      <div className="quiz-top">
+        <select
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+        >
+          <option value="">Select Course</option>
+          {courses.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.title}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+        >
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
       </div>
 
-      <div className="create-quiz-page">
-        <div className="quiz-meta cq-card">
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-          >
-            <option value="">Select Course</option>
-            {courses.map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.title}
-              </option>
+      {/* ================= QUESTION SECTION ================= */}
+      <div className="question-card">
+
+        <select
+          value={questionType}
+          onChange={(e) => setQuestionType(e.target.value)}
+        >
+          <option value="MCQ">MCQ</option>
+          <option value="TRUE_FALSE">True / False</option>
+        </select>
+
+        <input
+          type="text"
+          placeholder="Enter Question"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+        />
+
+        {questionType === "MCQ" && (
+          <>
+            {options.map((opt, i) => (
+              <input
+                key={i}
+                type="text"
+                placeholder={`Option ${i + 1}`}
+                value={opt}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[i] = e.target.value;
+                  setOptions(newOptions);
+                }}
+              />
             ))}
-          </select>
 
-          <select value={level} onChange={(e) => setLevel(e.target.value)}>
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
+            <select
+              value={correctAnswer}
+              onChange={(e) =>
+                setCorrectAnswer(e.target.value)
+              }
+            >
+              <option value="">Select Correct Answer</option>
+              {options.map((opt, i) => (
+                <option key={i} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+
+        {questionType === "TRUE_FALSE" && (
+          <select
+            value={correctAnswer}
+            onChange={(e) =>
+              setCorrectAnswer(e.target.value)
+            }
+          >
+            <option value="">Select Answer</option>
+            <option>True</option>
+            <option>False</option>
           </select>
-        </div>
+        )}
+
+        <button onClick={addQuestion}>
+          Add Question
+        </button>
       </div>
+
+      {/* ================= QUESTION LIST ================= */}
+      <div className="question-list">
+        {questions.map((q, index) => (
+          <div key={index} className="question-preview">
+            <strong>
+              {index + 1}. {q.question}
+            </strong>
+
+            <ul>
+              {q.options.map((opt, i) => (
+                <li
+                  key={i}
+                  style={{
+                    color: opt.isCorrect
+                      ? "green"
+                      : "black",
+                  }}
+                >
+                  {opt.text}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => deleteQuestion(index)}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <button className="save-btn" onClick={saveQuiz}>
+        Save Quiz
+      </button>
     </div>
   );
 }
