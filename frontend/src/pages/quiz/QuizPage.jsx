@@ -4,7 +4,6 @@ import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./QuizPage.css";
 
-const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 export default function QuizPage() {
   const { courseId, level } = useParams();
   const navigate = useNavigate();
@@ -47,7 +46,7 @@ export default function QuizPage() {
         setQuestions(res.data.questions);
       } catch (err) {
         console.error("Quiz Load Error:", err);
-        navigate(`/course/${courseId}`);
+        navigate(`/api/course/${courseId}`);
       } finally {
         setLoading(false);
       }
@@ -116,7 +115,7 @@ export default function QuizPage() {
       <div className="quiz-header">
         <button
           className="quiz-back-btn"
-          onClick={() => navigate(`/course/${courseId}`)}
+          onClick={() => navigate(`/api/course/${courseId}`)}
         >
           ← Back
         </button>
