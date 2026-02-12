@@ -4,19 +4,43 @@ import "./AdminProgressTable.css";
 
 const AdminProgressTable = () => {
   const [stats, setStats] = useState([]);
+  const [metrics, setMetrics] = useState({
+    totalEnrollments: 0,
+    completedCourses: 0,
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchReports = async () => {
+    const fetchData = async () => {
       try {
-        // 🔥 FIXED ENDPOINT
-        const res = await api.get("/api/reports/admin");
+        const token = localStorage.getItem("token");
 
-        setStats(Array.isArray(res.data) ? res.data : []);
+        // 🔹 1. Fetch dashboard summary
+        const summaryRes = await api.get("/api/reports/admin", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (summaryRes.data.success) {
+          setMetrics(summaryRes.data.data);
+        }
+
+        // 🔹 2. Fetch detailed enrollments
+        const enrollmentRes = await api.get(
+          "/api/enrollment/all-stats",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setStats(enrollmentRes.data || []);
       } catch (err) {
         console.error(
-          "Report Fetch Error:",
+          "Admin Report Error:",
           err.response?.data || err.message
         );
         setStats([]);
@@ -25,13 +49,18 @@ const AdminProgressTable = () => {
       }
     };
 
-    fetchReports();
+    fetchData();
   }, []);
 
+  // ===== FILTER =====
   const filteredStats = stats.filter(
     (s) =>
-      s.learner?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.course?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+      s.learner?.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      s.course?.title
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase())
   );
 
   const totalEnrollments = filteredStats.length;
@@ -50,33 +79,25 @@ const AdminProgressTable = () => {
     (s) => s.progress === 100
   ).length;
 
-  const handleExportCSV = async () => {
-    try {
-      await api.get("/api/reports/export", {
-        responseType: "blob",
-      });
-    } catch (err) {
-      console.error(
-        "Export Error:",
-        err.response?.data || err.message
-      );
-    }
-  };
-
   if (loading)
-    return <div className="loading-text">Loading Reports...</div>;
+    return (
+      <div className="loading-text">
+        Loading Reports...
+      </div>
+    );
 
   return (
     <div className="admin-progress-wrapper">
       <div className="progress-card">
-
         <h1 className="page-main-title">
           Detailed Student Progress
         </h1>
         <p className="page-subtitle">
-          Viewing all active course enrollments and completion percentages.
+          Viewing all active course enrollments and completion
+          percentages.
         </p>
 
+        {/* ===== METRICS ===== */}
         <div className="analytics-metrics-grid">
           <div className="metric-box">
             <h3>{totalEnrollments}</h3>
@@ -94,6 +115,7 @@ const AdminProgressTable = () => {
           </div>
         </div>
 
+        {/* ===== HEADER ===== */}
         <div className="stats-header">
           <h2 className="table-title">
             Organization Reports
@@ -108,16 +130,10 @@ const AdminProgressTable = () => {
                 setSearchTerm(e.target.value)
               }
             />
-
-            <button
-              onClick={handleExportCSV}
-              className="export-btn"
-            >
-              📥 Export CSV
-            </button>
           </div>
         </div>
 
+        {/* ===== TABLE ===== */}
         <div className="table-wrapper">
           <table className="progress-table">
             <thead>
@@ -183,16 +199,17 @@ const AdminProgressTable = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="no-results">
+                  <td
+                    colSpan="4"
+                    className="no-results"
+                  >
                     No records found.
                   </td>
                 </tr>
               )}
             </tbody>
-
           </table>
         </div>
-
       </div>
     </div>
   );

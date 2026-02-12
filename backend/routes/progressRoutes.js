@@ -4,8 +4,11 @@ const { protect } = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
 const Enrollment = require("../models/Enrollment");
 
+// ==============================
+// GET ALL ENROLLMENT PROGRESS (ADMIN)
+// ==============================
 router.get(
-  "/",
+  "/admin",
   protect,
   roleMiddleware("admin"),
   async (req, res) => {
@@ -14,9 +17,17 @@ router.get(
         .populate("learner", "name email")
         .populate("course", "title");
 
-      res.json(progress);
+      res.status(200).json({
+        success: true,
+        count: progress.length,
+        data: progress,
+      });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      console.error("Admin Report Error:", err.message);
+      res.status(500).json({
+        success: false,
+        message: "Failed to fetch admin reports",
+      });
     }
   }
 );
