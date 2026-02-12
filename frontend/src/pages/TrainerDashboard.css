@@ -55,6 +55,10 @@
 
 .logout-btn {
   background: #dc2626;
+  color: #fff;
+  justify-content: center;
+  position: static;
+  margin-top: 10px;
 }
 
 .logout-btn:hover {

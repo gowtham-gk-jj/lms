@@ -175,3 +175,54 @@
     width: 100%;
   }
 }
+/* ================= MOBILE FIX ================= */
+
+@media (max-width: 768px) {
+
+  .hero {
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .hero h1 span {
+    display: block;   /* Prevent overlap */
+  }
+
+  .hero p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    padding: 0 15px;
+  }
+
+}
+@media (max-width: 768px) {
+
+  .course-grid {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+
+  .course-card {
+    width: 100%;
+  }
+
+  .course-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .syllabus-btn,
+  .know-btn {
+    width: 100%;
+  }
+
+}

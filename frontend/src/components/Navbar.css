@@ -178,3 +178,16 @@
     font-size: 14px;
   }
 }
+@media (max-width: 768px) {
+
+  .nav-links {
+    display: none; /* Hide desktop links */
+  }
+
+  .hamburger {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+}
