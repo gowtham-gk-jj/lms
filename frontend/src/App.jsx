@@ -137,7 +137,6 @@ function App() {
             <Route path="users/create" element={<CreateUser />} />
             <Route path="articles/create" element={<AdminArticles />} />
             <Route path="enroll" element={<AdminEnrollment />} />
-            <Route path="/admin-dashboard/reports" element={<AdminReports />}/>
             <Route path="progress" element={<AdminProgressTable/>} />
 
 
