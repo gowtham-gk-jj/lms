@@ -26,8 +26,13 @@ app.use(
         return callback(null, true);
       }
 
-      // Allow all Vercel deployments
+      // Allow Vercel
       if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      // ✅ Allow Netlify
+      if (origin.endsWith(".netlify.app")) {
         return callback(null, true);
       }
 
@@ -35,7 +40,7 @@ app.use(
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: false, // ✅ FIXED (you are not using cookies)
+    credentials: false,
   })
 );
 
