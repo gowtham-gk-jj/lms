@@ -117,18 +117,7 @@ const Layout = () => {
               </NavLink>
             </li>
 
-            {/* 📑 REPORTS (NEW) */}
-            <li>
-              <NavLink
-                to="/admin-dashboard/reports"
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "active-nav" : ""}`
-                }
-              >
-                📑 Reports
-              </NavLink>
-            </li>
-
+            
             {/* ORGANIZATION SETTINGS */}
             <li>
               <NavLink

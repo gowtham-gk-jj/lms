@@ -11,9 +11,7 @@ import Unauthorized from "./pages/Unauthorized";
 import CourseDetails from "./pages/CourseDetails";
 
 /* ================= LEARNER ================= */
-import LearnerDashboard from "./pages/LearnerDashboard";
 import LearningPage from "./pages/LearningPage";
-
 /* ================= ADMIN ================= */
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
@@ -59,6 +57,8 @@ import CertificateManager from "./pages/trainer/CertificateManager";
 import NotificationsPage from "./pages/NotificationsPage";
 import AdminReports from "./pages/AdminReports";
 import LearnerProgress from "./pages/LearnerProgress";
+import LearnerDashboard from "./pages/Learnerdashboard";
+import AdminProgressPage from "./pages/AdminProgressPage";
 
 
 
@@ -140,7 +140,7 @@ function App() {
             <Route path="articles/create" element={<AdminArticles />} />
             <Route path="enroll" element={<AdminEnrollment />} />
             <Route path="/admin-dashboard/reports" element={<AdminReports />}/>
-            <Route path="progress" element={<LearnerProgress />} />
+            <Route path="progress" element={<AdminProgressPage/>} />
 
 
             <Route path="organization" element={<OrganizationSetup />}>
