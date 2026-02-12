@@ -43,21 +43,22 @@ const MyCertificates = () => {
   }, [user?.token]);
 
   return (
-  <div className="container mt-4">
+    <div className="container mt-4">
 
-    {/* Header Row */}
-    <div className="page-top-bar">
-      <button
-        className="top-back-btn"
-        onClick={() => navigate(-1)}
-      >
-        ← Back
-      </button>
+  {/* BOX HEADER */}
+  <div className="box-header">
+    <button
+      className="box-back-btn"
+      onClick={() => navigate(-1)}
+    >
+      ← Back
+    </button>
 
-      <h2 className="top-title">
-        My Achievement Certificates
-      </h2>
-    </div>
+    <h2 className="box-title">
+      My Achievement Certificates
+    </h2>
+  </div>
+
 
 
       {/* ================= CONTENT ================= */}

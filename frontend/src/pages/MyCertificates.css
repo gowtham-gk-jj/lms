@@ -1,27 +1,29 @@
 /* =========================================
-   MAIN PAGE CONTAINER (SAME AS QUIZ PAGE)
+   MAIN PAGE CONTAINER
 ========================================= */
 .container.mt-4 {
-    padding: 30px 20px;
-    max-width: 1200px;
+    padding: 0;
+    max-width: 100%;
     margin: 0 auto;
 }
 
 /* =========================================
-   HEADER ROW (EXACT QUIZ STYLE)
+   BOX HEADER (LIKE IMAGE)
 ========================================= */
-.page-header-row {
+.box-header {
+    background-color: #f3f4f6; /* light grey */
+    padding: 20px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom: 40px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-/* Blue Back Button (Left Side) */
-.quiz-back-btn {
+/* Back Button */
+.box-back-btn {
     position: absolute;
-    left: 0;
+    left: 40px;
     background-color: #2563eb;
     color: white;
     border: none;
@@ -32,12 +34,12 @@
     transition: background 0.2s ease;
 }
 
-.quiz-back-btn:hover {
+.box-back-btn:hover {
     background-color: #1e40af;
 }
 
-/* Centered Page Title */
-.quiz-page-title {
+/* Center Title */
+.box-title {
     font-size: 28px;
     font-weight: 600;
     margin: 0;
@@ -45,14 +47,42 @@
 }
 
 /* =========================================
-   GRID LAYOUT
+   CONTENT SPACING BELOW HEADER
 ========================================= */
 .cert-grid {
+    max-width: 1200px;
+    margin: 40px auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 30px;
-    padding: 20px 0;
+    padding: 0 20px;
 }
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 768px) {
+    .box-header {
+        padding: 15px 20px;
+    }
+
+    .box-back-btn {
+        left: 20px;
+        padding: 6px 14px;
+        font-size: 14px;
+    }
+
+    .box-title {
+        font-size: 22px;
+    }
+
+    .cert-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin: 30px auto;
+    }
+}
+
 
 /* =========================================
    EMPTY STATE
