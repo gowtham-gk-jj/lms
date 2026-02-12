@@ -1,64 +1,54 @@
-/* =========================================
-   MAIN PAGE CONTAINER (UPDATED)
-========================================= */
-.cert-page {
-    padding: 40px 20px;
+/* ===============================
+   PAGE CONTAINER
+=============================== */
+.container.mt-4 {
+    padding: 30px 20px;
     max-width: 1200px;
     margin: 0 auto;
-    min-height: 70vh;
 }
 
-/* =========================================
-   HEADER SECTION (NEW STRUCTURE)
-========================================= */
-.page-header {
+/* ===============================
+   TOP BAR (LIKE QUIZ PAGE)
+=============================== */
+.page-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    background: #f8f9fa;
-    padding: 30px 0;
-    border-radius: 12px;
-    margin-bottom: 50px;
-    text-align: center;
+    margin-bottom: 40px;
 }
 
-/* Page Title */
-.page-title {
-    font-size: 2.2rem;
-    color: #2c3e50;
-    font-weight: 700;
-    margin: 0;
-    position: relative;
-}
-
-/* Teal underline */
-.page-title::after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    background: #16a085;
-    margin: 12px auto 0;
-    border-radius: 2px;
-}
-
-/* Back Button */
-.back-btn {
+/* Back Button (Left Side) */
+.top-back-btn {
     position: absolute;
-    left: 25px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 0;
     background: #2563eb;
     color: white;
     border: none;
     padding: 8px 18px;
     border-radius: 8px;
-    cursor: pointer;
     font-weight: 600;
+    cursor: pointer;
     transition: 0.2s ease;
 }
 
-.back-btn:hover {
+.top-back-btn:hover {
     background: #1e40af;
 }
+
+/* Center Title */
+.top-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    color: #1f2937;
+}
+
+/* Remove old underline */
+.top-title::after {
+    display: none;
+}
+
 
 /* =========================================
    GRID LAYOUT
