@@ -10,10 +10,15 @@ const AdminProgressTable = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await api.get("/api/reports");
+        // 🔥 FIXED ENDPOINT
+        const res = await api.get("/api/reports/admin");
+
         setStats(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
-        console.error("Report Fetch Error:", err.response?.data || err.message);
+        console.error(
+          "Report Fetch Error:",
+          err.response?.data || err.message
+        );
         setStats([]);
       } finally {
         setLoading(false);
@@ -23,21 +28,21 @@ const AdminProgressTable = () => {
     fetchReports();
   }, []);
 
-  // ===== FILTER =====
   const filteredStats = stats.filter(
     (s) =>
       s.learner?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.course?.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ===== ANALYTICS =====
   const totalEnrollments = filteredStats.length;
 
   const avgProgress =
     totalEnrollments > 0
       ? (
-          filteredStats.reduce((acc, curr) => acc + (curr.progress || 0), 0) /
-          totalEnrollments
+          filteredStats.reduce(
+            (acc, curr) => acc + (curr.progress || 0),
+            0
+          ) / totalEnrollments
         ).toFixed(1)
       : 0;
 
@@ -45,22 +50,16 @@ const AdminProgressTable = () => {
     (s) => s.progress === 100
   ).length;
 
-  // ===== EXPORT CSV =====
   const handleExportCSV = async () => {
     try {
-      const response = await api.get("/api/reports/export", {
+      await api.get("/api/reports/export", {
         responseType: "blob",
       });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "admin_reports.csv");
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
     } catch (err) {
-      console.error("Export Error:", err.response?.data || err.message);
+      console.error(
+        "Export Error:",
+        err.response?.data || err.message
+      );
     }
   };
 
@@ -71,7 +70,6 @@ const AdminProgressTable = () => {
     <div className="admin-progress-wrapper">
       <div className="progress-card">
 
-        {/* ===== TITLE ===== */}
         <h1 className="page-main-title">
           Detailed Student Progress
         </h1>
@@ -79,7 +77,6 @@ const AdminProgressTable = () => {
           Viewing all active course enrollments and completion percentages.
         </p>
 
-        {/* ===== METRICS ===== */}
         <div className="analytics-metrics-grid">
           <div className="metric-box">
             <h3>{totalEnrollments}</h3>
@@ -97,16 +94,19 @@ const AdminProgressTable = () => {
           </div>
         </div>
 
-        {/* ===== REPORT HEADER ===== */}
         <div className="stats-header">
-          <h2 className="table-title">Organization Reports</h2>
+          <h2 className="table-title">
+            Organization Reports
+          </h2>
 
           <div className="header-actions">
             <input
               type="text"
               placeholder="Search student or course..."
               className="db-search-input"
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) =>
+                setSearchTerm(e.target.value)
+              }
             />
 
             <button
@@ -118,7 +118,6 @@ const AdminProgressTable = () => {
           </div>
         </div>
 
-        {/* ===== TABLE ===== */}
         <div className="table-wrapper">
           <table className="progress-table">
             <thead>
@@ -190,6 +189,7 @@ const AdminProgressTable = () => {
                 </tr>
               )}
             </tbody>
+
           </table>
         </div>
 

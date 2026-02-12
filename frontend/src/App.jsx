@@ -55,8 +55,8 @@ import CertificateManager from "./pages/trainer/CertificateManager";
 
 /* ================= NOTIFICATIONS ================= */
 import NotificationsPage from "./pages/NotificationsPage";
-import AdminProgressTable from "./pages/AdminProgressTable";
 import LearnerDashboard from "./pages/LearnerDashboard";
+import AdminProgressPage from "./pages/AdminProgressPage";
 
 
 
@@ -137,7 +137,7 @@ function App() {
             <Route path="users/create" element={<CreateUser />} />
             <Route path="articles/create" element={<AdminArticles />} />
             <Route path="enroll" element={<AdminEnrollment />} />
-            <Route path="progress" element={<AdminProgressTable/>} />
+            <Route path="progress" element={<AdminProgressPage/>} />
 
 
             <Route path="organization" element={<OrganizationSetup />}>
