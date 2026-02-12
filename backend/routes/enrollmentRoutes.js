@@ -6,6 +6,30 @@ const Course = require("../models/Course");
 const { protect, authorize } = require("../middleware/authMiddleware");
 const { createNotification } = require("../services/notificationService"); // ✅ ADDED
 
+
+/* ===============================
+   ADMIN – GET ALL ENROLLMENT STATS
+================================ */
+router.get(
+  "/all-stats",
+  protect,
+  authorize("admin"),
+  async (req, res) => {
+    try {
+      const enrollments = await Enrollment.find()
+        .populate("learner", "name email")
+        .populate("course", "title");
+
+      res.status(200).json(enrollments);
+    } catch (err) {
+      console.error("All Stats Error:", err);
+      res.status(500).json({
+        message: "Failed to fetch enrollment stats",
+      });
+    }
+  }
+);
+
 /* ===============================
    ADMIN / TRAINER ENROLL LEARNER
 ================================ */
