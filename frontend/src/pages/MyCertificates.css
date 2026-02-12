@@ -1,25 +1,42 @@
-/* ===============================
-   PAGE CONTAINER
-=============================== */
-.container.mt-4 {
+/* =========================================
+   MAIN PAGE CONTAINER
+========================================= */
+.cert-page {
     padding: 30px 20px;
     max-width: 1200px;
     margin: 0 auto;
+    min-height: 70vh;
 }
 
-/* ===============================
-   TOP BAR (LIKE QUIZ PAGE)
-=============================== */
-.page-top-bar {
+/* =========================================
+   TOP BAR (LIKE QUIZ RESULTS PAGE)
+========================================= */
+.page-header {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     margin-bottom: 40px;
+    background: transparent; /* remove box */
+    padding: 0;
+    border-radius: 0;
 }
 
-/* Back Button (Left Side) */
-.top-back-btn {
+/* Page Title (Centered) */
+.page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+/* REMOVE underline */
+.page-title::after {
+    display: none;
+}
+
+/* Back Button (Left side) */
+.back-btn {
     position: absolute;
     left: 0;
     background: #2563eb;
@@ -27,26 +44,13 @@
     border: none;
     padding: 8px 18px;
     border-radius: 8px;
-    font-weight: 600;
     cursor: pointer;
+    font-weight: 600;
     transition: 0.2s ease;
 }
 
-.top-back-btn:hover {
+.back-btn:hover {
     background: #1e40af;
-}
-
-/* Center Title */
-.top-title {
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0;
-    color: #1f2937;
-}
-
-/* Remove old underline */
-.top-title::after {
-    display: none;
 }
 
 
