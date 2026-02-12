@@ -55,8 +55,8 @@ import CertificateManager from "./pages/trainer/CertificateManager";
 
 /* ================= NOTIFICATIONS ================= */
 import NotificationsPage from "./pages/NotificationsPage";
-import LearnerDashboard from "./pages/Learnerdashboard";
 import AdminProgressTable from "./pages/AdminProgressTable";
+import LearnerDashboard from "./pages/Learnerdashboard";
 
 
 
