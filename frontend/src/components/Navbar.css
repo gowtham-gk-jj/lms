@@ -13,24 +13,46 @@
   max-width: 1200px;
   margin: 0 auto;
   height: 64px;
-  padding: 0 24px;
-  display: flex;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Left - Center - Right */
   align-items: center;
-  justify-content: space-between;
 }
 
-/* ===== LOGO ===== */
-.navbar-logo a {
+/* ===== LEFT SECTION ===== */
+.nav-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* ===== CENTER SECTION ===== */
+.nav-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-logo {
   font-size: 22px;
   font-weight: 800;
   color: #2563eb;
   text-decoration: none;
 }
 
-/* ===== LINKS ===== */
+/* ===== RIGHT SECTION ===== */
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== DESKTOP LINKS ===== */
 .navbar-links {
   display: flex;
   gap: 32px;
+  justify-content: center;
 }
 
 .navbar-links a {
@@ -44,29 +66,11 @@
   color: #22c55e;
 }
 
-/* ===== RIGHT ACTION ===== */
-.navbar-action {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.user-nav-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.welcome-text {
-  font-size: 14px;
-  color: #64748b;
-}
-
 /* ===== LOGIN BUTTON ===== */
 .login-btn {
   background: #22c55e;
   color: #fff;
-  padding: 8px 20px;
+  padding: 8px 18px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
@@ -76,10 +80,11 @@
 .logout-btn {
   background-color: #fee2e2;
   color: #ef4444;
-  padding: 8px 18px;
+  padding: 6px 14px;
   border-radius: 6px;
   border: 1px solid #fecaca;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .logout-btn:hover {
@@ -106,89 +111,32 @@
   border-radius: 50%;
 }
 
-/* ===== MOBILE ===== */
+/* ===== MOBILE MENU BUTTON ===== */
 .mobile-menu-toggle {
-  display: none;
   font-size: 26px;
   cursor: pointer;
+  display: none;
 }
 
-/* MOBILE RESPONSIVE */
+/* ================= MOBILE RESPONSIVE ================= */
 @media (max-width: 768px) {
 
+  /* Show hamburger */
   .mobile-menu-toggle {
     display: block;
   }
 
+  /* Hide desktop links */
   .navbar-links {
     display: none;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10px;
-    gap: 10px;
-  }
-
-  .navbar-links.active {
-    display: flex;
-  }
-
-  .navbar-container {
-    flex-wrap: wrap;
-  }
-
-  .navbar-action {
-    width: 100%;
-    margin-top: 10px;
-    justify-content: flex-start;
-  }
-
-  .user-nav-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .logout-btn {
-    position: static;
-    margin-top: 8px;
-  }
-}
-/* ================= NAVBAR LAYOUT ================= */
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.user-nav-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.welcome-text {
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-/* ================= MOBILE FIX ================= */
-@media (max-width: 768px) {
-
-  .navbar-links {
     position: absolute;
-    top: 60px;
+    top: 64px;
     left: 0;
     width: 100%;
-    background: #fff;
+    background: #ffffff;
     flex-direction: column;
-    display: none;
     padding: 20px;
+    gap: 12px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.08);
   }
 
@@ -196,20 +144,19 @@
     display: flex;
   }
 
-  .welcome-text {
-    display: none; /* 🔥 Hide name on mobile */
+  /* Keep 3-column layout on mobile */
+  .navbar-container {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
+  /* Hide welcome text to prevent overlap */
+  .welcome-text {
+    display: none;
+  }
+
+  /* Make logout smaller */
   .logout-btn {
     padding: 6px 10px;
     font-size: 13px;
-  }
-
-  .navbar-container {
-    flex-wrap: nowrap;
-  }
-
-  .user-nav-group {
-    gap: 8px;
   }
 }

@@ -49,100 +49,100 @@ export default function Navbar() {
     fetchNotifications();
   }, [user]);
 
-  return (
-    <header className="navbar-wrapper">
-      <div className="navbar-container">
+return (
+  <header className="navbar-wrapper">
+    <div className="navbar-container">
 
-        {/* LEFT SECTION */}
-        <div className="navbar-left">
-          <div className="navbar-logo">
-            <Link to="/">LMS</Link>
-          </div>
-
-          <div
-            className="mobile-menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            ☰
-          </div>
+      {/* LEFT - MENU */}
+      <div className="nav-left">
+        <div
+          className="mobile-menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
         </div>
-
-        {/* NAV LINKS */}
-        <nav className={`navbar-links ${menuOpen ? "active" : ""}`}>
-          <Link to="/" onClick={() => setMenuOpen(false)}>
-            Courses
-          </Link>
-
-          {user && (
-            <Link to={getOverviewPath()} onClick={() => setMenuOpen(false)}>
-              Overview
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
-              Admin Dashboard
-            </Link>
-          )}
-
-          {isTrainer && (
-            <Link to="/trainer-dashboard" onClick={() => setMenuOpen(false)}>
-              Trainer Dashboard
-            </Link>
-          )}
-
-          {isLearner && (
-            <Link to="/learner-dashboard" onClick={() => setMenuOpen(false)}>
-              My Learning
-            </Link>
-          )}
-
-          {isLearner && (
-            <Link to="/my-certificates" onClick={() => setMenuOpen(false)}>
-              Certificates
-            </Link>
-          )}
-
-          <Link to="/articles" onClick={() => setMenuOpen(false)}>
-            Articles
-          </Link>
-        </nav>
-
-        {/* RIGHT SECTION */}
-        <div className="navbar-action">
-          {!user ? (
-            <Link to="/login" className="login-btn">
-              Login
-            </Link>
-          ) : (
-            <div className="user-nav-group">
-              <button
-                className="notification-btn"
-                onClick={() => navigate("/notifications")}
-              >
-                <FaBell size={18} />
-                {unreadCount > 0 && (
-                  <span className="notification-badge">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-
-              <span className="welcome-text">
-                Hi, {user.name?.split(" ")[0]}
-              </span>
-
-              <button
-                className="logout-btn"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-
       </div>
-    </header>
-  );
+
+      {/* CENTER - LOGO */}
+      <div className="nav-center">
+        <Link to="/" className="navbar-logo">
+          LMS
+        </Link>
+      </div>
+
+      {/* RIGHT - ACTIONS */}
+      <div className="nav-right">
+        {!user ? (
+          <Link to="/login" className="login-btn">
+            Login
+          </Link>
+        ) : (
+          <>
+            <button
+              className="notification-btn"
+              onClick={() => navigate("/notifications")}
+            >
+              <FaBell size={18} />
+              {unreadCount > 0 && (
+                <span className="notification-badge">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              className="logout-btn"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </>
+        )}
+      </div>
+
+    </div>
+
+    {/* MOBILE DROPDOWN MENU */}
+    <nav className={`navbar-links ${menuOpen ? "active" : ""}`}>
+      <Link to="/" onClick={() => setMenuOpen(false)}>
+        Courses
+      </Link>
+
+      {user && (
+        <Link to={getOverviewPath()} onClick={() => setMenuOpen(false)}>
+          Overview
+        </Link>
+      )}
+
+      {isAdmin && (
+        <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
+          Admin Dashboard
+        </Link>
+      )}
+
+      {isTrainer && (
+        <Link to="/trainer-dashboard" onClick={() => setMenuOpen(false)}>
+          Trainer Dashboard
+        </Link>
+      )}
+
+      {isLearner && (
+        <Link to="/learner-dashboard" onClick={() => setMenuOpen(false)}>
+          My Learning
+        </Link>
+      )}
+
+      {isLearner && (
+        <Link to="/my-certificates" onClick={() => setMenuOpen(false)}>
+          Certificates
+        </Link>
+      )}
+
+      <Link to="/articles" onClick={() => setMenuOpen(false)}>
+        Articles
+      </Link>
+    </nav>
+
+  </header>
+);
 }
