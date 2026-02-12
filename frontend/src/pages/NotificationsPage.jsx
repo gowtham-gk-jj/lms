@@ -13,9 +13,16 @@ export default function NotificationsPage() {
   const loadNotifications = async () => {
     try {
       const data = await fetchNotifications();
-      setNotifications(data);
+
+      // ✅ Ensure always array
+      const safeData = Array.isArray(data)
+        ? data
+        : data?.notifications || [];
+
+      setNotifications(safeData);
     } catch (err) {
       console.error("Failed to load notifications", err);
+      setNotifications([]); // prevent crash
     } finally {
       setLoading(false);
     }
@@ -26,8 +33,18 @@ export default function NotificationsPage() {
   }, []);
 
   const handleRead = async (id) => {
-    await markNotificationAsRead(id);
-    loadNotifications();
+    try {
+      await markNotificationAsRead(id);
+
+      // Optimistic update (better UX)
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n._id === id ? { ...n, isRead: true } : n
+        )
+      );
+    } catch (err) {
+      console.error("Failed to mark as read", err);
+    }
   };
 
   if (loading) return <p>Loading notifications...</p>;
@@ -35,6 +52,7 @@ export default function NotificationsPage() {
   return (
     <div className="notifications-page">
       <h2>🔔 Notifications</h2>
+
       <NotificationList
         notifications={notifications}
         onRead={handleRead}

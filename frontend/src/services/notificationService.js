@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://lms-dj4b.onrender.com";
+const API_URL = "https://lms-dj4b.onrender.com/api/notifications";
 
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
@@ -14,7 +14,9 @@ const getAuthHeader = () => {
 // Fetch notifications
 export const fetchNotifications = async () => {
   const res = await axios.get(API_URL, getAuthHeader());
-  return res.data;
+
+  // Ensure we always return an array
+  return Array.isArray(res.data) ? res.data : res.data.notifications || [];
 };
 
 // Mark as read
@@ -24,5 +26,6 @@ export const markNotificationAsRead = async (id) => {
     {},
     getAuthHeader()
   );
+
   return res.data;
 };
