@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
-import "./AssignCourseForm.css";
+import "./AssignCourse.css";
 
 const AssignCourseForm = () => {
   const [learners, setLearners] = useState([]);
