@@ -14,7 +14,7 @@ export default function UserArticles() {
   const fetchArticles = async () => {
     try {
       // ✅ NEW API (public)
-      const res = await api.get("/articles/published");
+      const res = await api.get("/api/articles/published");
       setArticles(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error loading articles:", err);
