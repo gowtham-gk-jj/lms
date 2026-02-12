@@ -15,11 +15,11 @@
 /* ================= MOBILE HEADER ================= */
 /* ================================================= */
 
-.admin-header-bar {
+.mobile-header {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* keeps title centered */
   height: 60px;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
@@ -29,7 +29,7 @@
 /* Menu button LEFT */
 .menu-btn {
   position: absolute;
-  left: 0;
+  left: 15px;
   padding: 10px 12px;
   background: none;
   border: none;
@@ -39,23 +39,24 @@
 }
 
 /* Center Title */
-.admin-header-title {
+.mobile-title {
   font-size: 1.2rem;
   font-weight: 700;
   color: #1e293b;
+  margin: 0;
 }
 
-/* Right spacer to keep title perfectly centered */
-.header-right-space {
+/* Right spacer to perfectly balance header */
+.header-spacer {
   position: absolute;
-  right: 0;
-  width: 44px;
+  right: 15px;
+  width: 30px;
   height: 1px;
 }
 
 /* Hide header on desktop */
 @media (min-width: 769px) {
-  .admin-header-bar {
+  .mobile-header {
     display: none;
   }
 }
@@ -112,7 +113,6 @@
   box-shadow: 0 18px 25px -5px rgba(0, 0, 0, 0.12);
 }
 
-/* Card Text */
 .db-card h3 {
   font-size: 1.35rem;
   font-weight: 600;
@@ -203,7 +203,6 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
-
   .db-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -215,7 +214,6 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-
   .db-wrapper {
     padding: 1.2rem;
   }

@@ -166,10 +166,9 @@ export default function AdminArticles() {
   /* ================= RENDER ================= */
   return (
     <div className="admin-articles-container">
-
       {/* HEADER */}
       <header className="admin-header">
-        <div className="header-text">
+        <div className="header-left">
           <h1>📊 Article Management</h1>
           <p>Module 5: Content Administration</p>
         </div>
@@ -181,7 +180,7 @@ export default function AdminArticles() {
             else setShowForm(true);
           }}
         >
-          {showForm ? "Cancel" : "+ New Article"}
+          {showForm ? "Cancel" : "+ Create Article"}
         </button>
       </header>
 

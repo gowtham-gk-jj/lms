@@ -90,66 +90,65 @@ const AssignCourseForm = () => {
         </h3>
 
         <form onSubmit={assignCourse} className="assign-form">
-          {/* Learner */}
-          <div className="assign-field">
-            <label>Learner</label>
-            <select
-              value={selectedLearner}
-              onChange={(e) =>
-                setSelectedLearner(e.target.value)
-              }
-              required
-            >
-              <option value="">
-                -- {learners.length} Learners Found --
-              </option>
 
-              {learners.map((learner) => (
-                <option
-                  key={learner._id}
-                  value={learner._id}
-                >
-                  {learner.name} ({learner.email})
+          <div className="assign-row">
+
+            {/* Learner */}
+            <div className="assign-field">
+              <label>Learner</label>
+              <select
+                value={selectedLearner}
+                onChange={(e) =>
+                  setSelectedLearner(e.target.value)
+                }
+                required
+              >
+                <option value="">
+                  -- {learners.length} Learners Found --
                 </option>
-              ))}
-            </select>
-          </div>
 
-          {/* Course */}
-          <div className="assign-field">
-            <label>Course to Assign</label>
-            <select
-              value={selectedCourse}
-              onChange={(e) =>
-                setSelectedCourse(e.target.value)
-              }
-              required
-            >
-              <option value="">
-                -- {courses.length} Courses Found --
-              </option>
+                {learners.map((learner) => (
+                  <option key={learner._id} value={learner._id}>
+                    {learner.name} ({learner.email})
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {courses.map((course) => (
-                <option
-                  key={course._id}
-                  value={course._id}
-                >
-                  {course.title}
+            {/* Course */}
+            <div className="assign-field">
+              <label>Course to Assign</label>
+              <select
+                value={selectedCourse}
+                onChange={(e) =>
+                  setSelectedCourse(e.target.value)
+                }
+                required
+              >
+                <option value="">
+                  -- {courses.length} Courses Found --
                 </option>
-              ))}
-            </select>
-          </div>
 
-          {/* Button */}
-          <button
-            type="submit"
-            className="enroll-btn"
-            disabled={submitting}
-          >
-            {submitting
-              ? "Processing..."
-              : "Confirm Enrollment"}
-          </button>
+                {courses.map((course) => (
+                  <option key={course._id} value={course._id}>
+                    {course.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              className="enroll-btn"
+              disabled={submitting}
+            >
+              {submitting
+                ? "Processing..."
+                : "Confirm Enrollment"}
+            </button>
+
+          </div>
         </form>
       </div>
     </div>

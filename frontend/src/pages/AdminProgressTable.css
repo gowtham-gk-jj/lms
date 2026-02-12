@@ -1,6 +1,6 @@
 /* ================= WRAPPER ================= */
 .admin-progress-wrapper {
-  padding: 30px;
+  padding: 24px;
   background: #f9fafb;
   min-height: 100vh;
   box-sizing: border-box;
@@ -8,26 +8,25 @@
 
 .progress-card {
   background: #ffffff;
-  padding: 30px;
+  padding: 28px;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  max-width: 1200px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  max-width: 1100px;
   margin: auto;
   box-sizing: border-box;
 }
 
 /* ================= PAGE HEADER ================= */
 .page-main-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: #1e293b;
-  word-break: break-word;
 }
 
 .page-subtitle {
   color: #6b7280;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   line-height: 1.5;
 }
 
@@ -35,26 +34,21 @@
 .analytics-metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 18px;
+  margin-bottom: 28px;
 }
 
 .metric-box {
   background: #f3f4f6;
-  padding: 20px;
+  padding: 18px;
   border-radius: 12px;
   text-align: center;
   border-top: 4px solid #6366f1;
   transition: 0.3s ease;
 }
 
-.metric-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
 .metric-box h3 {
-  font-size: 24px;
+  font-size: 22px;
   margin: 0;
   color: #111827;
 }
@@ -62,7 +56,7 @@
 .metric-box p {
   font-size: 13px;
   color: #6b7280;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 /* ================= HEADER ================= */
@@ -70,8 +64,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  gap: 15px;
+  margin-bottom: 18px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -83,7 +77,7 @@
 
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -93,8 +87,8 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   font-size: 14px;
-  transition: 0.2s ease;
   min-width: 220px;
+  width: 250px;
 }
 
 .db-search-input:focus {
@@ -112,7 +106,6 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s ease;
   white-space: nowrap;
 }
 
@@ -145,15 +138,11 @@
   vertical-align: middle;
 }
 
-.progress-table tr:hover {
-  background: #f9fafb;
-}
-
 /* ================= STUDENT CELL ================= */
 .student-cell {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 
 .s-name {
@@ -165,7 +154,7 @@
 .s-email {
   font-size: 13px;
   color: #6b7280;
-  word-break: break-word;
+  word-break: break-all;   /* ✅ FIX EMAIL BREAK */
 }
 
 /* ================= COURSE BADGE ================= */
@@ -177,7 +166,6 @@
   font-size: 12px;
   font-weight: 600;
   display: inline-block;
-  word-break: break-word;
 }
 
 /* ================= PROGRESS BAR ================= */
@@ -185,16 +173,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .progress-bar-outer {
   background: #e5e7eb;
   height: 8px;
   border-radius: 4px;
-  width: 150px;
+  width: 140px;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 .progress-bar-inner {
@@ -207,6 +194,7 @@
 .progress-num {
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap; /* ✅ FIX "Progres s" issue */
 }
 
 /* ================= STATUS ================= */
@@ -215,7 +203,6 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  display: inline-block;
   white-space: nowrap;
 }
 
@@ -229,45 +216,25 @@
   color: #92400e;
 }
 
-/* ================= NO RESULTS ================= */
-.no-results {
-  text-align: center;
-  padding: 20px;
-  color: #6b7280;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 1024px) {
-  .analytics-metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
 
   .admin-progress-wrapper {
-    padding: 15px;
+    padding: 14px;
   }
 
   .progress-card {
-    padding: 20px;
+    padding: 18px;
   }
 
   .page-main-title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
-  .page-subtitle {
-    font-size: 14px;
-  }
-
-  /* Metrics stacked */
   .analytics-metrics-grid {
     grid-template-columns: 1fr;
   }
 
-  /* Header stacked */
   .stats-header {
     flex-direction: column;
     align-items: stretch;
@@ -283,8 +250,7 @@
     width: 100%;
   }
 
-  /* ===== MOBILE TABLE TRANSFORM ===== */
-
+  /* TABLE TO CARD */
   .progress-table thead {
     display: none;
   }
@@ -299,26 +265,25 @@
 
   .progress-table tr {
     background: #ffffff;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   }
 
   .progress-table td {
     text-align: right;
-    padding-left: 48%;
+    padding-left: 50%;
     position: relative;
     border-bottom: none;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    word-break: break-word;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 
   .progress-table td::before {
     content: attr(data-label);
     position: absolute;
-    left: 15px;
+    left: 14px;
     width: 45%;
     text-align: left;
     font-weight: 600;
@@ -328,26 +293,9 @@
   .progress-container {
     flex-direction: column;
     align-items: flex-end;
-    width: 100%;
   }
 
   .progress-bar-outer {
     width: 100%;
-  }
-}
-
-/* Extra small devices */
-@media (max-width: 480px) {
-
-  .progress-table td {
-    padding-left: 45%;
-  }
-
-  .progress-table td::before {
-    width: 40%;
-  }
-
-  .page-main-title {
-    font-size: 20px;
   }
 }
