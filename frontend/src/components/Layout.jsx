@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Layout.css";
@@ -6,6 +6,9 @@ import "./Layout.css";
 const Layout = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  // ✅ MOBILE SIDEBAR STATE (ADDED)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -23,8 +26,16 @@ const Layout = () => {
 
   return (
     <div className="admin-layout">
+      {/* ✅ MOBILE OVERLAY (ADDED) */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* ========== SIDEBAR ========== */}
-      <aside className="admin-sidebar">
+      <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="brand-badge">A</div>
           <div>
@@ -35,14 +46,12 @@ const Layout = () => {
 
         <nav className="sidebar-nav">
           <ul className="nav-list">
-            {/* HOME */}
             <li>
-              <NavLink to="/" className="nav-link">
+              <NavLink to="/" className="nav-link" onClick={() => setSidebarOpen(false)}>
                 🌐 Go to Home
               </NavLink>
             </li>
 
-            {/* DASHBOARD */}
             <li>
               <NavLink
                 to="/admin-dashboard"
@@ -50,12 +59,12 @@ const Layout = () => {
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 🏠 Dashboard Home
               </NavLink>
             </li>
 
-            {/* USERS */}
             <li>
               <NavLink
                 to="/admin-dashboard/users"
@@ -63,68 +72,67 @@ const Layout = () => {
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 👥 User Directory
               </NavLink>
-
             </li>
 
-            {/* REGISTER USER */}
             <li>
               <NavLink
                 to="/admin-dashboard/users/create"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 ➕ Register User
               </NavLink>
             </li>
 
-            {/* CREATE ARTICLE */}
             <li>
               <NavLink
                 to="/admin-dashboard/articles/create"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 📝 Create Article
               </NavLink>
             </li>
 
-            {/* ENROLL LEARNER */}
             <li>
               <NavLink
                 to="/admin-dashboard/enroll"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 🎓 Enroll Learner
               </NavLink>
             </li>
 
-            {/* LEARNER PROGRESS */}
             <li>
               <NavLink
                 to="/admin-dashboard/progress"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 📊 Learner Progress
               </NavLink>
             </li>
 
-            
-            {/* ORGANIZATION SETTINGS */}
             <li>
               <NavLink
                 to="/admin-dashboard/organization"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active-nav" : ""}`
                 }
+                onClick={() => setSidebarOpen(false)}
               >
                 ⚙ Organization Settings
               </NavLink>
@@ -141,7 +149,14 @@ const Layout = () => {
 
       {/* ========== MAIN CONTENT ========== */}
       <main className="admin-main">
+        {/* ✅ MOBILE HEADER WITH TOGGLE BUTTON */}
         <header className="admin-header">
+          <button
+            className="mobile-sidebar-toggle"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            ☰
+          </button>
           <h2 className="page-title">Admin Management</h2>
         </header>
 

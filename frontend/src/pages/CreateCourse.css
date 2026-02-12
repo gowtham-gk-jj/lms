@@ -129,3 +129,55 @@
   cursor: not-allowed;
   transform: none;
 }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .create-course-card {
+    padding: 30px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .create-course-wrapper {
+    padding: 40px 15px;
+    align-items: flex-start;
+  }
+
+  /* Make back button behave better on small screens */
+  .round-back-btn {
+    position: relative; /* remove fixed */
+    top: 0;
+    left: 0;
+    margin-bottom: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+  }
+
+  .create-course-card {
+    padding: 25px;
+    border-radius: 16px;
+  }
+
+  .card-header h2 {
+    font-size: 20px;
+  }
+
+  .card-header p {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .submit-btn {
+    font-size: 15px;
+    padding: 14px;
+  }
+}

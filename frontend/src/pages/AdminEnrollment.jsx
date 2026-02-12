@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AssignCourseForm from "../components/AssignCourse";
 import { useAuth } from "../context/AuthContext";
+import "./AdminEnrollment.css";
 
 const AdminEnrollment = () => {
   const { user } = useAuth();

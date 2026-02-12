@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import "./UserArticles.css";
 
 export default function UserArticles() {
   const [articles, setArticles] = useState([]);
@@ -13,7 +14,6 @@ export default function UserArticles() {
 
   const fetchArticles = async () => {
     try {
-      // ✅ NEW API (public)
       const res = await api.get("/api/articles/published");
       setArticles(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
@@ -23,7 +23,6 @@ export default function UserArticles() {
     }
   };
 
-  // Helper to calculate estimated read time
   const getReadTime = (content) => {
     const wordsPerMinute = 200;
     const words = content.split(/\s+/).length;
@@ -38,7 +37,7 @@ export default function UserArticles() {
 
   if (loading) {
     return (
-      <div style={{ padding: 100, textAlign: "center", color: "#64748b" }}>
+      <div className="articles-loading">
         <div className="loader"></div>
         <p>Fetching the latest insights...</p>
       </div>
@@ -46,18 +45,11 @@ export default function UserArticles() {
   }
 
   return (
-    <div style={{ width: "100%", minHeight: "100vh", background: "#f8fafc" }}>
-      {/* ================= HERO ================= */}
-      <section
-        style={{
-          padding: "100px 20px",
-          background: "linear-gradient(135deg, #4f46e5, #7c3aed)",
-          color: "#fff",
-          textAlign: "center",
-        }}
-      >
-        <h1 style={{ fontSize: 48, fontWeight: 800 }}>Knowledge Hub</h1>
-        <p style={{ fontSize: 20, marginTop: 16 }}>
+    <div className="articles-page">
+      {/* HERO */}
+      <section className="articles-hero">
+        <h1>Knowledge Hub</h1>
+        <p>
           Explore deep-dives, tutorials, and industry insights.
         </p>
 
@@ -66,55 +58,36 @@ export default function UserArticles() {
           placeholder="Search articles..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            marginTop: 40,
-            padding: "18px 24px",
-            width: "100%",
-            maxWidth: 600,
-            borderRadius: 14,
-            border: "none",
-            fontSize: 16,
-          }}
+          className="articles-search"
         />
       </section>
 
-      {/* ================= GRID ================= */}
-      <section style={{ padding: "80px 20px" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+      {/* GRID */}
+      <section className="articles-grid-section">
+        <div className="articles-grid-container">
           {filtered.length === 0 ? (
-            <div style={{ textAlign: "center" }}>
+            <div className="articles-empty">
               <h2>No articles found</h2>
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-                gap: 32,
-              }}
-            >
+            <div className="articles-grid">
               {filtered.map((article) => (
                 <article
                   key={article._id}
                   onClick={() => setSelectedArticle(article)}
-                  style={{
-                    background: "#fff",
-                    padding: 30,
-                    borderRadius: 24,
-                    cursor: "pointer",
-                  }}
+                  className="article-card"
                 >
-                  <span style={{ fontSize: 12, color: "#4f46e5" }}>
+                  <span className="article-category">
                     {article.category}
                   </span>
 
-                  <h3 style={{ marginTop: 10 }}>{article.title}</h3>
+                  <h3>{article.title}</h3>
 
-                  <p style={{ marginTop: 10 }}>
+                  <p>
                     {article.content.substring(0, 140)}...
                   </p>
 
-                  <p style={{ fontSize: 12, marginTop: 10 }}>
+                  <p className="read-time">
                     ⏱️ {getReadTime(article.content)} min read
                   </p>
                 </article>
@@ -124,32 +97,18 @@ export default function UserArticles() {
         </div>
       </section>
 
-      {/* ================= MODAL ================= */}
+      {/* MODAL */}
       {selectedArticle && (
         <div
+          className="article-modal-overlay"
           onClick={() => setSelectedArticle(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.8)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
         >
           <div
+            className="article-modal"
             onClick={(e) => e.stopPropagation()}
-            style={{
-              background: "#fff",
-              padding: 40,
-              borderRadius: 20,
-              maxWidth: 800,
-              maxHeight: "90vh",
-              overflowY: "auto",
-            }}
           >
             <h2>{selectedArticle.title}</h2>
-            <p style={{ marginTop: 20, whiteSpace: "pre-wrap" }}>
+            <p className="article-modal-content">
               {selectedArticle.content}
             </p>
           </div>

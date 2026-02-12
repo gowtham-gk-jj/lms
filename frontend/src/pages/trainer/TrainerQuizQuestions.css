@@ -180,3 +180,88 @@
     flex-direction: column;
   }
 }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .tqq-title {
+    font-size: 22px;
+  }
+
+  .tqq-content {
+    padding: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  /* Header stacked */
+  .tqq-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .tqq-title {
+    font-size: 18px;
+  }
+
+  .tqq-back-btn {
+    width: 100%;
+    height: 42px;
+    font-size: 16px;
+  }
+
+  .tqq-header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tqq-edit-all-btn,
+  .tqq-delete-all-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Content padding */
+  .tqq-content {
+    padding: 15px;
+  }
+
+  /* Card */
+  .tqq-card {
+    padding: 16px;
+  }
+
+  .tqq-card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tqq-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tqq-edit-btn,
+  .tqq-delete-btn {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .tqq-options {
+    padding-left: 15px;
+  }
+
+  .tqq-option {
+    font-size: 14px;
+  }
+}

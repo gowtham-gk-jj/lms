@@ -141,3 +141,71 @@
     padding: 14px 16px;
   }
 }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .eaq-title {
+    font-size: 22px;
+  }
+
+  .eaq-content {
+    padding: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  /* Header becomes stacked */
+  .eaq-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .eaq-title {
+    font-size: 18px;
+  }
+
+  .eaq-back-btn,
+  .eaq-save-header-btn {
+    width: 100%;
+    height: 42px;
+    font-size: 16px;
+  }
+
+  /* Content spacing */
+  .eaq-content {
+    padding: 15px;
+  }
+
+  /* Card adjustment */
+  .eaq-card {
+    padding: 16px;
+  }
+
+  .eaq-label {
+    font-size: 14px;
+  }
+
+  .eaq-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .eaq-select {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* Options stack */
+  .eaq-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

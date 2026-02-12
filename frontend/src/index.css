@@ -91,3 +91,29 @@ input:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+/* GLOBAL RESPONSIVE SETTINGS */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Make images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}

@@ -140,3 +140,101 @@
 .export-btn:hover {
   background-color: #16a34a;
 }
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .analytics-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+
+  .admin-progress-wrapper {
+    padding: 15px;
+  }
+
+  .progress-card {
+    padding: 20px;
+  }
+
+  .page-main-title {
+    font-size: 22px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  /* Metrics stacked */
+  .analytics-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Header stacked */
+  .stats-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .db-search-input {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .export-btn {
+    width: 100%;
+  }
+
+  /* ===== MOBILE TABLE TRANSFORM ===== */
+
+  .progress-table thead {
+    display: none;
+  }
+
+  .progress-table,
+  .progress-table tbody,
+  .progress-table tr,
+  .progress-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .progress-table tr {
+    background: #ffffff;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  .progress-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-bottom: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .progress-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    width: 45%;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .progress-bar-outer {
+    width: 100%;
+  }
+
+}

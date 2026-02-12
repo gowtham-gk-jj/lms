@@ -128,3 +128,53 @@
   min-width: 18px;
   text-align: center;
 }
+/* ================= MOBILE RESPONSIVE ================= */
+
+.mobile-menu-toggle {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* Tablet & Mobile */
+@media (max-width: 768px) {
+
+  .navbar-container {
+    flex-wrap: wrap;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-links a {
+    padding: 10px 0;
+  }
+
+  .navbar-action {
+    width: 100%;
+    margin-top: 10px;
+    justify-content: flex-start;
+  }
+
+  .user-nav-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .welcome-text {
+    font-size: 14px;
+  }
+}

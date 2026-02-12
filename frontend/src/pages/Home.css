@@ -1,140 +1,177 @@
-/* ===== PAGE ===== */
+/* ================= PAGE ================= */
+
 .home-page {
-    background: #f8f9fb;
-    min-height: 100vh;
-    padding-bottom: 60px;
-    font-family: "Segoe UI", sans-serif;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-/* ===== HERO ===== */
+/* ================= HERO ================= */
+
 .hero {
-    background: linear-gradient(90deg, #fff2a8, #ffe680);
-    padding: 70px 20px;
-    text-align: center;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .hero h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #1e293b;
+  font-size: 2.5rem;
+  font-weight: 800;
 }
 
-.hero h1 span {
-    color: #22c55e;
+.hero span {
+  color: #6366f1;
 }
 
 .hero p {
-    font-size: 16px;
-    color: #444;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #64748b;
 }
 
-/* ===== SECTION TITLE ===== */
+/* ================= SECTION ================= */
+
 .section-title {
-    margin: 40px 40px 20px;
-    font-size: 26px;
-    font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
-/* ===== COURSE GRID ===== */
+/* ================= GRID ================= */
+
 .course-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
-    padding: 0 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
-/* ===== COURSE CARD ===== */
+/* ================= CARD ================= */
+
 .course-card {
-    background: #fff;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .course-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
 
 .course-card img {
-    width: 100%;
-    height: 170px;
-    object-fit: cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
+/* ================= BODY ================= */
+
 .course-body {
-    padding: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .course-body h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #111;
+  margin-bottom: 0.5rem;
 }
 
 .course-body p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 14px;
+  font-size: 0.95rem;
+  color: #64748b;
+  flex-grow: 1;
 }
 
-/* ===== ACTIONS ===== */
+/* ================= ACTIONS ================= */
+
 .course-actions {
-    display: flex;
-    gap: 10px;
+  margin-top: 1rem;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.syllabus-btn,
+.know-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  text-align: center;
 }
 
 .syllabus-btn {
-    flex: 1;
-    text-align: center;
-    padding: 12px 0; /* Balanced with know-btn */
-    border-radius: 10px;
-    border: 1px solid #22c55e;
-    color: #22c55e;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s;
-    font-size: 14px;
-}
-
-.syllabus-btn:hover {
-    background: #22c55e;
-    color: #fff;
+  background: #e0e7ff;
+  color: #4338ca;
 }
 
 .know-btn {
-    flex: 1;
-    padding: 12px 0;
-    border-radius: 10px;
-    border: none;
-    background: #22c55e;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 14px;
+  background: #6366f1;
+  color: white;
 }
 
 .know-btn:hover {
-    background: #16a34a;
+  background: #4f46e5;
 }
 
-.loading-container, .no-courses {
-    text-align: center;
-    padding: 40px;
-    color: #64748b;
-    font-style: italic;
+/* ================= LOADING ================= */
+
+.loading-container {
+  text-align: center;
+  padding: 3rem;
 }
 
-/* ===== RESPONSIVE ===== */
+.no-courses {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .course-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-    .section-title {
-        margin-left: 20px;
-    }
-    .course-grid {
-        padding: 0 20px;
-    }
+
+  .home-page {
+    padding: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .course-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .course-card img {
+    height: 180px;
+  }
+
+  .course-body {
+    padding: 1rem;
+  }
+
+  .course-actions {
+    flex-direction: column;
+  }
+
+  .syllabus-btn,
+  .know-btn {
+    width: 100%;
+  }
 }

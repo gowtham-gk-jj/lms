@@ -1,0 +1,60 @@
+/* ===== PAGE WRAPPER ===== */
+.admin-progress-page {
+  padding: 30px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* ===== HEADER SECTION ===== */
+.admin-progress-header {
+  margin-bottom: 30px;
+}
+
+/* Back Button */
+.progress-back-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.progress-back-btn:hover {
+  background: #f1f5f9;
+}
+
+/* Header Text */
+.progress-header-text h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.progress-header-text p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* ===== TABLE WRAPPER ===== */
+.progress-table-wrapper {
+  margin-top: 10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .admin-progress-page {
+    padding: 20px;
+  }
+
+  .progress-header-text h1 {
+    font-size: 20px;
+  }
+
+  .progress-back-btn {
+    width: 100%;
+  }
+}

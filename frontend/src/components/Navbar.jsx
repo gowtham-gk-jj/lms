@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FaBell } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import api from "../api/axios"; // ✅ CHANGED
+import api from "../api/axios";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -12,6 +12,9 @@ export default function Navbar() {
 
   // 🔔 UNREAD COUNT STATE
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // ✅ MOBILE MENU STATE (ADDED)
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -39,7 +42,6 @@ export default function Navbar() {
       if (!user) return;
 
       try {
-        // ✅ FIXED API (no localhost, no manual token)
         const res = await api.get("/api/notifications");
 
         const unread = Array.isArray(res.data)
@@ -63,8 +65,16 @@ export default function Navbar() {
           <Link to="/">LMS</Link>
         </div>
 
+        {/* ✅ MOBILE MENU TOGGLE BUTTON (ADDED) */}
+        <div
+          className="mobile-menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </div>
+
         {/* LINKS */}
-        <nav className="navbar-links">
+        <nav className={`navbar-links ${menuOpen ? "active" : ""}`}>
           <Link
             to="/"
             className={
@@ -72,6 +82,7 @@ export default function Navbar() {
                 ? "nav-active"
                 : ""
             }
+            onClick={() => setMenuOpen(false)}
           >
             Courses
           </Link>
@@ -86,6 +97,7 @@ export default function Navbar() {
                   ? "nav-active"
                   : ""
               }
+              onClick={() => setMenuOpen(false)}
             >
               Overview
             </Link>
@@ -97,6 +109,7 @@ export default function Navbar() {
               className={
                 isActive("/admin-dashboard") ? "nav-active" : ""
               }
+              onClick={() => setMenuOpen(false)}
             >
               Admin Dashboard
             </Link>
@@ -108,6 +121,7 @@ export default function Navbar() {
               className={
                 isActive("/trainer-dashboard") ? "nav-active" : ""
               }
+              onClick={() => setMenuOpen(false)}
             >
               Trainer Dashboard
             </Link>
@@ -119,6 +133,7 @@ export default function Navbar() {
               className={
                 isActive("/learner-dashboard") ? "nav-active" : ""
               }
+              onClick={() => setMenuOpen(false)}
             >
               My Learning
             </Link>
@@ -130,6 +145,7 @@ export default function Navbar() {
               className={
                 isActive("/my-certificates") ? "nav-active" : ""
               }
+              onClick={() => setMenuOpen(false)}
             >
               Certificates
             </Link>
@@ -138,6 +154,7 @@ export default function Navbar() {
           <Link
             to="/articles"
             className={isActive("/articles") ? "nav-active" : ""}
+            onClick={() => setMenuOpen(false)}
           >
             Articles
           </Link>

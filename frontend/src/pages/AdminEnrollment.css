@@ -181,3 +181,95 @@
   color: #64748b;
   border: 2px dashed #e2e8f0;
 }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  .trainer-content {
+    padding: 25px;
+  }
+
+  .course-grid {
+    gap: 20px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  /* Layout becomes vertical */
+  .trainer-dashboard {
+    flex-direction: column;
+  }
+
+  /* Sidebar becomes top navigation */
+  .trainer-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: column;
+  }
+
+  .trainer-sidebar-top {
+    padding: 20px 15px;
+  }
+
+  .trainer-sidebar h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  /* Make sidebar buttons stacked */
+  .sidebar-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .trainer-sidebar-bottom {
+    padding: 15px;
+  }
+
+  /* Main content full width */
+  .trainer-content {
+    padding: 20px 15px;
+  }
+
+  /* Grid becomes single column */
+  .course-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .course-image {
+    height: 160px;
+  }
+
+  .course-body h3 {
+    font-size: 16px;
+  }
+
+  .course-desc {
+    font-size: 13px;
+  }
+
+  /* Actions stacked */
+  .course-actions {
+    flex-direction: column;
+  }
+
+  .btn-add,
+  .btn-edit,
+  .btn-delete {
+    width: 100%;
+  }
+
+  .loader-box,
+  .empty-text {
+    padding: 30px;
+  }
+}

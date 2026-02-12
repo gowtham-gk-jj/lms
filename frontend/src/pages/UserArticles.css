@@ -1,0 +1,142 @@
+/* ================= PAGE ================= */
+
+.articles-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* ================= HERO ================= */
+
+.articles-hero {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff;
+  text-align: center;
+}
+
+.articles-hero h1 {
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.articles-hero p {
+  font-size: 20px;
+  margin-top: 16px;
+}
+
+.articles-search {
+  margin-top: 40px;
+  padding: 18px 24px;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+}
+
+/* ================= GRID ================= */
+
+.articles-grid-section {
+  padding: 80px 20px;
+}
+
+.articles-grid-container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 32px;
+}
+
+.article-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.article-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.article-category {
+  font-size: 12px;
+  color: #4f46e5;
+}
+
+.read-time {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* ================= MODAL ================= */
+
+.article-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.article-modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.article-modal-content {
+  margin-top: 20px;
+  white-space: pre-wrap;
+}
+
+/* ================= LOADING ================= */
+
+.articles-loading {
+  padding: 100px;
+  text-align: center;
+  color: #64748b;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .articles-hero {
+    padding: 60px 20px;
+  }
+
+  .articles-hero h1 {
+    font-size: 28px;
+  }
+
+  .articles-hero p {
+    font-size: 16px;
+  }
+
+  .articles-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .article-card {
+    padding: 20px;
+  }
+
+  .article-modal {
+    padding: 20px;
+  }
+
+}

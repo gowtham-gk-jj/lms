@@ -1,94 +1,72 @@
+/* ================= CARD ================= */
+
 .certificate-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #16a085;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.2s ease;
+  background: #ffffff;
+  padding: 1.8rem;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: 0.3s ease;
 }
 
 .certificate-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }
 
+/* ================= INFO ================= */
+
 .cert-info h4 {
-    margin: 0 0 8px 0;
-    color: #2c3e50;
-    font-size: 1.2rem;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .cert-info p {
-    margin: 0;
-    color: #7f8c8d;
-    font-size: 0.9rem;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #64748b;
 }
+
+/* ================= BUTTON ================= */
 
 .btn-download-cert {
-    background-color: #16a085;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s ease;
-}
-
-.btn-download-cert:hover {
-    background-color: #1abc9c;
-}
-
-/* Grid layout for the MyCertificates page */
-.cert-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
-}
-.back-btn {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2563eb;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: 0.2s ease;
-}
-
-.back-btn:hover {
-  color: #1e40af;
-}
-.cert-page {
-  max-width: 1100px;
-  margin: auto;
-  padding: 40px 20px;
-}
-
-.page-back-btn {
   background: #2563eb;
   color: white;
   border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
   cursor: pointer;
-  margin-bottom: 20px;
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+  width: fit-content;
 }
 
-.page-back-btn:hover {
-  background: #1e40af;
+.btn-download-cert:hover {
+  background: #1d4ed8;
 }
 
-.page-title {
-  text-align: center;
-  margin-bottom: 40px;
-}
+/* ================= RESPONSIVE ================= */
 
-.cert-grid {
-  display: flex;
-  justify-content: center;
+@media (max-width: 768px) {
+
+  .certificate-card {
+    padding: 1.2rem;
+  }
+
+  .cert-info h4 {
+    font-size: 1rem;
+  }
+
+  .cert-info p {
+    font-size: 0.85rem;
+  }
+
+  .btn-download-cert {
+    width: 100%;
+    text-align: center;
+  }
 }

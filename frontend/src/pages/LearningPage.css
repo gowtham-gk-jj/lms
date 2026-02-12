@@ -1,106 +1,221 @@
+/* ================= CONTAINER ================= */
+
 .learning-container {
   display: flex;
-  height: 100vh;
-  background-color: #f8fafc;
-  overflow: hidden;
+  min-height: 100vh;
+  background: #f8fafc;
 }
 
-/* Sidebar Styling */
+/* ================= SIDEBAR ================= */
+
 .lesson-sidebar {
-  width: 320px;
+  width: 300px;
   background: #ffffff;
   border-right: 1px solid #e2e8f0;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
 }
 
+/* Sidebar Top Nav */
 .sidebar-top-nav {
   display: flex;
   align-items: center;
-  padding: 15px 20px;
-  gap: 15px;
-  border-bottom: 1px solid #f1f5f9;
+  gap: 10px;
+  margin-bottom: 1.5rem;
 }
 
 .back-arrow-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background-color: #0284c7; 
-  color: white;
   text-decoration: none;
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-.sidebar-header {
-  padding: 20px;
-  background: #1e293b;
-  color: white;
-}
-
-/* 🔹 Sidebar Progress Bar */
-.sidebar-progress-box { margin-top: 10px; }
-.progress-label { font-size: 0.8rem; margin-bottom: 6px; color: #cbd5e1; }
-.sidebar-pb-bg { width: 100%; height: 6px; background: #334155; border-radius: 3px; overflow: hidden; }
-.sidebar-pb-fill { height: 100%; background: #10b981; transition: width 0.4s ease; }
-
-.level-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; }
-.level-list li { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; color: #475569; }
-.level-list li:hover { background-color: #f8fafc; color: #0284c7; }
-.level-list li.active-level { background: #f0f9ff; color: #0284c7; border-left: 5px solid #0284c7; font-weight: bold; }
-
-/* Content Area */
-.video-main-content { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
-.video-player-wrapper { 
-  width: 100%; 
-  aspect-ratio: 16 / 9; 
-  background: #000; 
-  border-radius: 12px; 
-  overflow: hidden; 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-}
-
-.lesson-controls {
-  margin-top: 30px;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #e2e8f0;
-}
-
-.complete-btn {
-  padding: 14px 28px;
-  background: #10b981; 
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.complete-btn:hover { background: #059669; transform: translateY(-2px); }
-
-.no-video-placeholder { color: #94a3b8; display: flex; height: 100%; align-items: center; justify-content: center; }
-
-.loading-screen, .error-screen { display: flex; height: 100vh; align-items: center; justify-content: center; font-size: 1.2rem; }
-.back-to-levels-btn {
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
+  font-size: 18px;
+  background: #f1f5f9;
+  padding: 6px 10px;
   border-radius: 6px;
+}
+
+.nav-label {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Sidebar Header */
+.sidebar-header h3 {
+  margin-bottom: 1rem;
+}
+
+/* Progress */
+.sidebar-progress-box {
+  margin-bottom: 1.5rem;
+}
+
+.progress-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.sidebar-pb-bg {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sidebar-pb-fill {
+  height: 100%;
+  background: #6366f1;
+  transition: width 0.3s ease;
+}
+
+/* Level List */
+.level-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.level-list li {
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
   cursor: pointer;
-  margin-bottom: 12px;
   font-size: 14px;
 }
 
-.back-to-levels-btn:hover {
-  background: #1e40af;
+.unlocked-level {
+  background: #f1f5f9;
+}
+
+.active-level {
+  background: #6366f1;
+  color: white;
+}
+
+.locked-level {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* ================= MAIN CONTENT ================= */
+
+.video-main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.back-to-levels-btn {
+  align-self: flex-start;
+  margin-bottom: 1.5rem;
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.content-header h2 {
+  margin-bottom: 1rem;
+}
+
+/* ================= VIDEO ================= */
+
+.video-player-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.video-player-wrapper iframe,
+.video-player-wrapper video {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.main-video-player {
+  width: 100%;
+  height: 100%;
+}
+
+.no-video-placeholder {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* ================= CONTROLS ================= */
+
+.lesson-controls {
+  margin-top: auto;
+}
+
+.complete-btn {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.complete-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ================= LOADING ================= */
+
+.loading-screen,
+.error-screen {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .lesson-sidebar {
+    width: 250px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .learning-container {
+    flex-direction: column;
+  }
+
+  .lesson-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .video-main-content {
+    padding: 1rem;
+  }
+
+  .video-player-wrapper {
+    border-radius: 8px;
+  }
+
+  .complete-btn {
+    width: 100%;
+  }
+
+  .back-to-levels-btn {
+    width: 100%;
+  }
 }

@@ -170,3 +170,76 @@
 .chart-container {
   height: 260px;
 }
+/* ================================================= */
+/* ================= RESPONSIVE ==================== */
+/* ================================================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .db-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .db-card {
+    padding: 2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .db-wrapper {
+    padding: 1.2rem;
+  }
+
+  .db-welcome h1 {
+    font-size: 1.6rem;
+  }
+
+  .db-welcome p {
+    font-size: 0.95rem;
+  }
+
+  /* Cards stack */
+  .db-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .db-card {
+    padding: 1.5rem;
+  }
+
+  .db-card-title {
+    font-size: 1.1rem;
+  }
+
+  .db-card-desc {
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  /* Role dashboard wrapper */
+  .role-dashboard-wrapper {
+    padding: 1rem;
+  }
+
+  /* KPI grid */
+  .role-dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .overview-value {
+    font-size: 1.5rem;
+  }
+
+  /* Chart container smaller */
+  .chart-container {
+    height: 220px;
+  }
+}

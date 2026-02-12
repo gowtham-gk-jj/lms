@@ -77,3 +77,90 @@ button { cursor: pointer; border: none; transition: 0.2s; }
 .btn-edit:hover { background: #6366f1; color: white; }
 
 .loading-state { padding: 50px; text-align: center; color: #64748b; font-style: italic; }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .admin-header h1 {
+    font-size: 22px;
+  }
+
+  .stats-grid {
+    gap: 16px;
+  }
+
+  .stat-card p {
+    font-size: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  /* Header stacked */
+  .admin-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+
+  /* Stats grid becomes single column */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Form */
+  .article-form input,
+  .article-form textarea {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+  /* Article rows stack */
+  .article-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .article-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .row-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .row-actions button {
+    width: 100%;
+  }
+
+  .status-pill {
+    align-self: flex-start;
+  }
+}

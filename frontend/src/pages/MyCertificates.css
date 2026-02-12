@@ -1,129 +1,106 @@
-/* =========================================
-   FULL WIDTH HEADER (LIKE QUIZ PAGE)
-========================================= */
+/* ================= FULL HEADER ================= */
+
 .full-header {
-    width: 100%;
-    background-color: #f3f4f6;   /* light grey bar */
-    padding: 20px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-bottom: 1px solid #e5e7eb;
+  width: 100%;
+  background: #f8fafc;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-/* Back Button */
 .header-back-btn {
-    position: absolute;
-    left: 40px;
-    background-color: #2563eb;
-    color: #ffffff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .header-back-btn:hover {
-    background-color: #1e40af;
+  background: #e2e8f0;
 }
 
-/* Center Title */
 .header-title {
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0;
-    color: #111827;
+  margin: 0;
+  font-size: 1.6rem;
 }
 
-/* =========================================
-   CONTENT CONTAINER
-========================================= */
-.container.mt-4 {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+/* ================= CONTENT ================= */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-/* =========================================
-   GRID LAYOUT
-========================================= */
+/* ================= GRID ================= */
+
 .cert-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
-/* =========================================
-   EMPTY STATE
-========================================= */
-.no-certs-message {
-    text-align: center;
-    padding: 60px;
-    background: #f9fafb;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    color: #6b7280;
-}
+/* ================= LOADING ================= */
 
-.no-certs-message p {
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-/* =========================================
-   LOADING TEXT
-========================================= */
 .loading-text {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #2563eb;
-    margin-top: 80px;
-    font-weight: 500;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
 }
 
-/* =========================================
-   CARD ENTRY ANIMATION
-========================================= */
-.cert-grid > * {
-    animation: fadeInUp 0.5s ease forwards;
+/* ================= EMPTY STATE ================= */
+
+.no-certs-message {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+  font-size: 1rem;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .cert-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* Mobile */
 @media (max-width: 768px) {
 
-    .header-back-btn {
-        left: 20px;
-        padding: 6px 14px;
-        font-size: 14px;
-    }
+  .full-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 1rem;
+  }
 
-    .header-title {
-        font-size: 22px;
-    }
+  .header-title {
+    font-size: 1.3rem;
+    text-align: center;
+  }
 
-    .container.mt-4 {
-        margin: 30px auto;
-        padding: 0 15px;
-    }
+  .header-back-btn {
+    width: 100%;
+  }
 
-    .cert-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
+  .container {
+    padding: 1rem;
+  }
+
+  .cert-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .loading-text,
+  .no-certs-message {
+    font-size: 0.9rem;
+  }
 }

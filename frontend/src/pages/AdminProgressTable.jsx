@@ -7,6 +7,7 @@ const AdminProgressTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
+  /* ================= FETCH DATA ================= */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,7 +41,7 @@ const AdminProgressTable = () => {
     fetchData();
   }, []);
 
-  // ================= FILTER =================
+  /* ================= FILTER ================= */
   const filteredStats = stats.filter(
     (s) =>
       s.learner?.name
@@ -67,7 +68,7 @@ const AdminProgressTable = () => {
     (s) => s.progress === 100
   ).length;
 
-  // ================= EXPORT CSV =================
+  /* ================= EXPORT CSV ================= */
   const handleExportCSV = () => {
     if (filteredStats.length === 0) {
       alert("No data to export");
@@ -94,8 +95,7 @@ const AdminProgressTable = () => {
     });
 
     const encodedUri = encodeURI(csvContent);
-    const link =
-      document.createElement("a");
+    const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute(
       "download",
@@ -184,7 +184,8 @@ const AdminProgressTable = () => {
               {filteredStats.length > 0 ? (
                 filteredStats.map((s) => (
                   <tr key={s._id}>
-                    <td>
+
+                    <td data-label="Student Details">
                       <div className="student-cell">
                         <span className="s-name">
                           {s.learner?.name}
@@ -195,13 +196,13 @@ const AdminProgressTable = () => {
                       </div>
                     </td>
 
-                    <td>
+                    <td data-label="Enrolled Course">
                       <span className="course-badge">
                         {s.course?.title}
                       </span>
                     </td>
 
-                    <td>
+                    <td data-label="Progress">
                       <div className="progress-container">
                         <div className="progress-bar-outer">
                           <div
@@ -217,7 +218,7 @@ const AdminProgressTable = () => {
                       </div>
                     </td>
 
-                    <td>
+                    <td data-label="Status">
                       <span
                         className={`status-pill ${
                           s.progress === 100
@@ -230,6 +231,7 @@ const AdminProgressTable = () => {
                           : "Learning"}
                       </span>
                     </td>
+
                   </tr>
                 ))
               ) : (

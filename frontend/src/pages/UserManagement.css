@@ -131,3 +131,70 @@
   color: #94a3b8;
   font-style: italic;
 }
+/* ================= RESPONSIVE ================= */
+
+.um-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .um-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .um-wrapper {
+    padding: 1rem;
+  }
+
+  .um-card {
+    padding: 1rem;
+  }
+
+  .um-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .um-count {
+    font-size: 0.9rem;
+  }
+
+  .um-table {
+    min-width: 600px;
+  }
+
+  .um-user {
+    gap: 0.5rem;
+  }
+
+  .um-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .um-name {
+    font-size: 0.9rem;
+  }
+
+  .um-email {
+    font-size: 0.8rem;
+  }
+
+  .um-role,
+  .um-status {
+    font-size: 0.8rem;
+  }
+
+  .um-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}

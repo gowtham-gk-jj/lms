@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Added Link
+import { useNavigate, Link } from "react-router-dom";
 import { getMyCourses } from "../api/enrollmentApi";
 import "./LearnerDashboardStyles.css";
 
@@ -28,7 +28,7 @@ export default function LearnerDashboard() {
 
   return (
     <div className="learner-db-wrapper">
-      {/* ✅ NEW: TOP NAVIGATION WITH BACK ARROW */}
+
       <div className="dashboard-top-nav">
         <Link to="/" className="back-arrow-btn" title="Back to Home">
           <span>←</span>
@@ -38,7 +38,7 @@ export default function LearnerDashboard() {
 
       <div className="dashboard-content">
         <h1>My Learning Journey</h1>
-        
+
         <div className="info-box">
           Welcome back! You have <strong>{enrollments.length}</strong> active enrollments.
         </div>
@@ -47,24 +47,29 @@ export default function LearnerDashboard() {
           {enrollments.length > 0 ? (
             enrollments.map((item) => (
               <div key={item._id} className="course-progress-card">
-                <h3 className="course-name">{item.course?.title || "Untitled Course"}</h3>
-                
+                <h3 className="course-name">
+                  {item.course?.title || "Untitled Course"}
+                </h3>
+
                 <div className="progress-section">
                   <div className="progress-text">
                     <span>Course Progress</span>
                     <span>{item.progress || 0}%</span>
                   </div>
+
                   <div className="progress-bar-bg">
-                    <div 
-                      className="progress-bar-fill" 
-                      style={{ width: `${item.progress || 0}%` }} 
+                    <div
+                      className="progress-bar-fill"
+                      style={{ width: `${item.progress || 0}%` }}
                     />
                   </div>
                 </div>
 
-                <button 
+                <button
                   className="continue-btn"
-                  onClick={() => navigate(`/learn/${item.course?._id}/beginner`)}
+                  onClick={() =>
+                    navigate(`/learn/${item.course?._id}/beginner`)
+                  }
                 >
                   Continue Learning
                 </button>
@@ -73,7 +78,10 @@ export default function LearnerDashboard() {
           ) : (
             <div className="empty-state">
               <p>No courses enrolled yet.</p>
-              <button className="browse-btn" onClick={() => navigate('/')}>
+              <button
+                className="browse-btn"
+                onClick={() => navigate("/")}
+              >
                 Browse Courses
               </button>
             </div>

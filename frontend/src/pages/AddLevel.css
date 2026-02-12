@@ -110,3 +110,66 @@
   background: #ccc;
   cursor: not-allowed;
 }
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .add-level-card {
+    padding: 30px;
+  }
+
+  .form-header h2 {
+    font-size: 22px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .add-level-page {
+    padding: 20px 15px;
+  }
+
+  /* Back button full width */
+  .back-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  /* Card */
+  .add-level-card {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .form-header h2 {
+    font-size: 18px;
+  }
+
+  .form-header p {
+    font-size: 13px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .helper-text {
+    font-size: 12px;
+  }
+
+  .submit-level-btn {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px;
+  }
+}

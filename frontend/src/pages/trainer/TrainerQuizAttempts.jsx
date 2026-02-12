@@ -85,18 +85,31 @@ export default function TrainerQuizAttempts() {
           <tbody>
             {attempts.map((a) => (
               <tr key={a.attemptId}>
-                <td>{a.userName || "N/A"}</td>
-                <td className="mono">{a.userEmail || "N/A"}</td>
-                <td>{a.courseTitle || "N/A"}</td>
-                <td>{a.level}</td>
+                <td data-label="User">
+                  {a.userName || "N/A"}
+                </td>
 
-                <td>
+                <td data-label="Email" className="mono">
+                  {a.userEmail || "N/A"}
+                </td>
+
+                <td data-label="Course">
+                  {a.courseTitle || "N/A"}
+                </td>
+
+                <td data-label="Level">
+                  {a.level}
+                </td>
+
+                <td data-label="Score">
                   {a.score} / {a.totalQuestions}
                 </td>
 
-                <td>{a.percentage}%</td>
+                <td data-label="Percentage">
+                  {a.percentage}%
+                </td>
 
-                <td>
+                <td data-label="Status">
                   <span
                     className={`status-badge ${
                       a.passed ? "pass" : "fail"
@@ -106,7 +119,7 @@ export default function TrainerQuizAttempts() {
                   </span>
                 </td>
 
-                <td>
+                <td data-label="Date">
                   {a.date
                     ? new Date(a.date).toLocaleDateString()
                     : "N/A"}
@@ -114,6 +127,7 @@ export default function TrainerQuizAttempts() {
               </tr>
             ))}
           </tbody>
+
         </table>
       </div>
     </div>
