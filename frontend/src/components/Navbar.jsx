@@ -40,7 +40,7 @@ export default function Navbar() {
 
       try {
         // ✅ FIXED API (no localhost, no manual token)
-        const res = await api.get("/notifications");
+        const res = await api.get("/api/notifications");
 
         const unread = Array.isArray(res.data)
           ? res.data.filter((n) => !n.isRead)
