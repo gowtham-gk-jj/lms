@@ -1,58 +1,48 @@
 /* =========================================
-   MAIN PAGE CONTAINER
+   MAIN PAGE CONTAINER (SAME AS QUIZ PAGE)
 ========================================= */
-.cert-page {
+.container.mt-4 {
     padding: 30px 20px;
     max-width: 1200px;
     margin: 0 auto;
-    min-height: 70vh;
 }
 
 /* =========================================
-   TOP BAR (LIKE QUIZ RESULTS PAGE)
+   HEADER ROW (EXACT QUIZ STYLE)
 ========================================= */
-.page-header {
+.page-header-row {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     margin-bottom: 40px;
-    background: transparent; /* remove box */
-    padding: 0;
-    border-radius: 0;
 }
 
-/* Page Title (Centered) */
-.page-title {
-    font-size: 28px;
-    font-weight: 600;
-    color: #1f2937;
-    margin: 0;
-}
-
-/* REMOVE underline */
-.page-title::after {
-    display: none;
-}
-
-/* Back Button (Left side) */
-.back-btn {
+/* Blue Back Button (Left Side) */
+.quiz-back-btn {
     position: absolute;
     left: 0;
-    background: #2563eb;
+    background-color: #2563eb;
     color: white;
     border: none;
     padding: 8px 18px;
     border-radius: 8px;
-    cursor: pointer;
     font-weight: 600;
-    transition: 0.2s ease;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
-.back-btn:hover {
-    background: #1e40af;
+.quiz-back-btn:hover {
+    background-color: #1e40af;
 }
 
+/* Centered Page Title */
+.quiz-page-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    color: #111827;
+}
 
 /* =========================================
    GRID LAYOUT
@@ -70,15 +60,15 @@
 .no-certs-message {
     text-align: center;
     padding: 60px;
-    background: #fdfdfd;
-    border-radius: 15px;
-    border: 2px dashed #bdc3c7;
-    color: #7f8c8d;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    color: #6b7280;
 }
 
 .no-certs-message p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
+    font-size: 1.1rem;
+    margin: 0;
 }
 
 /* =========================================
@@ -86,9 +76,9 @@
 ========================================= */
 .loading-text {
     text-align: center;
-    font-size: 1.3rem;
-    color: #16a085;
-    margin-top: 100px;
+    font-size: 1.2rem;
+    color: #2563eb;
+    margin-top: 80px;
     font-weight: 500;
 }
 
@@ -96,13 +86,13 @@
    CARD ENTRY ANIMATION
 ========================================= */
 .cert-grid > * {
-    animation: fadeInUp 0.6s ease-out forwards;
+    animation: fadeInUp 0.5s ease forwards;
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(25px);
     }
     to {
         opacity: 1;
@@ -114,12 +104,12 @@
    RESPONSIVE
 ========================================= */
 @media (max-width: 768px) {
-    .cert-page {
+    .container.mt-4 {
         padding: 20px 15px;
     }
 
-    .page-title {
-        font-size: 1.8rem;
+    .quiz-page-title {
+        font-size: 22px;
     }
 
     .cert-grid {
@@ -127,7 +117,9 @@
         gap: 20px;
     }
 
-    .back-btn {
-        left: 15px;
+    .quiz-back-btn {
+        left: 0;
+        padding: 7px 14px;
+        font-size: 14px;
     }
 }
