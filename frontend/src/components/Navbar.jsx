@@ -10,15 +10,13 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔔 UNREAD COUNT STATE
   const [unreadCount, setUnreadCount] = useState(0);
-
-  // ✅ MOBILE MENU STATE (ADDED)
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate("/");
+    setMenuOpen(false);
   };
 
   const role = user?.role;
@@ -28,7 +26,6 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname.startsWith(path);
 
-  /* ================= ROLE OVERVIEW PATH ================= */
   const getOverviewPath = () => {
     if (isAdmin) return "/admin-dashboard/overview";
     if (isTrainer) return "/trainer-dashboard/overview";
@@ -36,20 +33,17 @@ export default function Navbar() {
     return "/";
   };
 
-  /* ================= FETCH NOTIFICATIONS ================= */
   useEffect(() => {
     const fetchNotifications = async () => {
       if (!user) return;
 
       try {
         const res = await api.get("/api/notifications");
-
         const unread = Array.isArray(res.data)
           ? res.data.filter((n) => !n.isRead)
           : [];
-
         setUnreadCount(unread.length);
-      } catch (err) {
+      } catch {
         console.error("Failed to fetch notifications");
       }
     };
@@ -65,7 +59,7 @@ export default function Navbar() {
           <Link to="/">LMS</Link>
         </div>
 
-        {/* ✅ MOBILE MENU TOGGLE BUTTON (ADDED) */}
+        {/* MOBILE MENU BUTTON */}
         <div
           className="mobile-menu-toggle"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -73,30 +67,15 @@ export default function Navbar() {
           ☰
         </div>
 
-        {/* LINKS */}
+        {/* NAV LINKS */}
         <nav className={`navbar-links ${menuOpen ? "active" : ""}`}>
-          <Link
-            to="/"
-            className={
-              isActive("/") && !isAdmin && !isTrainer
-                ? "nav-active"
-                : ""
-            }
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/" onClick={() => setMenuOpen(false)}>
             Courses
           </Link>
 
           {user && (
             <Link
               to={getOverviewPath()}
-              className={
-                isActive("/admin-dashboard/overview") ||
-                isActive("/trainer-dashboard/overview") ||
-                isActive("/learner-dashboard/overview")
-                  ? "nav-active"
-                  : ""
-              }
               onClick={() => setMenuOpen(false)}
             >
               Overview
@@ -106,9 +85,6 @@ export default function Navbar() {
           {isAdmin && (
             <Link
               to="/admin-dashboard"
-              className={
-                isActive("/admin-dashboard") ? "nav-active" : ""
-              }
               onClick={() => setMenuOpen(false)}
             >
               Admin Dashboard
@@ -118,9 +94,6 @@ export default function Navbar() {
           {isTrainer && (
             <Link
               to="/trainer-dashboard"
-              className={
-                isActive("/trainer-dashboard") ? "nav-active" : ""
-              }
               onClick={() => setMenuOpen(false)}
             >
               Trainer Dashboard
@@ -130,9 +103,6 @@ export default function Navbar() {
           {isLearner && (
             <Link
               to="/learner-dashboard"
-              className={
-                isActive("/learner-dashboard") ? "nav-active" : ""
-              }
               onClick={() => setMenuOpen(false)}
             >
               My Learning
@@ -142,9 +112,6 @@ export default function Navbar() {
           {isLearner && (
             <Link
               to="/my-certificates"
-              className={
-                isActive("/my-certificates") ? "nav-active" : ""
-              }
               onClick={() => setMenuOpen(false)}
             >
               Certificates
@@ -153,14 +120,13 @@ export default function Navbar() {
 
           <Link
             to="/articles"
-            className={isActive("/articles") ? "nav-active" : ""}
             onClick={() => setMenuOpen(false)}
           >
             Articles
           </Link>
         </nav>
 
-        {/* AUTH / USER ACTIONS */}
+        {/* RIGHT SIDE */}
         <div className="navbar-action">
           {!user ? (
             <Link to="/login" className="login-btn">
@@ -168,10 +134,8 @@ export default function Navbar() {
             </Link>
           ) : (
             <div className="user-nav-group">
-              {/* 🔔 NOTIFICATION ICON */}
               <button
                 className="notification-btn"
-                title="Notifications"
                 onClick={() => navigate("/notifications")}
               >
                 <FaBell size={18} />
@@ -186,7 +150,10 @@ export default function Navbar() {
                 Hi, {user.name?.split(" ")[0]}
               </span>
 
-              <button className="logout-btn" onClick={handleLogout}>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </div>
