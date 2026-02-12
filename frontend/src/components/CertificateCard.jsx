@@ -23,13 +23,8 @@ const CertificateCard = ({ cert }) => {
         import.meta.env.VITE_API_BASE_URL ||
         "";
 
-      // ✅ Ensure BASE_URL has no trailing slash
-      const safeBaseUrl = BASE_URL.endsWith("/")
-        ? BASE_URL.slice(0, -1)
-        : BASE_URL;
-
       const logoUrl = cert?.orgLogo
-        ? `${safeBaseUrl}/${cert.orgLogo.replace(/^\/+/, "")}`
+        ? `${BASE_URL}/${cert.orgLogo.replace(/^\/+/, "")}`
         : null;
 
       let base64Logo = null;
@@ -39,9 +34,7 @@ const CertificateCard = ({ cert }) => {
       =============================== */
       if (logoUrl) {
         try {
-          const response = await fetch(logoUrl, {
-            mode: "cors", // ✅ Added CORS safety
-          });
+          const response = await fetch(logoUrl);
 
           if (response.ok) {
             const blob = await response.blob();
@@ -67,12 +60,7 @@ const CertificateCard = ({ cert }) => {
       /* ===============================
          BORDER
       =============================== */
-
-      // ✅ Safe default color
-      const themeColor =
-        cert?.themeColor && /^#([0-9A-F]{3}){1,2}$/i.test(cert.themeColor)
-          ? cert.themeColor
-          : "#2563eb";
+      const themeColor = cert?.themeColor || "#2563eb";
 
       const r = parseInt(themeColor.substring(1, 3), 16);
       const g = parseInt(themeColor.substring(3, 5), 16);
@@ -122,14 +110,8 @@ const CertificateCard = ({ cert }) => {
       doc.setFont("times", "bold");
       doc.setFontSize(34);
       doc.setTextColor(22, 160, 133);
-
-      // ✅ Safe uppercase
-      const learnerName = cert?.learnerName
-        ? cert.learnerName.toUpperCase()
-        : "";
-
       doc.text(
-        learnerName,
+        cert?.learnerName?.toUpperCase() || "",
         pageWidth / 2,
         340,
         { align: "center" }
@@ -141,16 +123,8 @@ const CertificateCard = ({ cert }) => {
       doc.setFont("times", "bold");
       doc.setFontSize(22);
       doc.setTextColor(44, 62, 80);
-
-      // ✅ Handle long course names
-      const courseText = cert?.courseName || "";
-      const splitCourse = doc.splitTextToSize(
-        courseText,
-        pageWidth - 200
-      );
-
       doc.text(
-        splitCourse,
+        cert?.courseName || "",
         pageWidth / 2,
         430,
         { align: "center" }
