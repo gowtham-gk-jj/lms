@@ -1,18 +1,10 @@
 /* =========================================
-   MAIN PAGE CONTAINER
+   FULL WIDTH HEADER (LIKE QUIZ PAGE)
 ========================================= */
-.container.mt-4 {
-    padding: 0;
-    max-width: 100%;
-    margin: 0 auto;
-}
-
-/* =========================================
-   BOX HEADER (LIKE IMAGE)
-========================================= */
-.box-header {
-    background-color: #f3f4f6; /* light grey */
-    padding: 20px 40px;
+.full-header {
+    width: 100%;
+    background-color: #f3f4f6;   /* light grey bar */
+    padding: 20px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,11 +13,11 @@
 }
 
 /* Back Button */
-.box-back-btn {
+.header-back-btn {
     position: absolute;
     left: 40px;
     background-color: #2563eb;
-    color: white;
+    color: #ffffff;
     border: none;
     padding: 8px 18px;
     border-radius: 8px;
@@ -34,12 +26,12 @@
     transition: background 0.2s ease;
 }
 
-.box-back-btn:hover {
+.header-back-btn:hover {
     background-color: #1e40af;
 }
 
 /* Center Title */
-.box-title {
+.header-title {
     font-size: 28px;
     font-weight: 600;
     margin: 0;
@@ -47,42 +39,22 @@
 }
 
 /* =========================================
-   CONTENT SPACING BELOW HEADER
+   CONTENT CONTAINER
 ========================================= */
-.cert-grid {
+.container.mt-4 {
     max-width: 1200px;
     margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
     padding: 0 20px;
 }
 
 /* =========================================
-   RESPONSIVE
+   GRID LAYOUT
 ========================================= */
-@media (max-width: 768px) {
-    .box-header {
-        padding: 15px 20px;
-    }
-
-    .box-back-btn {
-        left: 20px;
-        padding: 6px 14px;
-        font-size: 14px;
-    }
-
-    .box-title {
-        font-size: 22px;
-    }
-
-    .cert-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        margin: 30px auto;
-    }
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
 }
-
 
 /* =========================================
    EMPTY STATE
@@ -134,22 +106,24 @@
    RESPONSIVE
 ========================================= */
 @media (max-width: 768px) {
-    .container.mt-4 {
-        padding: 20px 15px;
+
+    .header-back-btn {
+        left: 20px;
+        padding: 6px 14px;
+        font-size: 14px;
     }
 
-    .quiz-page-title {
+    .header-title {
         font-size: 22px;
+    }
+
+    .container.mt-4 {
+        margin: 30px auto;
+        padding: 0 15px;
     }
 
     .cert-grid {
         grid-template-columns: 1fr;
         gap: 20px;
-    }
-
-    .quiz-back-btn {
-        left: 0;
-        padding: 7px 14px;
-        font-size: 14px;
     }
 }
