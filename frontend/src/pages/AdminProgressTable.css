@@ -1,3 +1,38 @@
+/* MODULE 9: ANALYTICS GRID STYLES */
+.analytics-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f1f5f9;
+}
+
+.metric-box {
+    background: #ffffff;
+    padding: 1.2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-top: 4px solid #6366f1;
+}
+
+.metric-box h3 { font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0; }
+.metric-box p { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 0.3rem; text-transform: uppercase; }
+
+.export-btn {
+    background-color: #10b981;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.export-btn:hover { background-color: #059669; }
+
+/* YOUR ORIGINAL STYLES */
 .admin-stats-card {
     background: #ffffff;
     border-radius: 12px;
@@ -66,15 +101,8 @@
     flex-direction: column;
 }
 
-.s-name {
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.s-email {
-    font-size: 0.85rem;
-    color: #94a3b8;
-}
+.s-name { font-weight: 600; color: #1e293b; }
+.s-email { font-size: 0.85rem; color: #94a3b8; }
 
 .course-badge {
     background: #e0e7ff;
@@ -85,11 +113,7 @@
     font-weight: 500;
 }
 
-.progress-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.progress-container { display: flex; align-items: center; gap: 10px; }
 
 .progress-bar-outer {
     flex: 1;
@@ -102,17 +126,12 @@
 
 .progress-bar-inner {
     height: 100%;
-    background: #6366f1; /* Your Indigo Theme Color */
+    background: #6366f1;
     border-radius: 10px;
     transition: width 0.5s ease-in-out;
 }
 
-.progress-num {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #475569;
-    min-width: 35px;
-}
+.progress-num { font-size: 0.85rem; font-weight: 700; color: #475569; min-width: 35px; }
 
 .status-pill {
     padding: 4px 12px;
@@ -122,18 +141,7 @@
     text-transform: uppercase;
 }
 
-.status-pill.active {
-    background: #fef9c3;
-    color: #854d0e;
-}
+.status-pill.active { background: #fef9c3; color: #854d0e; }
+.status-pill.completed { background: #dcfce7; color: #15803d; }
 
-.status-pill.completed {
-    background: #dcfce7;
-    color: #15803d;
-}
-
-.no-results, .loading-text {
-    padding: 2rem;
-    text-align: center;
-    color: #64748b;
-}
+.no-results, .loading-text { padding: 2rem; text-align: center; color: #64748b; }
