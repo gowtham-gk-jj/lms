@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api/axios";
+import "./AssignCourseForm.css";
 
 const AssignCourseForm = () => {
   const [learners, setLearners] = useState([]);
@@ -13,10 +14,10 @@ const AssignCourseForm = () => {
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
-
     try {
-      // ✅ FIXED: added /api
+      setLoading(true);
+
+      // Get users
       const resUsers = await api.get("/api/auth/users");
 
       const usersList = Array.isArray(resUsers.data)
@@ -31,7 +32,7 @@ const AssignCourseForm = () => {
 
       setLearners(learnerList);
 
-      // ✅ FIXED: added /api
+      // Get courses
       const resCourses = await api.get("/api/courses");
 
       const courseList = Array.isArray(resCourses.data)
@@ -39,9 +40,8 @@ const AssignCourseForm = () => {
         : resCourses.data.courses || [];
 
       setCourses(courseList);
-
     } catch (err) {
-      console.error("❌ Admin Enrollment Load Error:", err);
+      console.error("❌ Enrollment Load Error:", err);
       setLearners([]);
       setCourses([]);
     } finally {
@@ -53,18 +53,18 @@ const AssignCourseForm = () => {
     e.preventDefault();
 
     if (!selectedLearner || !selectedCourse) {
-      alert("Please select both a learner and a course");
+      alert("Please select both learner and course");
       return;
     }
 
     try {
-      // ✅ FIXED: added /api
       await api.post("/api/enrollment/enroll", {
         learnerId: selectedLearner,
         courseId: selectedCourse,
       });
 
-      alert("🎉 Course assigned successfully!");
+      alert("🎉 Enrollment Successful!");
+
       setSelectedLearner("");
       setSelectedCourse("");
     } catch (err) {
@@ -73,51 +73,62 @@ const AssignCourseForm = () => {
   };
 
   if (loading) {
-    return <div>Syncing Database...</div>;
+    return <div style={{ padding: "20px" }}>Loading...</div>;
   }
 
   return (
-    <div>
-      <h3>Administrative Enrollment</h3>
+    <div className="assign-card">
+      <h3>👤 Administrative Enrollment</h3>
 
       <form onSubmit={assignCourse}>
-        <div>
-          <label>Learner</label>
-          <select
-            value={selectedLearner}
-            onChange={(e) => setSelectedLearner(e.target.value)}
-            required
-          >
-            <option value="">
-              -- {learners.length} Learners Found --
-            </option>
-            {learners.map((l) => (
-              <option key={l._id} value={l._id}>
-                {l.name} ({l.email})
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className="assign-row">
 
-        <div>
-          <label>Course</label>
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            required
-          >
-            <option value="">
-              -- {courses.length} Courses Found --
-            </option>
-            {courses.map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.title}
+          {/* Learner Dropdown */}
+          <div>
+            <label>Learner</label>
+            <select
+              value={selectedLearner}
+              onChange={(e) => setSelectedLearner(e.target.value)}
+              required
+            >
+              <option value="">
+                -- {learners.length} Learners Found --
               </option>
-            ))}
-          </select>
-        </div>
+              {learners.map((learner) => (
+                <option key={learner._id} value={learner._id}>
+                  {learner.name} ({learner.email})
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <button type="submit">Confirm Enrollment</button>
+          {/* Course Dropdown */}
+          <div>
+            <label>Course to Assign</label>
+            <select
+              value={selectedCourse}
+              onChange={(e) => setSelectedCourse(e.target.value)}
+              required
+            >
+              <option value="">
+                -- {courses.length} Courses Found --
+              </option>
+              {courses.map((course) => (
+                <option key={course._id} value={course._id}>
+                  {course.title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Button */}
+          <div>
+            <button type="submit" className="enroll-btn">
+              Confirm Enrollment
+            </button>
+          </div>
+
+        </div>
       </form>
     </div>
   );

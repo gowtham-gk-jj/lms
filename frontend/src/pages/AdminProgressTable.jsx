@@ -4,10 +4,6 @@ import "./AdminProgressTable.css";
 
 const AdminProgressTable = () => {
   const [stats, setStats] = useState([]);
-  const [metrics, setMetrics] = useState({
-    totalEnrollments: 0,
-    completedCourses: 0,
-  });
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -16,18 +12,6 @@ const AdminProgressTable = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // 🔹 1. Fetch dashboard summary
-        const summaryRes = await api.get("/api/reports/admin", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (summaryRes.data.success) {
-          setMetrics(summaryRes.data.data);
-        }
-
-        // 🔹 2. Fetch detailed enrollments
         const enrollmentRes = await api.get(
           "/api/enrollment/all-stats",
           {
@@ -37,7 +21,11 @@ const AdminProgressTable = () => {
           }
         );
 
-        setStats(enrollmentRes.data || []);
+        setStats(
+          Array.isArray(enrollmentRes.data)
+            ? enrollmentRes.data
+            : []
+        );
       } catch (err) {
         console.error(
           "Admin Report Error:",
@@ -52,7 +40,7 @@ const AdminProgressTable = () => {
     fetchData();
   }, []);
 
-  // ===== FILTER =====
+  // ================= FILTER =================
   const filteredStats = stats.filter(
     (s) =>
       s.learner?.name
@@ -79,6 +67,45 @@ const AdminProgressTable = () => {
     (s) => s.progress === 100
   ).length;
 
+  // ================= EXPORT CSV =================
+  const handleExportCSV = () => {
+    if (filteredStats.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    let csvContent =
+      "data:text/csv;charset=utf-8,";
+
+    csvContent +=
+      "Student Name,Email,Course,Progress %,Status\n";
+
+    filteredStats.forEach((s) => {
+      const status =
+        s.progress === 100
+          ? "Finished"
+          : "Learning";
+
+      csvContent += `${s.learner?.name || ""},${
+        s.learner?.email || ""
+      },${s.course?.title || ""},${
+        s.progress || 0
+      },${status}\n`;
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link =
+      document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      "student_progress_report.csv"
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading)
     return (
       <div className="loading-text">
@@ -89,12 +116,13 @@ const AdminProgressTable = () => {
   return (
     <div className="admin-progress-wrapper">
       <div className="progress-card">
+
+        {/* ===== PAGE TITLE ===== */}
         <h1 className="page-main-title">
           Detailed Student Progress
         </h1>
         <p className="page-subtitle">
-          Viewing all active course enrollments and completion
-          percentages.
+          Viewing all active course enrollments and completion percentages.
         </p>
 
         {/* ===== METRICS ===== */}
@@ -115,7 +143,7 @@ const AdminProgressTable = () => {
           </div>
         </div>
 
-        {/* ===== HEADER ===== */}
+        {/* ===== HEADER SECTION ===== */}
         <div className="stats-header">
           <h2 className="table-title">
             Organization Reports
@@ -130,6 +158,13 @@ const AdminProgressTable = () => {
                 setSearchTerm(e.target.value)
               }
             />
+
+            <button
+              onClick={handleExportCSV}
+              className="export-btn"
+            >
+              📥 Export CSV
+            </button>
           </div>
         </div>
 
@@ -208,8 +243,10 @@ const AdminProgressTable = () => {
                 </tr>
               )}
             </tbody>
+
           </table>
         </div>
+
       </div>
     </div>
   );
