@@ -1,19 +1,23 @@
+/* ================= WRAPPER ================= */
 .admin-progress-wrapper {
   padding: 30px;
   background: #f9fafb;
+  min-height: 100vh;
 }
 
 .progress-card {
   background: #ffffff;
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
+/* ================= PAGE HEADER ================= */
 .page-main-title {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 5px;
+  color: #1e293b;
 }
 
 .page-subtitle {
@@ -21,7 +25,7 @@
   margin-bottom: 30px;
 }
 
-/* ===== METRICS ===== */
+/* ================= METRICS ================= */
 .analytics-metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -35,11 +39,18 @@
   border-radius: 12px;
   text-align: center;
   border-top: 4px solid #6366f1;
+  transition: 0.3s ease;
+}
+
+.metric-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
 }
 
 .metric-box h3 {
   font-size: 24px;
   margin: 0;
+  color: #111827;
 }
 
 .metric-box p {
@@ -48,7 +59,7 @@
   margin-top: 8px;
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 .stats-header {
   display: flex;
   justify-content: space-between;
@@ -56,76 +67,33 @@
   margin-bottom: 20px;
 }
 
-.db-search-input {
-  padding: 8px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  margin-right: 10px;
-}
-
-.export-btn {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* ===== TABLE ===== */
-.progress-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.progress-table th {
-  background: #f3f4f6;
-  padding: 12px;
-  text-align: left;
-  font-size: 14px;
-}
-
-.progress-table td {
-  padding: 14px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-/* ===== PROGRESS BAR ===== */
-.progress-bar-outer {
-  background: #e5e7eb;
-  height: 8px;
-  border-radius: 4px;
-  width: 150px;
-}
-
-.progress-bar-inner {
-  background: #3b82f6;
-  height: 8px;
-  border-radius: 4px;
-}
-
-.status-pill {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+.table-title {
+  font-size: 18px;
   font-weight: 600;
+  color: #1e293b;
 }
 
-.status-pill.completed {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.status-pill.active {
-  background: #fef3c7;
-  color: #92400e;
-}
 .header-actions {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
+.db-search-input {
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.db-search-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* ================= EXPORT BUTTON ================= */
 .export-btn {
   background-color: #22c55e;
   color: white;
@@ -140,6 +108,114 @@
 .export-btn:hover {
   background-color: #16a34a;
 }
+
+/* ================= TABLE ================= */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.progress-table th {
+  background: #f3f4f6;
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+  color: #374151;
+}
+
+.progress-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.progress-table tr:hover {
+  background: #f9fafb;
+}
+
+/* ================= STUDENT CELL ================= */
+.student-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.s-name {
+  font-weight: 600;
+  color: #111827;
+}
+
+.s-email {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ================= COURSE BADGE ================= */
+.course-badge {
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ================= PROGRESS BAR ================= */
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-bar-outer {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+  width: 150px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  background: #3b82f6;
+  height: 8px;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.progress-num {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ================= STATUS ================= */
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-pill.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-pill.active {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* ================= NO RESULTS ================= */
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
 /* ================= MOBILE RESPONSIVE ================= */
 
 @media (max-width: 1024px) {
@@ -185,7 +261,6 @@
 
   .db-search-input {
     width: 100%;
-    margin-right: 0;
   }
 
   .export-btn {
@@ -210,7 +285,7 @@
     background: #ffffff;
     margin-bottom: 15px;
     border-radius: 12px;
-    padding: 12px;
+    padding: 14px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   }
 
@@ -219,8 +294,8 @@
     padding-left: 50%;
     position: relative;
     border-bottom: none;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .progress-table td::before {
@@ -233,8 +308,12 @@
     color: #374151;
   }
 
+  .progress-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   .progress-bar-outer {
     width: 100%;
   }
-
 }

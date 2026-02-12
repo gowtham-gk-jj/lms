@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../api/axios";
 import "./AssignCourse.css";
 
@@ -8,47 +8,55 @@ const AssignCourseForm = () => {
   const [selectedLearner, setSelectedLearner] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  /* ================= FETCH DATA ================= */
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
-      // Get users
+      /* ===== USERS ===== */
       const resUsers = await api.get("/api/auth/users");
 
-      const usersList = Array.isArray(resUsers.data)
-        ? resUsers.data
-        : resUsers.data.users || [];
+      const usersList =
+        resUsers?.data?.users ||
+        resUsers?.data ||
+        [];
 
-      const learnerList = usersList.filter((u) =>
-        ["learner", "student"].includes(
-          u.role?.toLowerCase()?.trim()
-        )
-      );
+      const learnerList = Array.isArray(usersList)
+        ? usersList.filter((u) =>
+            ["learner", "student"].includes(
+              u?.role?.toLowerCase()?.trim()
+            )
+          )
+        : [];
 
       setLearners(learnerList);
 
-      // Get courses
+      /* ===== COURSES ===== */
       const resCourses = await api.get("/api/courses");
 
-      const courseList = Array.isArray(resCourses.data)
-        ? resCourses.data
-        : resCourses.data.courses || [];
+      const courseList =
+        resCourses?.data?.courses ||
+        resCourses?.data ||
+        [];
 
-      setCourses(courseList);
+      setCourses(Array.isArray(courseList) ? courseList : []);
+
     } catch (err) {
-      console.error("❌ Enrollment Load Error:", err);
+      console.error("Enrollment Load Error:", err);
       setLearners([]);
       setCourses([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  /* ================= ASSIGN COURSE ================= */
   const assignCourse = async (e) => {
     e.preventDefault();
 
@@ -58,6 +66,8 @@ const AssignCourseForm = () => {
     }
 
     try {
+      setSubmitting(true);
+
       await api.post("/api/enrollment/enroll", {
         learnerId: selectedLearner,
         courseId: selectedCourse,
@@ -67,15 +77,27 @@ const AssignCourseForm = () => {
 
       setSelectedLearner("");
       setSelectedCourse("");
+
     } catch (err) {
-      alert(err.response?.data?.message || "Enrollment failed");
+      alert(
+        err?.response?.data?.message ||
+        "Enrollment failed"
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
+  /* ================= LOADING ================= */
   if (loading) {
-    return <div style={{ padding: "20px" }}>Loading...</div>;
+    return (
+      <div style={{ padding: "20px" }}>
+        Loading learners and courses...
+      </div>
+    );
   }
 
+  /* ================= UI ================= */
   return (
     <div className="assign-card">
       <h3>👤 Administrative Enrollment</h3>
@@ -83,48 +105,66 @@ const AssignCourseForm = () => {
       <form onSubmit={assignCourse}>
         <div className="assign-row">
 
-          {/* Learner Dropdown */}
-          <div>
+          {/* ===== Learner Dropdown ===== */}
+          <div className="assign-field">
             <label>Learner</label>
             <select
               value={selectedLearner}
-              onChange={(e) => setSelectedLearner(e.target.value)}
+              onChange={(e) =>
+                setSelectedLearner(e.target.value)
+              }
               required
             >
               <option value="">
                 -- {learners.length} Learners Found --
               </option>
+
               {learners.map((learner) => (
-                <option key={learner._id} value={learner._id}>
+                <option
+                  key={learner._id}
+                  value={learner._id}
+                >
                   {learner.name} ({learner.email})
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Course Dropdown */}
-          <div>
+          {/* ===== Course Dropdown ===== */}
+          <div className="assign-field">
             <label>Course to Assign</label>
             <select
               value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
+              onChange={(e) =>
+                setSelectedCourse(e.target.value)
+              }
               required
             >
               <option value="">
                 -- {courses.length} Courses Found --
               </option>
+
               {courses.map((course) => (
-                <option key={course._id} value={course._id}>
+                <option
+                  key={course._id}
+                  value={course._id}
+                >
                   {course.title}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Button */}
-          <div>
-            <button type="submit" className="enroll-btn">
-              Confirm Enrollment
+          {/* ===== Button ===== */}
+          <div className="assign-field">
+            <button
+              type="submit"
+              className="enroll-btn"
+              disabled={submitting}
+            >
+              {submitting
+                ? "Processing..."
+                : "Confirm Enrollment"}
             </button>
           </div>
 

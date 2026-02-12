@@ -1,132 +1,325 @@
+/* ================================================= */
+/* ================= CONTAINER ===================== */
+/* ================================================= */
+
 .admin-articles-container {
-  padding: 20px;
+  padding: 24px;
   background: #f8fafc;
   min-height: 100vh;
 }
+
+/* ================================================= */
+/* ================= HEADER ======================== */
+/* ================================================= */
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
-.header-text h1 { font-size: 1.6rem; color: #1e293b; margin: 0; }
-.header-text p { color: #64748b; margin: 4px 0 0; font-size: 0.9rem; }
+.header-text h1 {
+  font-size: 1.8rem;
+  color: #1e293b;
+  margin: 0;
+  font-weight: 700;
+}
 
-/* STATS */
+.header-text p {
+  color: #64748b;
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+}
+
+/* ================================================= */
+/* ================= STATS ========================= */
+/* ================================================= */
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+  gap: 18px;
   margin-bottom: 30px;
 }
 
 .stat-card {
-  padding: 15px;
-  border-radius: 10px;
+  padding: 18px;
+  border-radius: 12px;
   color: white;
   text-align: center;
+  transition: 0.3s ease;
 }
 
-.stat-card.total { background: #6366f1; }
-.stat-card.published { background: #10b981; }
-.stat-card.draft { background: #f59e0b; }
-.stat-card h3 { font-size: 0.8rem; margin: 0; opacity: 0.8; }
-.stat-card p { font-size: 1.8rem; font-weight: 800; margin: 5px 0 0; }
+.stat-card:hover {
+  transform: translateY(-4px);
+}
 
-/* LIST */
+.stat-card.total {
+  background: #6366f1;
+}
+
+.stat-card.published {
+  background: #10b981;
+}
+
+.stat-card.draft {
+  background: #f59e0b;
+}
+
+.stat-card h3 {
+  font-size: 0.8rem;
+  margin: 0;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card p {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin: 8px 0 0;
+}
+
+/* ================================================= */
+/* ================= SECTION BOX =================== */
+/* ================================================= */
+
 .section-box {
   background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  margin-bottom: 25px;
 }
+
+/* ================================================= */
+/* ================= ARTICLE LIST ================== */
+/* ================================================= */
 
 .article-row {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  align-items: center;
+  padding: 14px 10px;
   border-bottom: 1px solid #f1f5f9;
 }
 
+.article-row:last-child {
+  border-bottom: none;
+}
+
+.article-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.article-info strong {
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+/* ================================================= */
+/* ================= STATUS ======================== */
+/* ================================================= */
+
 .status-pill {
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
   font-size: 0.7rem;
   font-weight: 700;
-  margin-right: 10px;
+  letter-spacing: 0.5px;
 }
-.status-pill.pub { background: #dcfce7; color: #166534; }
-.status-pill.drf { background: #fee2e2; color: #991b1b; }
 
-/* BUTTONS */
-button { cursor: pointer; border: none; transition: 0.2s; }
-.add-btn { background: #1e293b; color: white; padding: 10px 18px; border-radius: 6px; }
-.save-btn { background: #6366f1; color: white; padding: 10px 20px; border-radius: 6px; }
-.cancel-btn { background: #e2e8f0; margin-left: 10px; padding: 10px 20px; border-radius: 6px; }
+.status-pill.pub {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.drf {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ================================================= */
+/* ================= BUTTONS ======================= */
+/* ================================================= */
+
+button {
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+}
+
+/* Top Add Button */
+.add-btn {
+  background: #1e293b;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.add-btn:hover {
+  background: #111827;
+}
+
+/* Form Buttons */
+.save-btn {
+  background: #6366f1;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.save-btn:hover {
+  background: #4f46e5;
+}
+
+.cancel-btn {
+  background: #e2e8f0;
+  margin-left: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.cancel-btn:hover {
+  background: #cbd5e1;
+}
+
+/* Row Buttons */
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .row-actions button {
   font-size: 0.75rem;
-  padding: 5px 10px;
-  margin-left: 5px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   background: #f1f5f9;
+  font-weight: 500;
 }
-.btn-delete:hover { background: #ef4444; color: white; }
-.btn-edit:hover { background: #6366f1; color: white; }
 
-.loading-state { padding: 50px; text-align: center; color: #64748b; font-style: italic; }
-/* ================= RESPONSIVE ================= */
+.btn-delete:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.btn-toggle:hover {
+  background: #10b981;
+  color: white;
+}
+
+/* ================================================= */
+/* ================= FORM ========================== */
+/* ================================================= */
+
+.article-form input,
+.article-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.article-form input:focus,
+.article-form textarea:focus {
+  border-color: #6366f1;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* ================================================= */
+/* ================= LOADING ======================= */
+/* ================================================= */
+
+.loading-state {
+  padding: 60px;
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* ================================================= */
+/* ================= RESPONSIVE ==================== */
+/* ================================================= */
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .admin-header h1 {
-    font-size: 22px;
-  }
 
   .stats-grid {
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .stat-card p {
-    font-size: 20px;
+    font-size: 1.6rem;
   }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
 
+  .admin-articles-container {
+    padding: 16px;
+  }
+
   /* Header stacked */
   .admin-header {
-    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     align-items: stretch;
     text-align: center;
-    padding: 16px;
   }
 
   .add-btn {
     width: 100%;
   }
 
-  /* Stats grid becomes single column */
+  /* Stats stack */
   .stats-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
   }
 
-  /* Form */
-  .article-form input,
-  .article-form textarea {
+  /* Article rows stack */
+  .article-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 8px;
+  }
+
+  .article-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .row-actions {
     width: 100%;
-    font-size: 14px;
-    padding: 10px;
+    flex-direction: column;
+  }
+
+  .row-actions button {
+    width: 100%;
   }
 
   .form-actions {
-    display: flex;
     flex-direction: column;
     gap: 10px;
   }
@@ -134,33 +327,5 @@ button { cursor: pointer; border: none; transition: 0.2s; }
   .save-btn,
   .cancel-btn {
     width: 100%;
-  }
-
-  /* Article rows stack */
-  .article-row {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 14px;
-  }
-
-  .article-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .row-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .row-actions button {
-    width: 100%;
-  }
-
-  .status-pill {
-    align-self: flex-start;
   }
 }

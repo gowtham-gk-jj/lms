@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import api from "../api/axios";
 import "./AdminProgressTable.css";
 
@@ -13,20 +13,24 @@ const AdminProgressTable = () => {
       try {
         const token = localStorage.getItem("token");
 
-        const enrollmentRes = await api.get(
-          "/api/enrollment/all-stats",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        if (!token) {
+          console.warn("No token found");
+          setStats([]);
+          setLoading(false);
+          return;
+        }
 
-        setStats(
-          Array.isArray(enrollmentRes.data)
-            ? enrollmentRes.data
-            : []
-        );
+        const res = await api.get("/api/enrollment/all-stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const safeData = Array.isArray(res.data)
+          ? res.data
+          : [];
+
+        setStats(safeData);
       } catch (err) {
         console.error(
           "Admin Report Error:",
@@ -42,16 +46,23 @@ const AdminProgressTable = () => {
   }, []);
 
   /* ================= FILTER ================= */
-  const filteredStats = stats.filter(
-    (s) =>
-      s.learner?.name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      s.course?.title
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase())
-  );
+  const filteredStats = useMemo(() => {
+    const term = searchTerm.toLowerCase().trim();
 
+    return stats.filter((s) => {
+      const learnerName =
+        s.learner?.name?.toLowerCase() || "";
+      const courseTitle =
+        s.course?.title?.toLowerCase() || "";
+
+      return (
+        learnerName.includes(term) ||
+        courseTitle.includes(term)
+      );
+    });
+  }, [stats, searchTerm]);
+
+  /* ================= METRICS ================= */
   const totalEnrollments = filteredStats.length;
 
   const avgProgress =
@@ -75,43 +86,47 @@ const AdminProgressTable = () => {
       return;
     }
 
-    let csvContent =
-      "data:text/csv;charset=utf-8,";
-
-    csvContent +=
+    const header =
       "Student Name,Email,Course,Progress %,Status\n";
 
-    filteredStats.forEach((s) => {
-      const status =
-        s.progress === 100
-          ? "Finished"
-          : "Learning";
+    const rows = filteredStats
+      .map((s) => {
+        const status =
+          s.progress === 100
+            ? "Finished"
+            : "Learning";
 
-      csvContent += `${s.learner?.name || ""},${
-        s.learner?.email || ""
-      },${s.course?.title || ""},${
-        s.progress || 0
-      },${status}\n`;
+        // Wrap fields in quotes to avoid CSV comma issues
+        return `"${s.learner?.name || ""}","${
+          s.learner?.email || ""
+        }","${s.course?.title || ""}","${
+          s.progress || 0
+        }","${status}"`;
+      })
+      .join("\n");
+
+    const blob = new Blob([header + rows], {
+      type: "text/csv;charset=utf-8;",
     });
 
-    const encodedUri = encodeURI(csvContent);
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute(
-      "download",
-      "student_progress_report.csv"
-    );
-    document.body.appendChild(link);
+
+    link.href = url;
+    link.download = "student_progress_report.csv";
     link.click();
-    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
   };
 
-  if (loading)
+  /* ================= LOADING ================= */
+  if (loading) {
     return (
       <div className="loading-text">
         Loading Reports...
       </div>
     );
+  }
 
   return (
     <div className="admin-progress-wrapper">
@@ -154,6 +169,7 @@ const AdminProgressTable = () => {
               type="text"
               placeholder="Search student or course..."
               className="db-search-input"
+              value={searchTerm}
               onChange={(e) =>
                 setSearchTerm(e.target.value)
               }
@@ -188,17 +204,17 @@ const AdminProgressTable = () => {
                     <td data-label="Student Details">
                       <div className="student-cell">
                         <span className="s-name">
-                          {s.learner?.name}
+                          {s.learner?.name || "N/A"}
                         </span>
                         <span className="s-email">
-                          {s.learner?.email}
+                          {s.learner?.email || "N/A"}
                         </span>
                       </div>
                     </td>
 
                     <td data-label="Enrolled Course">
                       <span className="course-badge">
-                        {s.course?.title}
+                        {s.course?.title || "N/A"}
                       </span>
                     </td>
 

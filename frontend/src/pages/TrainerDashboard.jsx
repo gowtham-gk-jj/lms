@@ -10,12 +10,11 @@ export default function TrainerDashboard() {
 
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const ASSET_URL = import.meta.env.VITE_API_BASE_URL;
 
-  /* ===============================
-     FETCH COURSES
-  ================================ */
+  /* ================= FETCH COURSES ================= */
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -24,7 +23,6 @@ export default function TrainerDashboard() {
           return;
         }
 
-        // ✅ FIXED — added /api
         const res = await api.get("/api/courses");
 
         const data = Array.isArray(res.data)
@@ -45,17 +43,13 @@ export default function TrainerDashboard() {
     fetchCourses();
   }, [navigate, user]);
 
-  /* ===============================
-     DELETE COURSE
-  ================================ */
+  /* ================= DELETE COURSE ================= */
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this course?"))
       return;
 
     try {
-      // ✅ FIXED — added /api
       await api.delete(`/api/courses/${id}`);
-
       setCourses((prev) => prev.filter((c) => c._id !== id));
     } catch (err) {
       console.error(
@@ -66,9 +60,7 @@ export default function TrainerDashboard() {
     }
   };
 
-  /* ===============================
-     LOGOUT
-  ================================ */
+  /* ================= LOGOUT ================= */
   const handleLogout = () => {
     logout();
     navigate("/", { replace: true });
@@ -76,55 +68,100 @@ export default function TrainerDashboard() {
 
   return (
     <div className="trainer-dashboard">
-      <aside className="trainer-sidebar">
+
+      {/* ===== MOBILE HEADER ===== */}
+      <div className="trainer-mobile-header">
+        <button
+          className="menu-btn"
+          onClick={() => setMenuOpen(true)}
+        >
+          ☰
+        </button>
+
+        <h2 className="trainer-title">Trainer Panel</h2>
+
+        <div style={{ width: "30px" }}></div>
+      </div>
+
+      {/* ===== OVERLAY ===== */}
+      {menuOpen && (
+        <div
+          className="overlay"
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
+
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`trainer-sidebar ${menuOpen ? "open" : ""}`}>
         <div className="trainer-sidebar-top">
           <h2>Trainer Panel</h2>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/trainer-dashboard/overview")}
+            onClick={() => {
+              navigate("/trainer-dashboard/overview");
+              setMenuOpen(false);
+            }}
           >
             📊 Overview
           </button>
 
           <button
             className="sidebar-btn active"
-            onClick={() => navigate("/trainer-dashboard")}
+            onClick={() => {
+              navigate("/trainer-dashboard");
+              setMenuOpen(false);
+            }}
           >
             📚 My Courses
           </button>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/trainer/quizzes")}
+            onClick={() => {
+              navigate("/trainer/quizzes");
+              setMenuOpen(false);
+            }}
           >
             📝 View Quizzes
           </button>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/trainer/quiz-attempts")}
+            onClick={() => {
+              navigate("/trainer/quiz-attempts");
+              setMenuOpen(false);
+            }}
           >
             📊 Practice Quiz Results
           </button>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/trainer/create-quiz")}
+            onClick={() => {
+              navigate("/trainer/create-quiz");
+              setMenuOpen(false);
+            }}
           >
             ➕ Create Quiz
           </button>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/trainer/create-course")}
+            onClick={() => {
+              navigate("/trainer/create-course");
+              setMenuOpen(false);
+            }}
           >
             ➕ Create Course
           </button>
 
           <button
             className="sidebar-btn"
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              setMenuOpen(false);
+            }}
           >
             🌐 View Site
           </button>
@@ -140,16 +177,21 @@ export default function TrainerDashboard() {
         </div>
       </aside>
 
+      {/* ===== MAIN CONTENT ===== */}
       <main className="trainer-content">
         <div className="dashboard-header">
           <h1>Welcome, {user?.name || "Trainer"}</h1>
           <p>Manage your curriculum, quizzes, and student progress.</p>
         </div>
 
-        <h2 style={{ marginBottom: "20px" }}>Course Management</h2>
+        <h2 style={{ marginBottom: "20px" }}>
+          Course Management
+        </h2>
 
         {loading ? (
-          <div className="loader-box">Loading courses...</div>
+          <div className="loader-box">
+            Loading courses...
+          </div>
         ) : (
           <div className="course-grid">
             {courses.length > 0 ? (
@@ -196,7 +238,9 @@ export default function TrainerDashboard() {
 
                       <button
                         className="btn-delete"
-                        onClick={() => handleDelete(course._id)}
+                        onClick={() =>
+                          handleDelete(course._id)
+                        }
                       >
                         🗑️
                       </button>
@@ -209,7 +253,9 @@ export default function TrainerDashboard() {
                 <p>No courses found.</p>
                 <button
                   className="btn-add"
-                  onClick={() => navigate("/trainer/create-course")}
+                  onClick={() =>
+                    navigate("/trainer/create-course")
+                  }
                 >
                   Create First Course
                 </button>

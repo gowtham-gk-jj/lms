@@ -13,14 +13,17 @@ export default function TrainerQuizAttempts() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user?.token) return;
+    if (!user?.token) {
+      setLoading(false);
+      return;
+    }
 
     const fetchAttempts = async () => {
       try {
         const res = await api.get("/api/quiz/trainer/attempts");
 
         if (!res.data?.success) {
-          setError("No quiz attempts found");
+          setAttempts([]);
           return;
         }
 
@@ -34,7 +37,7 @@ export default function TrainerQuizAttempts() {
     };
 
     fetchAttempts();
-  }, [user]);
+  }, [user?.token]);
 
   if (loading) {
     return (
@@ -50,7 +53,8 @@ export default function TrainerQuizAttempts() {
 
   return (
     <div className="trainer-attempts-page">
-      {/* ===== HEADER ===== */}
+
+      {/* HEADER */}
       <div className="trainer-attempts-header">
         <button
           className="attempts-back-btn"
@@ -66,70 +70,76 @@ export default function TrainerQuizAttempts() {
         <div />
       </div>
 
-      {/* ===== TABLE CARD ===== */}
+      {/* TABLE */}
       <div className="attempts-card">
-        <table className="trainer-attempts-table">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>User Email</th>
-              <th>Course</th>
-              <th>Level</th>
-              <th>Score</th>
-              <th>Percentage</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {attempts.map((a) => (
-              <tr key={a.attemptId}>
-                <td data-label="User">
-                  {a.userName || "N/A"}
-                </td>
-
-                <td data-label="Email" className="mono">
-                  {a.userEmail || "N/A"}
-                </td>
-
-                <td data-label="Course">
-                  {a.courseTitle || "N/A"}
-                </td>
-
-                <td data-label="Level">
-                  {a.level}
-                </td>
-
-                <td data-label="Score">
-                  {a.score} / {a.totalQuestions}
-                </td>
-
-                <td data-label="Percentage">
-                  {a.percentage}%
-                </td>
-
-                <td data-label="Status">
-                  <span
-                    className={`status-badge ${
-                      a.passed ? "pass" : "fail"
-                    }`}
-                  >
-                    {a.passed ? "PASS" : "FAIL"}
-                  </span>
-                </td>
-
-                <td data-label="Date">
-                  {a.date
-                    ? new Date(a.date).toLocaleDateString()
-                    : "N/A"}
-                </td>
+        {attempts.length === 0 ? (
+          <p className="attempts-status">
+            No quiz attempts found.
+          </p>
+        ) : (
+          <table className="trainer-attempts-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Level</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Status</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
 
-        </table>
+            <tbody>
+              {attempts.map((a) => (
+                <tr key={a.attemptId}>
+                  <td data-label="User">
+                    {a.userName || "N/A"}
+                  </td>
+
+                  <td data-label="Email" className="mono">
+                    {a.userEmail || "N/A"}
+                  </td>
+
+                  <td data-label="Course">
+                    {a.courseTitle || "N/A"}
+                  </td>
+
+                  <td data-label="Level">
+                    {a.level}
+                  </td>
+
+                  <td data-label="Score">
+                    {a.score} / {a.totalQuestions}
+                  </td>
+
+                  <td data-label="Percentage">
+                    {a.percentage}%
+                  </td>
+
+                  <td data-label="Status">
+                    <span
+                      className={`status-badge ${
+                        a.passed ? "pass" : "fail"
+                      }`}
+                    >
+                      {a.passed ? "PASS" : "FAIL"}
+                    </span>
+                  </td>
+
+                  <td data-label="Date">
+                    {a.date
+                      ? new Date(a.date).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
+
     </div>
   );
 }

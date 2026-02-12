@@ -2,6 +2,7 @@
 .trainer-attempts-page {
   min-height: 100vh;
   background: #f4f6f8;
+  padding-bottom: 40px;
 }
 
 /* ================= HEADER ================= */
@@ -45,10 +46,9 @@
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  overflow-x: auto;
 }
 
-/* ================= TABLE ================= */
+/* ================= TABLE (DESKTOP) ================= */
 .trainer-attempts-table {
   width: 100%;
   border-collapse: collapse;
@@ -75,7 +75,7 @@
 
 /* ================= STATUS BADGE ================= */
 .status-badge {
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
@@ -91,7 +91,7 @@
   color: #991b1b;
 }
 
-/* ================= STATUS ================= */
+/* ================= STATUS TEXT ================= */
 .attempts-status {
   text-align: center;
   padding: 40px;
@@ -99,29 +99,10 @@
   color: #6b7280;
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .attempts-title {
-    font-size: 22px;
-  }
-}
-/* ================= RESPONSIVE ================= */
+/* ================================================= */
+/* ================= MOBILE DESIGN ================= */
+/* ================================================= */
 
-/* Tablet */
-@media (max-width: 1024px) {
-
-  .attempts-title {
-    font-size: 22px;
-  }
-
-  .trainer-attempts-table th,
-  .trainer-attempts-table td {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-
-/* Mobile */
 @media (max-width: 768px) {
 
   /* Header stacked */
@@ -135,43 +116,42 @@
   }
 
   .attempts-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .attempts-back-btn {
     width: 100%;
-    font-size: 14px;
   }
 
-  /* Make table scrollable horizontally */
-  .attempts-card {
-    overflow-x: auto;
-  }
-
-  .trainer-attempts-table {
-    min-width: 800px;
-  }
-
-  /* Alternative stacked layout (optional improvement) */
+  /* Hide table header */
   .trainer-attempts-table thead {
     display: none;
   }
 
-  .trainer-attempts-table tr {
+  /* Convert table to cards */
+  .trainer-attempts-table,
+  .trainer-attempts-table tbody,
+  .trainer-attempts-table tr,
+  .trainer-attempts-table td {
     display: block;
-    margin-bottom: 16px;
+    width: 100%;
+  }
+
+  .trainer-attempts-table tr {
     background: #ffffff;
-    border-radius: 12px;
+    margin-bottom: 18px;
+    border-radius: 14px;
     padding: 14px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
   }
 
   .trainer-attempts-table td {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    font-size: 14px;
+    align-items: center;
+    padding: 8px 0;
     border: none;
+    font-size: 14px;
   }
 
   .trainer-attempts-table td::before {

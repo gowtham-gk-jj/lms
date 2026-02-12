@@ -1,4 +1,7 @@
-/* ================= CONTAINER ================= */
+/* ================================================= */
+/* ================= BASE WRAPPER ================== */
+/* ================================================= */
+
 .db-wrapper {
   animation: fadeIn 0.5s ease-out;
   width: 100%;
@@ -8,7 +11,60 @@
   box-sizing: border-box;
 }
 
-/* ================= WELCOME HEADER ================= */
+/* ================================================= */
+/* ================= MOBILE HEADER ================= */
+/* ================================================= */
+
+.admin-header-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+/* Menu button LEFT */
+.menu-btn {
+  position: absolute;
+  left: 0;
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #1e293b;
+}
+
+/* Center Title */
+.admin-header-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Right spacer to keep title perfectly centered */
+.header-right-space {
+  position: absolute;
+  right: 0;
+  width: 40px;
+}
+
+/* Hide header on desktop */
+@media (min-width: 769px) {
+  .admin-header-bar {
+    display: none;
+  }
+}
+
+/* ================================================= */
+/* ================= WELCOME ======================= */
+/* ================================================= */
+
+.db-welcome {
+  margin-top: 1rem;
+}
+
 .db-welcome h1 {
   font-size: 2.2rem;
   color: #1e293b;
@@ -22,14 +78,20 @@
   margin: 0.5rem 0 2rem 0;
 }
 
-/* ================= GRID ================= */
+/* ================================================= */
+/* ================= GRID ========================== */
+/* ================================================= */
+
 .db-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
 }
 
-/* ================= CARD ================= */
+/* ================================================= */
+/* ================= CARD ========================== */
+/* ================================================= */
+
 .db-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -38,9 +100,7 @@
   cursor: pointer;
   transition: all 0.35s ease;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-
-  /* 🔥 IMPORTANT FIX */
-  display: block;   /* ❌ NOT flex */
+  display: block;
 }
 
 .db-card:hover {
@@ -49,47 +109,36 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12);
 }
 
-/* ================= CARD TEXT ================= */
-.db-card-title {
+/* Card Text */
+.db-card h3 {
   font-size: 1.4rem;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 10px; /* 🔥 space below title */
+  margin-bottom: 10px;
 }
 
-.db-card-desc {
+.db-card p {
   font-size: 1rem;
   color: #64748b;
   line-height: 1.6;
-  max-width: 90%;
 }
 
-/* ================= ANIMATION ================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* ================= ROLE DASHBOARD ================= */
+/* ================================================= */
+/* ================= ROLE DASHBOARD ================ */
+/* ================================================= */
+
 .role-dashboard-wrapper {
-  margin-bottom: 3rem;           /* space below analytics */
+  margin-bottom: 3rem;
   padding: 1.5rem;
   background: #f8fafc;
   border-radius: 18px;
   border: 1px solid #e2e8f0;
 }
 
-/* Ensure charts never collapse */
 .role-dashboard-wrapper .recharts-responsive-container {
   min-height: 260px;
 }
 
-/* KPI cards inside RoleDashboard */
 .role-dashboard-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -97,39 +146,14 @@
   margin-bottom: 2rem;
 }
 
-/* Smooth separation from welcome section */
-.db-welcome {
-  margin-top: 2rem;
-}
-/* ================= OVERVIEW CARD ================= */
+/* ================================================= */
+/* ================= OVERVIEW ====================== */
+/* ================================================= */
+
 .overview-card {
   border: 1px solid #6366f1;
 }
 
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.overview-label {
-  font-size: 0.95rem;
-  color: #64748b;
-  margin-bottom: 6px;
-}
-
-.overview-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-}
-/* ================= OVERVIEW CARD ================= */
-.overview-card {
-  border: 1px solid #6366f1;
-}
-
-/* KPI GRID */
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -155,7 +179,6 @@
   color: #1e293b;
 }
 
-/* KPI CHART */
 .overview-chart {
   margin-top: 1.5rem;
 }
@@ -170,12 +193,14 @@
 .chart-container {
   height: 260px;
 }
+
 /* ================================================= */
 /* ================= RESPONSIVE ==================== */
 /* ================================================= */
 
 /* Tablet */
 @media (max-width: 1024px) {
+
   .db-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -200,7 +225,6 @@
     font-size: 0.95rem;
   }
 
-  /* Cards stack */
   .db-grid {
     grid-template-columns: 1fr;
     gap: 1.2rem;
@@ -210,21 +234,18 @@
     padding: 1.5rem;
   }
 
-  .db-card-title {
+  .db-card h3 {
     font-size: 1.1rem;
   }
 
-  .db-card-desc {
+  .db-card p {
     font-size: 0.9rem;
-    max-width: 100%;
   }
 
-  /* Role dashboard wrapper */
   .role-dashboard-wrapper {
     padding: 1rem;
   }
 
-  /* KPI grid */
   .role-dashboard-cards {
     grid-template-columns: 1fr;
   }
@@ -238,8 +259,22 @@
     font-size: 1.5rem;
   }
 
-  /* Chart container smaller */
   .chart-container {
     height: 220px;
+  }
+}
+
+/* ================================================= */
+/* ================= ANIMATION ===================== */
+/* ================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

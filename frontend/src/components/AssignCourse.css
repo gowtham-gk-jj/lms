@@ -1,31 +1,45 @@
-/* ===== CARD WRAPPER ===== */
+/* ================================================= */
+/* ================= CARD WRAPPER ================== */
+/* ================================================= */
+
 .assign-card {
   background: #ffffff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   max-width: 1000px;
   margin: auto;
+  transition: 0.3s ease;
 }
 
 .assign-card h3 {
-  margin-bottom: 25px;
+  margin-bottom: 28px;
   font-size: 22px;
   font-weight: 700;
   color: #1e293b;
 }
 
-/* ===== ROW LAYOUT ===== */
+/* ================================================= */
+/* ================= GRID LAYOUT =================== */
+/* ================================================= */
+
 .assign-row {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
-  gap: 20px;
+  gap: 24px;
   align-items: end;
 }
 
-/* ===== FORM ELEMENTS ===== */
+.assign-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================================================= */
+/* ================= FORM ELEMENTS ================= */
+/* ================================================= */
+
 .assign-row label {
-  display: block;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
@@ -34,48 +48,73 @@
 
 .assign-row select {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
   font-size: 14px;
   background: #f8fafc;
+  transition: all 0.2s ease;
 }
 
 .assign-row select:focus {
   outline: none;
   border-color: #3b82f6;
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* ===== BUTTON ===== */
+/* ================================================= */
+/* ================= BUTTON ======================== */
+/* ================================================= */
+
 .enroll-btn {
-  padding: 12px 18px;
-  border-radius: 10px;
+  padding: 13px 20px;
+  border-radius: 12px;
   border: none;
   background: #22c55e;
   color: #ffffff;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.25s ease;
   white-space: nowrap;
+  min-width: 160px;
 }
 
 .enroll-btn:hover {
   background: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25);
 }
 
-/* ================= RESPONSIVE ================= */
+.enroll-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
 
+/* Disabled state */
+.enroll-btn:disabled {
+  background: #86efac;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ================================================= */
+/* ================= RESPONSIVE ==================== */
+/* ================================================= */
+
+/* Tablet */
 @media (max-width: 1024px) {
   .assign-row {
     grid-template-columns: 1fr 1fr;
   }
 
-  .assign-row > div:last-child {
+  .assign-row > .assign-field:last-child {
     grid-column: span 2;
   }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
 
   .assign-card {
@@ -84,15 +123,16 @@
 
   .assign-row {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .assign-row > div {
+  .assign-field {
     width: 100%;
   }
 
   .enroll-btn {
     width: 100%;
     padding: 14px;
+    font-size: 15px;
   }
-
 }
