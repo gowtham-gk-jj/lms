@@ -15,13 +15,8 @@ const AssignCourseForm = () => {
     try {
       setLoading(true);
 
-      /* ===== USERS ===== */
       const resUsers = await api.get("/api/auth/users");
-
-      const usersList =
-        resUsers?.data?.users ||
-        resUsers?.data ||
-        [];
+      const usersList = resUsers?.data?.users || resUsers?.data || [];
 
       const learnerList = Array.isArray(usersList)
         ? usersList.filter((u) =>
@@ -33,16 +28,11 @@ const AssignCourseForm = () => {
 
       setLearners(learnerList);
 
-      /* ===== COURSES ===== */
       const resCourses = await api.get("/api/courses");
-
       const courseList =
-        resCourses?.data?.courses ||
-        resCourses?.data ||
-        [];
+        resCourses?.data?.courses || resCourses?.data || [];
 
       setCourses(Array.isArray(courseList) ? courseList : []);
-
     } catch (err) {
       console.error("Enrollment Load Error:", err);
       setLearners([]);
@@ -77,35 +67,30 @@ const AssignCourseForm = () => {
 
       setSelectedLearner("");
       setSelectedCourse("");
-
     } catch (err) {
-      alert(
-        err?.response?.data?.message ||
-        "Enrollment failed"
-      );
+      alert(err?.response?.data?.message || "Enrollment failed");
     } finally {
       setSubmitting(false);
     }
   };
 
-  /* ================= LOADING ================= */
   if (loading) {
     return (
-      <div style={{ padding: "20px" }}>
+      <div className="assign-loading">
         Loading learners and courses...
       </div>
     );
   }
 
-  /* ================= UI ================= */
   return (
-    <div className="assign-card">
-      <h3>👤 Administrative Enrollment</h3>
+    <div className="assign-container">
+      <div className="assign-card">
+        <h3 className="assign-title">
+          👤 Administrative Enrollment
+        </h3>
 
-      <form onSubmit={assignCourse}>
-        <div className="assign-row">
-
-          {/* ===== Learner Dropdown ===== */}
+        <form onSubmit={assignCourse} className="assign-form">
+          {/* Learner */}
           <div className="assign-field">
             <label>Learner</label>
             <select
@@ -130,7 +115,7 @@ const AssignCourseForm = () => {
             </select>
           </div>
 
-          {/* ===== Course Dropdown ===== */}
+          {/* Course */}
           <div className="assign-field">
             <label>Course to Assign</label>
             <select
@@ -155,21 +140,18 @@ const AssignCourseForm = () => {
             </select>
           </div>
 
-          {/* ===== Button ===== */}
-          <div className="assign-field">
-            <button
-              type="submit"
-              className="enroll-btn"
-              disabled={submitting}
-            >
-              {submitting
-                ? "Processing..."
-                : "Confirm Enrollment"}
-            </button>
-          </div>
-
-        </div>
-      </form>
+          {/* Button */}
+          <button
+            type="submit"
+            className="enroll-btn"
+            disabled={submitting}
+          >
+            {submitting
+              ? "Processing..."
+              : "Confirm Enrollment"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

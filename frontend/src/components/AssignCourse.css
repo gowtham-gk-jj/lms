@@ -1,14 +1,28 @@
 /* ================================================= */
+/* ================= PAGE WRAPPER ================== */
+/* ================================================= */
+
+.assign-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* ================================================= */
 /* ================= CARD WRAPPER ================== */
 /* ================================================= */
 
 .assign-card {
+  width: 100%;
+  max-width: 1000px;
   background: #ffffff;
   padding: 32px;
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  max-width: 1000px;
-  margin: auto;
   transition: 0.3s ease;
 }
 
@@ -17,6 +31,7 @@
   font-size: 22px;
   font-weight: 700;
   color: #1e293b;
+  text-align: center;
 }
 
 /* ================================================= */
@@ -100,10 +115,9 @@
 }
 
 /* ================================================= */
-/* ================= RESPONSIVE ==================== */
+/* ================= TABLET RESPONSIVE ============= */
 /* ================================================= */
 
-/* Tablet */
 @media (max-width: 1024px) {
   .assign-row {
     grid-template-columns: 1fr 1fr;
@@ -114,11 +128,24 @@
   }
 }
 
-/* Mobile */
+/* ================================================= */
+/* ================= MOBILE RESPONSIVE ============= */
+/* ================================================= */
+
 @media (max-width: 768px) {
+
+  .assign-container {
+    padding: 20px 15px;
+  }
 
   .assign-card {
     padding: 20px;
+    border-radius: 16px;
+  }
+
+  .assign-card h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
   }
 
   .assign-row {
@@ -130,9 +157,33 @@
     width: 100%;
   }
 
+  .assign-row select {
+    padding: 14px;
+    font-size: 15px;
+  }
+
   .enroll-btn {
     width: 100%;
     padding: 14px;
     font-size: 15px;
+  }
+}
+
+/* ================================================= */
+/* ================= SMALL MOBILE ================== */
+/* ================================================= */
+
+@media (max-width: 480px) {
+
+  .assign-card {
+    padding: 16px;
+  }
+
+  .assign-card h3 {
+    font-size: 16px;
+  }
+
+  .enroll-btn {
+    font-size: 14px;
   }
 }

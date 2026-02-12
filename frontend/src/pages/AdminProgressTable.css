@@ -3,6 +3,7 @@
   padding: 30px;
   background: #f9fafb;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .progress-card {
@@ -10,6 +11,9 @@
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  max-width: 1200px;
+  margin: auto;
+  box-sizing: border-box;
 }
 
 /* ================= PAGE HEADER ================= */
@@ -18,11 +22,13 @@
   font-weight: 700;
   margin-bottom: 5px;
   color: #1e293b;
+  word-break: break-word;
 }
 
 .page-subtitle {
   color: #6b7280;
   margin-bottom: 30px;
+  line-height: 1.5;
 }
 
 /* ================= METRICS ================= */
@@ -65,6 +71,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .table-title {
@@ -77,6 +85,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .db-search-input {
@@ -85,6 +94,7 @@
   border-radius: 8px;
   font-size: 14px;
   transition: 0.2s ease;
+  min-width: 220px;
 }
 
 .db-search-input:focus {
@@ -103,6 +113,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
+  white-space: nowrap;
 }
 
 .export-btn:hover {
@@ -131,6 +142,7 @@
   padding: 14px;
   border-bottom: 1px solid #e5e7eb;
   font-size: 14px;
+  vertical-align: middle;
 }
 
 .progress-table tr:hover {
@@ -141,16 +153,19 @@
 .student-cell {
   display: flex;
   flex-direction: column;
+  gap: 3px;
 }
 
 .s-name {
   font-weight: 600;
   color: #111827;
+  word-break: break-word;
 }
 
 .s-email {
   font-size: 13px;
   color: #6b7280;
+  word-break: break-word;
 }
 
 /* ================= COURSE BADGE ================= */
@@ -161,6 +176,8 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  display: inline-block;
+  word-break: break-word;
 }
 
 /* ================= PROGRESS BAR ================= */
@@ -168,6 +185,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .progress-bar-outer {
@@ -176,6 +194,7 @@
   border-radius: 4px;
   width: 150px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .progress-bar-inner {
@@ -197,6 +216,7 @@
   font-size: 12px;
   font-weight: 600;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .status-pill.completed {
@@ -216,7 +236,7 @@
   color: #6b7280;
 }
 
-/* ================= MOBILE RESPONSIVE ================= */
+/* ================= RESPONSIVE ================= */
 
 @media (max-width: 1024px) {
   .analytics-metrics-grid {
@@ -251,7 +271,6 @@
   .stats-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
   }
 
   .header-actions {
@@ -259,10 +278,7 @@
     width: 100%;
   }
 
-  .db-search-input {
-    width: 100%;
-  }
-
+  .db-search-input,
   .export-btn {
     width: 100%;
   }
@@ -291,11 +307,12 @@
 
   .progress-table td {
     text-align: right;
-    padding-left: 50%;
+    padding-left: 48%;
     position: relative;
     border-bottom: none;
     padding-top: 10px;
     padding-bottom: 10px;
+    word-break: break-word;
   }
 
   .progress-table td::before {
@@ -311,9 +328,26 @@
   .progress-container {
     flex-direction: column;
     align-items: flex-end;
+    width: 100%;
   }
 
   .progress-bar-outer {
     width: 100%;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+
+  .progress-table td {
+    padding-left: 45%;
+  }
+
+  .progress-table td::before {
+    width: 40%;
+  }
+
+  .page-main-title {
+    font-size: 20px;
   }
 }

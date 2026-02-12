@@ -14,28 +14,18 @@ const AdminProgressTable = () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-          console.warn("No token found");
           setStats([]);
           setLoading(false);
           return;
         }
 
         const res = await api.get("/api/enrollment/all-stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        const safeData = Array.isArray(res.data)
-          ? res.data
-          : [];
-
-        setStats(safeData);
+        setStats(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
-        console.error(
-          "Admin Report Error:",
-          err.response?.data || err.message
-        );
+        console.error("Admin Report Error:", err.response?.data || err.message);
         setStats([]);
       } finally {
         setLoading(false);
@@ -50,15 +40,9 @@ const AdminProgressTable = () => {
     const term = searchTerm.toLowerCase().trim();
 
     return stats.filter((s) => {
-      const learnerName =
-        s.learner?.name?.toLowerCase() || "";
-      const courseTitle =
-        s.course?.title?.toLowerCase() || "";
-
-      return (
-        learnerName.includes(term) ||
-        courseTitle.includes(term)
-      );
+      const learnerName = s.learner?.name?.toLowerCase() || "";
+      const courseTitle = s.course?.title?.toLowerCase() || "";
+      return learnerName.includes(term) || courseTitle.includes(term);
     });
   }, [stats, searchTerm]);
 
@@ -92,11 +76,8 @@ const AdminProgressTable = () => {
     const rows = filteredStats
       .map((s) => {
         const status =
-          s.progress === 100
-            ? "Finished"
-            : "Learning";
+          s.progress === 100 ? "Finished" : "Learning";
 
-        // Wrap fields in quotes to avoid CSV comma issues
         return `"${s.learner?.name || ""}","${
           s.learner?.email || ""
         }","${s.course?.title || ""}","${
@@ -111,28 +92,20 @@ const AdminProgressTable = () => {
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-
     link.href = url;
     link.download = "student_progress_report.csv";
     link.click();
-
     URL.revokeObjectURL(url);
   };
 
-  /* ================= LOADING ================= */
   if (loading) {
-    return (
-      <div className="loading-text">
-        Loading Reports...
-      </div>
-    );
+    return <div className="loading-text">Loading Reports...</div>;
   }
 
   return (
     <div className="admin-progress-wrapper">
       <div className="progress-card">
 
-        {/* ===== PAGE TITLE ===== */}
         <h1 className="page-main-title">
           Detailed Student Progress
         </h1>
@@ -160,9 +133,7 @@ const AdminProgressTable = () => {
 
         {/* ===== HEADER SECTION ===== */}
         <div className="stats-header">
-          <h2 className="table-title">
-            Organization Reports
-          </h2>
+          <h2 className="table-title">Organization Reports</h2>
 
           <div className="header-actions">
             <input
@@ -170,9 +141,7 @@ const AdminProgressTable = () => {
               placeholder="Search student or course..."
               className="db-search-input"
               value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(e.target.value)
-              }
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
 
             <button
@@ -200,7 +169,6 @@ const AdminProgressTable = () => {
               {filteredStats.length > 0 ? (
                 filteredStats.map((s) => (
                   <tr key={s._id}>
-
                     <td data-label="Student Details">
                       <div className="student-cell">
                         <span className="s-name">
@@ -247,15 +215,11 @@ const AdminProgressTable = () => {
                           : "Learning"}
                       </span>
                     </td>
-
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="4"
-                    className="no-results"
-                  >
+                  <td colSpan="4" className="no-results">
                     No records found.
                   </td>
                 </tr>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Dashboard.css";
@@ -6,6 +6,7 @@ import "./Dashboard.css";
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // 🔐 Admin-only protection
   if (user?.role?.toLowerCase() !== "admin") {
@@ -19,16 +20,36 @@ const Dashboard = () => {
 
   return (
     <div className="db-wrapper">
+
+      {/* ================= MOBILE HEADER ================= */}
+      <div className="mobile-header">
+        <button
+          className="menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        <h2 className="mobile-title">
+          Admin Panel
+        </h2>
+
+        <div className="header-spacer" />
+      </div>
+
       {/* ================= ADMIN WELCOME ================= */}
       <header className="db-welcome">
-        <h1>Welcome, {user?.name || "System Administrator"}</h1>
+        <h1>
+          Welcome, {user?.name || "System Administrator"}
+        </h1>
         <p className="db-subtitle">
-          Manage your platform&apos;s users, content, and settings from here.
+          Manage your platform's users, content, and settings from here.
         </p>
       </header>
 
       {/* ================= ADMIN DASHBOARD CARDS ================= */}
       <div className="db-grid">
+
         {/* OVERVIEW */}
         <div
           className="db-card"
@@ -95,16 +116,6 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* 📊 REPORTS (NEW) */}
-        <div
-          className="db-card"
-          onClick={() => navigate("/admin-dashboard/reports")}
-        >
-          <h3 className="db-card-title">Reports</h3>
-          <p className="db-card-desc">
-            Download organization-wide learning reports.
-          </p>
-        </div>
       </div>
     </div>
   );

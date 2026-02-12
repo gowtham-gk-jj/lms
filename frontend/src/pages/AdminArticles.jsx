@@ -12,6 +12,7 @@ import "./AdminArticles.css";
 export default function AdminArticles() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingArticle, setEditingArticle] = useState(null);
 
@@ -27,6 +28,7 @@ export default function AdminArticles() {
   const fetchArticles = useCallback(async () => {
     try {
       setLoading(true);
+
       const res = await getArticles();
 
       const articleList =
@@ -51,6 +53,8 @@ export default function AdminArticles() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (submitting) return;
+
     const articleData = {
       ...formData,
       tags: formData.tags
@@ -62,9 +66,11 @@ export default function AdminArticles() {
     };
 
     try {
+      setSubmitting(true);
+
       if (editingArticle) {
         await updateArticle(
-          editingArticle._id || editingArticle.id,
+          editingArticle?._id || editingArticle?.id,
           articleData
         );
       } else {
@@ -79,11 +85,15 @@ export default function AdminArticles() {
         err?.response?.data?.message ||
           "Error saving article"
       );
+    } finally {
+      setSubmitting(false);
     }
   };
 
   /* ================= EDIT ================= */
   const handleEdit = (article) => {
+    if (!article) return;
+
     setEditingArticle(article);
 
     setFormData({
@@ -101,23 +111,32 @@ export default function AdminArticles() {
 
   /* ================= DELETE ================= */
   const handleDelete = async (id) => {
+    if (!id) return;
     if (!window.confirm("Delete this article?")) return;
 
     try {
       await deleteArticle(id);
       await fetchArticles();
     } catch (err) {
-      alert("Delete failed");
+      alert(
+        err?.response?.data?.message ||
+          "Delete failed"
+      );
     }
   };
 
   /* ================= TOGGLE PUBLISH ================= */
   const handleTogglePublish = async (id) => {
+    if (!id) return;
+
     try {
       await togglePublish(id);
       await fetchArticles();
     } catch (err) {
-      alert("Status update failed");
+      alert(
+        err?.response?.data?.message ||
+          "Status update failed"
+      );
     }
   };
 
@@ -130,6 +149,7 @@ export default function AdminArticles() {
       content: "",
       published: false
     });
+
     setEditingArticle(null);
     setShowForm(false);
   };
@@ -174,18 +194,12 @@ export default function AdminArticles() {
 
         <div className="stat-card published">
           <h3>Published</h3>
-          <p>
-            {articles.filter((a) => a.published)
-              .length}
-          </p>
+          <p>{articles.filter((a) => a?.published).length}</p>
         </div>
 
         <div className="stat-card draft">
           <h3>Drafts</h3>
-          <p>
-            {articles.filter((a) => !a.published)
-              .length}
-          </p>
+          <p>{articles.filter((a) => !a?.published).length}</p>
         </div>
       </section>
 
@@ -198,10 +212,8 @@ export default function AdminArticles() {
               : "✨ Create New Article"}
           </h2>
 
-          <form
-            onSubmit={handleSubmit}
-            className="article-form"
-          >
+          <form onSubmit={handleSubmit} className="article-form">
+
             <input
               type="text"
               placeholder="Article Title"
@@ -260,8 +272,7 @@ export default function AdminArticles() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    published:
-                      e.target.checked
+                    published: e.target.checked
                   })
                 }
               />
@@ -272,8 +283,11 @@ export default function AdminArticles() {
               <button
                 type="submit"
                 className="save-btn"
+                disabled={submitting}
               >
-                {editingArticle
+                {submitting
+                  ? "Saving..."
+                  : editingArticle
                   ? "Update Article"
                   : "Create Article"}
               </button>
@@ -282,6 +296,7 @@ export default function AdminArticles() {
                 type="button"
                 className="cancel-btn"
                 onClick={resetForm}
+                disabled={submitting}
               >
                 Cancel
               </button>
@@ -298,64 +313,40 @@ export default function AdminArticles() {
           </p>
         ) : (
           articles.map((article) => {
-            const id =
-              article._id || article.id;
+            const id = article?._id || article?.id;
 
             return (
-              <div
-                key={id}
-                className="article-row"
-              >
+              <div key={id} className="article-row">
                 <div className="article-info">
                   <span
                     className={`status-pill ${
-                      article.published
-                        ? "pub"
-                        : "drf"
+                      article?.published ? "pub" : "drf"
                     }`}
                   >
-                    {article.published
-                      ? "Live"
-                      : "Draft"}
+                    {article?.published ? "Live" : "Draft"}
                   </span>
 
-                  <strong>
-                    {article.title}
-                  </strong>
+                  <strong>{article?.title}</strong>
                 </div>
 
                 <div className="row-actions">
                   <button
                     className="btn-toggle"
-                    onClick={() =>
-                      handleTogglePublish(
-                        id
-                      )
-                    }
+                    onClick={() => handleTogglePublish(id)}
                   >
-                    {article.published
-                      ? "Hide"
-                      : "Publish"}
+                    {article?.published ? "Hide" : "Publish"}
                   </button>
 
                   <button
                     className="btn-edit"
-                    onClick={() =>
-                      handleEdit(
-                        article
-                      )
-                    }
+                    onClick={() => handleEdit(article)}
                   >
                     Edit
                   </button>
 
                   <button
                     className="btn-delete"
-                    onClick={() =>
-                      handleDelete(
-                        id
-                      )
-                    }
+                    onClick={() => handleDelete(id)}
                   >
                     Delete
                   </button>

@@ -6,6 +6,7 @@
   padding: 24px;
   background: #f8fafc;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* ================================================= */
@@ -17,6 +18,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  gap: 20px;
 }
 
 .header-text h1 {
@@ -103,6 +105,7 @@
   align-items: center;
   padding: 14px 10px;
   border-bottom: 1px solid #f1f5f9;
+  gap: 10px;
 }
 
 .article-row:last-child {
@@ -118,6 +121,7 @@
 .article-info strong {
   color: #1e293b;
   font-size: 0.95rem;
+  word-break: break-word;
 }
 
 /* ================================================= */
@@ -146,10 +150,20 @@
 /* ================= BUTTONS ======================= */
 /* ================================================= */
 
-button {
+/* Scoped buttons only */
+.add-btn,
+.save-btn,
+.cancel-btn,
+.row-actions button {
   cursor: pointer;
   border: none;
   transition: 0.2s ease;
+}
+
+/* Disabled state */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Top Add Button */
@@ -232,6 +246,7 @@ button {
   border: 1px solid #e2e8f0;
   font-size: 0.9rem;
   outline: none;
+  box-sizing: border-box;
 }
 
 .article-form input:focus,
@@ -239,10 +254,28 @@ button {
   border-color: #6366f1;
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
 .form-actions {
   display: flex;
   align-items: center;
   margin-top: 10px;
+}
+
+/* ================================================= */
+/* ================= EMPTY STATE =================== */
+/* ================================================= */
+
+.empty-text {
+  text-align: center;
+  padding: 20px;
+  color: #64748b;
 }
 
 /* ================================================= */
