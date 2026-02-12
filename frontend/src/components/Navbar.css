@@ -152,3 +152,64 @@
     margin-top: 8px;
   }
 }
+/* ================= NAVBAR LAYOUT ================= */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.welcome-text {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ================= MOBILE FIX ================= */
+@media (max-width: 768px) {
+
+  .navbar-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    flex-direction: column;
+    display: none;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .welcome-text {
+    display: none; /* 🔥 Hide name on mobile */
+  }
+
+  .logout-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .navbar-container {
+    flex-wrap: nowrap;
+  }
+
+  .user-nav-group {
+    gap: 8px;
+  }
+}

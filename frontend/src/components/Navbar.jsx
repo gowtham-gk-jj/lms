@@ -24,8 +24,6 @@ export default function Navbar() {
   const isTrainer = role === "trainer" || role === "instructor";
   const isLearner = role === "learner" || role === "student";
 
-  const isActive = (path) => location.pathname.startsWith(path);
-
   const getOverviewPath = () => {
     if (isAdmin) return "/admin-dashboard/overview";
     if (isTrainer) return "/trainer-dashboard/overview";
@@ -54,17 +52,19 @@ export default function Navbar() {
   return (
     <header className="navbar-wrapper">
       <div className="navbar-container">
-        {/* LOGO */}
-        <div className="navbar-logo">
-          <Link to="/">LMS</Link>
-        </div>
 
-        {/* MOBILE MENU BUTTON */}
-        <div
-          className="mobile-menu-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
+        {/* LEFT SECTION */}
+        <div className="navbar-left">
+          <div className="navbar-logo">
+            <Link to="/">LMS</Link>
+          </div>
+
+          <div
+            className="mobile-menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </div>
         </div>
 
         {/* NAV LINKS */}
@@ -74,59 +74,41 @@ export default function Navbar() {
           </Link>
 
           {user && (
-            <Link
-              to={getOverviewPath()}
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to={getOverviewPath()} onClick={() => setMenuOpen(false)}>
               Overview
             </Link>
           )}
 
           {isAdmin && (
-            <Link
-              to="/admin-dashboard"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>
               Admin Dashboard
             </Link>
           )}
 
           {isTrainer && (
-            <Link
-              to="/trainer-dashboard"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to="/trainer-dashboard" onClick={() => setMenuOpen(false)}>
               Trainer Dashboard
             </Link>
           )}
 
           {isLearner && (
-            <Link
-              to="/learner-dashboard"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to="/learner-dashboard" onClick={() => setMenuOpen(false)}>
               My Learning
             </Link>
           )}
 
           {isLearner && (
-            <Link
-              to="/my-certificates"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link to="/my-certificates" onClick={() => setMenuOpen(false)}>
               Certificates
             </Link>
           )}
 
-          <Link
-            to="/articles"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/articles" onClick={() => setMenuOpen(false)}>
             Articles
           </Link>
         </nav>
 
-        {/* RIGHT SIDE */}
+        {/* RIGHT SECTION */}
         <div className="navbar-action">
           {!user ? (
             <Link to="/login" className="login-btn">
@@ -159,6 +141,7 @@ export default function Navbar() {
             </div>
           )}
         </div>
+
       </div>
     </header>
   );
