@@ -14,25 +14,38 @@ connectDB();
 
 const app = express();
 
-/* =====================================================
-   ✅ PRODUCTION CORS FIX (FINAL WORKING VERSION)
-===================================================== */
+// ================= CORS CONFIG =================
+const allowedOrigins = [
+  "http://localhost:5173", // Local Vite
+  "https://lms-frontend-pxpyonrender.com", // Render frontend
+];
+
 app.use(
   cors({
-    origin: true, // 🔥 Allows all origins dynamically (fixes Netlify issue)
+    origin: function (origin, callback) {
+      // Allow Postman or server-to-server calls
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS blocked: " + origin));
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false, // Not using cookies
   })
 );
 
-/* ================= MIDDLEWARE ================= */
+// ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ================= STATIC FILES ================= */
+// ================= STATIC FILES =================
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-/* ================= ROUTES ================= */
+// ================= ROUTES =================
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/courses", require("./routes/courseRoutes"));
 app.use("/api/organization", require("./routes/organizationRoutes"));
@@ -45,25 +58,25 @@ app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/reports", reportRoutes);
 
-/* ================= HEALTH CHECK ================= */
+// ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
   res.status(200).send("✅ LMS API is Running");
 });
 
-/* ================= ERROR HANDLER ================= */
+// ================= ERROR HANDLER =================
 app.use((err, req, res, next) => {
-  console.error("❌ Server Error:", err.message);
+  console.error("❌ Error:", err.message);
   res.status(500).json({
     success: false,
     message: err.message || "Server Error",
   });
 });
 
-/* ================= SERVER + SOCKET ================= */
+// ================= SERVER + SOCKET =================
 const server = http.createServer(app);
 initSocket(server);
 
-/* ================= START SERVER ================= */
+// ================= START SERVER =================
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
