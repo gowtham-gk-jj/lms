@@ -15,26 +15,16 @@ connectDB();
 const app = express();
 
 // ================= CORS CONFIG =================
-const allowedOrigins = [
-  "http://localhost:5173", // Local Vite
-  "https://lms-frontend-pxpyonrender.com", // Render frontend
-];
-
+// Allow your frontend + localhost
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow Postman or server-to-server calls
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("CORS blocked: " + origin));
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://lms-frontend-pxpy.onrender.com"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: false, // Not using cookies
+    credentials: false
   })
 );
 
