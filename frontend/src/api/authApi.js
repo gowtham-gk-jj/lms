@@ -9,6 +9,11 @@ const handleResponse = async (response) => {
   return data;
 };
 
+const getToken = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  return storedUser?.token;
+};
+
 export const authApi = {
   login: async (email, password) => {
     const response = await fetch(`${AUTH_BASE}/login`, {
@@ -38,5 +43,34 @@ export const authApi = {
     });
 
     return handleResponse(response);
-  }
+  },
+
+  // ✅ ADD THIS
+  getAllUsers: async () => {
+    const token = getToken();
+
+    const response = await fetch(`${AUTH_BASE}/users`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return handleResponse(response);
+  },
+
+  // ✅ ADD THIS
+  updateUserStatus: async (id) => {
+    const token = getToken();
+
+    const response = await fetch(`${AUTH_BASE}/users/${id}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return handleResponse(response);
+  },
 };
